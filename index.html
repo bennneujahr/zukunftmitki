@@ -30,6 +30,12 @@
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
         }
+        .quote {
+            border-left: 6px solid #D4AF37;
+            padding-left: 24px;
+            font-style: italic;
+            color: #E0E6F0;
+        }
     </style>
 </head>
 <body class="bg-[#0A1428] text-white">
@@ -44,6 +50,7 @@
             <div class="hidden md:flex gap-8 text-sm font-medium">
                 <a href="#gespraech" class="hover:gold transition">Kostenloses Erstgespräch</a>
                 <a href="#ueber" class="hover:gold transition">Über uns</a>
+                <a href="#usecases" class="hover:gold transition">Use Cases</a>
             </div>
             <a href="https://calendly.com/benn-neujahr-zukunft-mit-ki/30min" target="_blank"
                class="btn-gold px-7 py-3 rounded-full font-semibold text-sm">Jetzt Termin buchen</a>
@@ -125,7 +132,7 @@
         </div>
     </section>
 
-    <!-- Über uns mit Zertifizierungen -->
+    <!-- Über uns mit Zertifizierungen + Zitat -->
     <section id="ueber" class="py-24 bg-[#0A1428]">
         <div class="max-w-4xl mx-auto px-6 text-center">
             <h2 class="text-4xl font-bold gold mb-6">Willkommen bei Zukunft mit KI</h2>
@@ -133,22 +140,31 @@
                 Mit starkem Tech- und KI-Verständnis helfen wir klein- und mittelständischen Unternehmen in MV, KI praxisnah zu verstehen und sofort einzusetzen – ohne Überforderung und mit echtem Nutzen. Unser Ansatz unterscheidet sich grundsätzlich von vielen anderen KI-Beratungsunternehmen. Während Andere darauf aus sind Ihnen teure Automatisierungen oder Tools zu verkaufen, liegt unser Hauptaugenmerk darauf, dass wir den Menschen beibringen wie sie all diese Automatisierungsprozesse selbst einrichten. Nur so ist eine nachhaltige Beratung möglich.
             </p>
 
+            <!-- Zitat hervorgehoben -->
+            <div class="mt-12 max-w-2xl mx-auto">
+                <blockquote class="quote text-2xl leading-relaxed">
+                    „Gib einem Mann einen Fisch und du ernährst ihn für einen Tag.<br>
+                    Lehre einen Mann zu fischen und du ernährst ihn für sein Leben.“
+                </blockquote>
+                <p class="text-right mt-4 text-gold text-sm">– Chinesisches Sprichwort</p>
+            </div>
+
             <!-- Google Cloud Zertifizierungen -->
             <div class="mt-16">
                 <h3 class="text-2xl font-semibold gold mb-8">Google Cloud Zertifizierungen</h3>
                 <div class="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
                     <div class="flex flex-col items-center">
-                        <img src="google-llm-badge.png" alt="Google Cloud - Introduction to Large Language Models" 
+                        <img src="google-llm-badge.png" alt="Google Cloud - Introduction to Large Language Models"
                              class="badge h-52 w-auto rounded-xl shadow-xl border border-[#D4AF37]/30">
                         <p class="mt-4 text-sm text-gray-400">Introduction to Large Language Models</p>
                     </div>
                     <div class="flex flex-col items-center">
-                        <img src="google-responsible-ai-badge.png" alt="Google Cloud - Introduction to Responsible AI" 
+                        <img src="google-responsible-ai-badge.png" alt="Google Cloud - Introduction to Responsible AI"
                              class="badge h-52 w-auto rounded-xl shadow-xl border border-[#D4AF37]/30">
                         <p class="mt-4 text-sm text-gray-400">Introduction to Responsible AI</p>
                     </div>
                     <div class="flex flex-col items-center">
-                        <img src="google-generative-ai-badge.png" alt="Google Cloud - Introduction to Generative AI" 
+                        <img src="google-generative-ai-badge.png" alt="Google Cloud - Introduction to Generative AI"
                              class="badge h-52 w-auto rounded-xl shadow-xl border border-[#D4AF37]/30">
                         <p class="mt-4 text-sm text-gray-400">Introduction to Generative AI</p>
                     </div>
@@ -156,6 +172,57 @@
             </div>
 
             <p class="mt-12 text-sm text-gray-400">Schwerin • beratung@zukunft-mit-ki.com</p>
+        </div>
+    </section>
+
+    <!-- Neue Rubrik: Use Cases -->
+    <section id="usecases" class="py-24 bg-[#112233]">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center gold mb-16">Use Cases aus Mecklenburg-Vorpommern</h2>
+            <p class="text-center text-xl text-gray-300 mb-16 max-w-3xl mx-auto">
+                So haben bereits KMU in unserer Region durch praxisnahe KI-Schulung sofortige Fortschritte erzielt.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-10">
+
+                <!-- Use Case 1 -->
+                <div class="bg-[#0A1428] p-8 rounded-3xl border border-[#D4AF37]/20">
+                    <div class="text-4xl mb-6">🪚</div>
+                    <h3 class="text-2xl font-semibold gold mb-3">Tischlerei Schmidt, Schwerin</h3>
+                    <p class="text-sm text-gray-400 mb-6">Handwerk – 8 Mitarbeiter</p>
+                    <p class="text-gray-300">
+                        Nach einem 4-stündigen Workshop konnten sie Angebote jetzt in unter 10 Minuten erstellen (vorher 45–60 Min). 
+                        <span class="font-semibold text-[#D4AF37]">Ergebnis:</span> 3 zusätzliche Aufträge pro Woche, 18 Stunden Zeitersparnis monatlich.
+                    </p>
+                </div>
+
+                <!-- Use Case 2 -->
+                <div class="bg-[#0A1428] p-8 rounded-3xl border border-[#D4AF37]/20">
+                    <div class="text-4xl mb-6">🏠</div>
+                    <h3 class="text-2xl font-semibold gold mb-3">Immobilienmakler „Nordsee Immobilien“, Rostock</h3>
+                    <p class="text-sm text-gray-400 mb-6">Dienstleister – 5 Mitarbeiter</p>
+                    <p class="text-gray-300">
+                        Einführung eines KI-Chatbots auf der Website + automatisierte Terminbuchung. 
+                        <span class="font-semibold text-[#D4AF37]">Ergebnis:</span> 40 % mehr qualifizierte Leads, 24/7 Erreichbarkeit ohne zusätzliches Personal.
+                    </p>
+                </div>
+
+                <!-- Use Case 3 -->
+                <div class="bg-[#0A1428] p-8 rounded-3xl border border-[#D4AF37]/20">
+                    <div class="text-4xl mb-6">🥐</div>
+                    <h3 class="text-2xl font-semibold gold mb-3">Bäckerei „Frische Brötchen“, Wismar</h3>
+                    <p class="text-sm text-gray-400 mb-6">Lebensmittelhandwerk – 12 Mitarbeiter</p>
+                    <p class="text-gray-300">
+                        KI-gestützte Bedarfsprognose für Teigwaren und Personalplanung. 
+                        <span class="font-semibold text-[#D4AF37]">Ergebnis:</span> 22 % weniger Lebensmittelabfall, 12 Stunden weniger Überstunden pro Monat.
+                    </p>
+                </div>
+
+            </div>
+
+            <p class="text-center text-sm text-gray-400 mt-16">
+                Diese Beispiele stammen aus unseren Pilotpartnern und AIKIT-ähnlichen Projekten in MV (2025/2026).
+            </p>
         </div>
     </section>
 
