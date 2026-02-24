@@ -23,6 +23,13 @@
             background-color: #E8C14A;
             transform: translateY(-3px);
         }
+        .badge {
+            transition: all 0.3s;
+        }
+        .badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+        }
     </style>
 </head>
 <body class="bg-[#0A1428] text-white">
@@ -38,7 +45,7 @@
                 <a href="#gespraech" class="hover:gold transition">Kostenloses Erstgespräch</a>
                 <a href="#ueber" class="hover:gold transition">Über uns</a>
             </div>
-            <a href="https://calendly.com/benn-neujahr-zukunft-mit-ki/30min" target="_blank" 
+            <a href="https://calendly.com/benn-neujahr-zukunft-mit-ki/30min" target="_blank"
                class="btn-gold px-7 py-3 rounded-full font-semibold text-sm">Jetzt Termin buchen</a>
         </div>
     </nav>
@@ -91,7 +98,7 @@
         <div class="max-w-4xl mx-auto px-6 text-center">
             <h2 class="text-4xl font-bold gold mb-6">Ihr kostenloses Erstgespräch</h2>
             <p class="text-xl text-gray-300 mb-12">Persönlich, praxisnah, sofort einsetzbar.</p>
-            
+           
             <div class="grid md:grid-cols-2 gap-8 text-left max-w-2xl mx-auto">
                 <div class="flex gap-4">
                     <span class="text-3xl text-[#D4AF37]">✓</span>
@@ -110,7 +117,6 @@
                     <div><h4 class="font-semibold">Strukturierte Planung für die Zukunft</h4></div>
                 </div>
             </div>
-
             <a href="https://calendly.com/benn-neujahr-zukunft-mit-ki/30min" target="_blank"
                class="mt-12 inline-block btn-gold px-12 py-6 rounded-2xl text-xl font-semibold">
                 Jetzt Termin sichern
@@ -119,16 +125,37 @@
         </div>
     </section>
 
-    <!-- Über mich + Final CTA + Footer bleiben gleich wie vorher -->
-
-    <!-- Über mich -->
+    <!-- Über uns mit Zertifizierungen -->
     <section id="ueber" class="py-24 bg-[#0A1428]">
         <div class="max-w-4xl mx-auto px-6 text-center">
             <h2 class="text-4xl font-bold gold mb-6">Willkommen bei Zukunft mit KI</h2>
             <p class="text-lg text-gray-300 leading-relaxed max-w-2xl mx-auto">
-                Mit starkem Tech- und KI-Verständnis helfen wir klein- und mittelständischen Unternehmen in MV, KI praxisnah zu verstehen und sofort einzusetzen – ohne Überforderung und mit echtem Nutzen. Unser Ansatz unterscheidet sich grundsätzlich von vielen anderen KI-Beratungsunternehmen. Während Andere darauf aus sind Ihnen teure Automatisierungen oder Tools zu verkaufen, liegt unser Hauptaugenmerk darauf, dass wir den Menschen beibringen wie sie all diese Automatisierungsprozesse selbst einrichten. Nur so ist eine nachhaltige Beratung möglich. Zitat: "Wenn du einem Menschen einen Fisch fängst, hat er Nahrung für einen Tag. Lehrst du ihm jedoch zu Angeln, hat er Essen sein Leben lang." 
+                Mit starkem Tech- und KI-Verständnis helfen wir klein- und mittelständischen Unternehmen in MV, KI praxisnah zu verstehen und sofort einzusetzen – ohne Überforderung und mit echtem Nutzen. Unser Ansatz unterscheidet sich grundsätzlich von vielen anderen KI-Beratungsunternehmen. Während Andere darauf aus sind Ihnen teure Automatisierungen oder Tools zu verkaufen, liegt unser Hauptaugenmerk darauf, dass wir den Menschen beibringen wie sie all diese Automatisierungsprozesse selbst einrichten. Nur so ist eine nachhaltige Beratung möglich. Zitat: "Wenn du einem Menschen einen Fisch fängst, hat er Nahrung für einen Tag. Lehrst du ihm jedoch zu Angeln, hat er Essen sein Leben lang."
             </p>
-            <p class="mt-8 text-sm text-gray-400">Schwerin • beratung@zukunft-mit-ki.com</p>
+
+            <!-- Google Cloud Zertifizierungen -->
+            <div class="mt-16">
+                <h3 class="text-2xl font-semibold gold mb-8">Google Cloud Zertifizierungen</h3>
+                <div class="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+                    <div class="flex flex-col items-center">
+                        <img src="google-llm-badge.png" alt="Google Cloud - Introduction to Large Language Models" 
+                             class="badge h-52 w-auto rounded-xl shadow-xl border border-[#D4AF37]/30">
+                        <p class="mt-4 text-sm text-gray-400">Introduction to Large Language Models</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <img src="google-responsible-ai-badge.png" alt="Google Cloud - Introduction to Responsible AI" 
+                             class="badge h-52 w-auto rounded-xl shadow-xl border border-[#D4AF37]/30">
+                        <p class="mt-4 text-sm text-gray-400">Introduction to Responsible AI</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <img src="google-generative-ai-badge.png" alt="Google Cloud - Introduction to Generative AI" 
+                             class="badge h-52 w-auto rounded-xl shadow-xl border border-[#D4AF37]/30">
+                        <p class="mt-4 text-sm text-gray-400">Introduction to Generative AI</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="mt-12 text-sm text-gray-400">Schwerin • beratung@zukunft-mit-ki.com</p>
         </div>
     </section>
 
