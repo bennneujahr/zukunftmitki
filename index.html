@@ -1,247 +1,1404 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zukunft mit KI – Kostenloses Erstgespräch</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        body { font-family: 'Inter', system-ui, sans-serif; }
-        .hero-bg {
-            background-image: linear-gradient(rgba(10, 20, 40, 0.88), rgba(10, 20, 40, 0.88)), url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=1920');
-            background-size: cover;
-            background-position: center;
-        }
-        .gold { color: #D4AF37; }
-        .btn-gold {
-            background-color: #D4AF37;
-            color: #0A1428;
-            transition: all 0.3s;
-        }
-        .btn-gold:hover {
-            background-color: #E8C14A;
-            transform: translateY(-3px);
-        }
-        .badge {
-            transition: all 0.3s;
-        }
-        .badge:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
-        }
-        .quote {
-            border-left: 6px solid #D4AF37;
-            padding-left: 24px;
-            font-style: italic;
-            color: #E0E6F0;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zukunft mit KI – KI-Beratung & Digitale Transformation</title>
+  <meta name="description" content="Professionelle KI-Beratung, Systementwicklung und Schulungen für Ihr Unternehmen. Kostenloses Erstgespräch buchen." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Design Tokens ──────────────────────────────── */
+    :root {
+      --dark:       #1a2035;
+      --dark-2:     #151c2e;
+      --gold:       #C9A84C;
+      --gold-light: #E8C870;
+      --gold-dim:   rgba(201,168,76,0.15);
+      --surface:    #222b45;
+      --surface-2:  #293252;
+      --text:       #e8eaf0;
+      --text-muted: #8d9ab5;
+      --border:     rgba(201,168,76,0.2);
+      --radius:     14px;
+      --radius-sm:  8px;
+      --shadow:     0 8px 40px rgba(0,0,0,0.35);
+      --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ─── Reset & Base ───────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      line-height: 1.2;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { cursor: pointer; font-family: inherit; border: none; }
+
+    /* ─── Utility ────────────────────────────────────── */
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 96px 0; }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 560px;
+    }
+
+    /* ─── Scroll Reveal ──────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ─── Buttons ────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.55s ease;
+    }
+    .btn:hover::after { transform: translateX(100%); }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--dark);
+    }
+    .btn-gold:hover {
+      box-shadow: 0 4px 24px rgba(201,168,76,0.5);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+    }
+    .btn-outline:hover {
+      background: var(--gold-dim);
+      transform: translateY(-1px);
+    }
+
+    /* ─── Navigation ─────────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 24px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      transition: background var(--transition), backdrop-filter var(--transition), box-shadow var(--transition);
+    }
+    #navbar.scrolled {
+      background: rgba(26,32,53,0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(201,168,76,0.15), 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .nav-inner {
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-logo-icon svg { width: 20px; height: 20px; }
+    .nav-logo span { color: var(--gold); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color var(--transition);
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform var(--transition);
+      transform-origin: left;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-cta { margin-left: 12px; }
+
+    /* Mobile nav */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    #mobile-menu {
+      display: none;
+      position: fixed;
+      top: 72px; left: 0; right: 0;
+      background: var(--dark-2);
+      border-bottom: 1px solid var(--border);
+      padding: 24px;
+      z-index: 99;
+      flex-direction: column;
+      gap: 20px;
+    }
+    #mobile-menu.open { display: flex; }
+    #mobile-menu a {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    #mobile-menu a:last-child { border-bottom: none; }
+    #mobile-menu .btn { justify-content: center; margin-top: 8px; }
+
+    /* ─── Hero ───────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 72px;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 50%, rgba(201,168,76,0.08) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 80% at 20% 80%, rgba(34,43,69,0.8) 0%, transparent 60%),
+        linear-gradient(160deg, var(--dark) 0%, #1e2840 50%, #1a2035 100%);
+    }
+    /* Decorative grid */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 70% 70% at 70% 40%, black 0%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 70% 70% at 70% 40%, black 0%, transparent 70%);
+    }
+    /* Animated orb */
+    .hero-orb {
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      right: -60px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, transparent 0%, rgba(201,168,76,0.12) 25%, transparent 50%, rgba(201,168,76,0.06) 75%, transparent 100%);
+      animation: orb-spin 20s linear infinite;
+    }
+    .hero-orb::before {
+      content: '';
+      position: absolute;
+      inset: 60px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.2);
+      animation: orb-spin 15s linear infinite reverse;
+    }
+    .hero-orb::after {
+      content: '';
+      position: absolute;
+      inset: 130px;
+      border-radius: 50%;
+      border: 1px dashed rgba(201,168,76,0.15);
+      animation: orb-spin 10s linear infinite;
+    }
+    @keyframes orb-spin {
+      to { transform: rotate(360deg); }
+    }
+    /* Floating dots */
+    .hero-dots {
+      position: absolute;
+      right: 180px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 200px;
+      height: 200px;
+    }
+    .hero-dot {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: dot-float 3s ease-in-out infinite;
+    }
+    .hero-dot:nth-child(1) { top: 20%; left: 50%; animation-delay: 0s; }
+    .hero-dot:nth-child(2) { top: 50%; left: 20%; animation-delay: 0.5s; opacity: 0.6; width: 4px; height: 4px; }
+    .hero-dot:nth-child(3) { top: 70%; left: 70%; animation-delay: 1s; opacity: 0.4; width: 3px; height: 3px; }
+    .hero-dot:nth-child(4) { top: 30%; left: 80%; animation-delay: 1.5s; opacity: 0.7; }
+    .hero-dot:nth-child(5) { top: 80%; left: 30%; animation-delay: 0.8s; opacity: 0.5; width: 4px; height: 4px; }
+    @keyframes dot-float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 640px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold-dim);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 24px;
+      animation: fade-up 0.6s ease 0.1s both;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(1.4); }
+    }
+    .hero-title {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      animation: fade-up 0.6s ease 0.25s both;
+    }
+    .hero-title .accent { color: var(--gold); }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 520px;
+      animation: fade-up 0.6s ease 0.4s both;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fade-up 0.6s ease 0.55s both;
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: fade-up 0.6s ease 0.7s both;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scroll-line 2s ease infinite;
+    }
+    @keyframes scroll-line {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      50%  { transform: scaleY(1); transform-origin: top; }
+      51%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Leistungen ─────────────────────────────────── */
+    #leistungen { background: var(--dark); }
+    .leistungen-header { margin-bottom: 56px; }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--transition);
+    }
+    .card:hover {
+      border-color: var(--border);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    .card:hover::before { transform: scaleX(1); }
+    .card-icon {
+      width: 54px;
+      height: 54px;
+      background: var(--gold-dim);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .card-icon svg { width: 26px; height: 26px; color: var(--gold); }
+    .card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .card p { color: var(--text-muted); font-size: 0.95rem; }
+
+    /* ─── Zertifikate ────────────────────────────────── */
+    #zertifikate { background: var(--dark-2); }
+    .zert-header { margin-bottom: 56px; }
+    .zert-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .zert-card {
+      background: var(--surface);
+      border: 2px dashed rgba(201,168,76,0.25);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      text-align: center;
+      transition: border-color var(--transition), background var(--transition);
+      cursor: default;
+      position: relative;
+    }
+    .zert-card:hover {
+      border-color: var(--gold);
+      background: var(--gold-dim);
+    }
+    .zert-card:hover .zert-tooltip { opacity: 1; transform: translateY(-4px); }
+    .zert-placeholder-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.08);
+      border: 1.5px solid rgba(201,168,76,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .zert-placeholder-icon svg { width: 30px; height: 30px; color: var(--gold); opacity: 0.7; }
+    .zert-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    .zert-org {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .zert-tooltip {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 14px;
+      font-size: 0.75rem;
+      color: var(--gold);
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity var(--transition), transform var(--transition);
+      pointer-events: none;
+    }
+    .zert-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%; left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: var(--border);
+    }
+    .zert-hint {
+      margin-top: 32px;
+      padding: 16px 20px;
+      background: var(--gold-dim);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .zert-hint code {
+      background: rgba(255,255,255,0.07);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: var(--gold-light);
+    }
+
+    /* ─── Über mich ──────────────────────────────────── */
+    #ueber-mich { background: var(--dark); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    /* Photo placeholder */
+    .about-photo-wrap {
+      position: relative;
+    }
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: var(--text-muted);
+      position: relative;
+      overflow: hidden;
+    }
+    .about-photo::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.05) 0%, transparent 60%);
+    }
+    .about-photo svg { width: 48px; height: 48px; opacity: 0.4; }
+    .about-photo p { font-size: 0.85rem; text-align: center; padding: 0 24px; }
+    .about-photo-badge {
+      position: absolute;
+      bottom: -12px;
+      right: -12px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--dark);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 4px 20px rgba(201,168,76,0.35);
+    }
+    /* Text side */
+    .about-content { position: relative; }
+    .about-accent-line {
+      position: absolute;
+      left: -24px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      border-radius: 2px;
+    }
+    .about-content .section-title { margin-bottom: 20px; }
+    .about-text {
+      color: var(--text-muted);
+      font-size: 0.97rem;
+      margin-bottom: 16px;
+    }
+    .about-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .about-skill {
+      background: var(--gold-dim);
+      border: 1px solid var(--border);
+      color: var(--gold-light);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: 100px;
+    }
+
+    /* ─── Kontakt ────────────────────────────────────── */
+    #kontakt { background: var(--dark-2); }
+    .kontakt-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 64px;
+      align-items: start;
+    }
+    .kontakt-info .section-title { margin-bottom: 16px; }
+    .kontakt-info .section-sub { margin-bottom: 36px; }
+    .kontakt-detail {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+    .kontakt-detail-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background: var(--gold-dim);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .kontakt-detail-icon svg { width: 18px; height: 18px; color: var(--gold); }
+
+    /* Form */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      padding: 40px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: var(--dark);
+      border: 1.5px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+    }
+    .form-group input.error,
+    .form-group textarea.error {
+      border-color: #e05c5c;
+      box-shadow: 0 0 0 3px rgba(224,92,92,0.12);
+    }
+    .form-error-msg {
+      font-size: 0.78rem;
+      color: #e07a7a;
+      margin-top: 5px;
+      display: none;
+    }
+    .form-error-msg.visible { display: block; }
+    .form-group textarea { min-height: 130px; }
+    .form-submit { width: 100%; justify-content: center; font-size: 1rem; padding: 15px 28px; }
+    .form-feedback {
+      text-align: center;
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      margin-top: 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: none;
+    }
+    .form-feedback.success {
+      display: block;
+      background: rgba(80,200,120,0.12);
+      border: 1px solid rgba(80,200,120,0.25);
+      color: #6edba3;
+    }
+
+    /* ─── Footer ─────────────────────────────────────── */
+    footer {
+      background: var(--dark-2);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 40px 24px;
+    }
+    .footer-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-logo {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .footer-logo span { color: var(--gold); }
+    .footer-copy { font-size: 0.82rem; color: var(--text-muted); }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      transition: color var(--transition);
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-socials {
+      display: flex;
+      gap: 12px;
+    }
+    .footer-social {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .footer-social:hover {
+      border-color: var(--border);
+      background: var(--gold-dim);
+    }
+    .footer-social svg { width: 16px; height: 16px; color: var(--text-muted); transition: color var(--transition); }
+    .footer-social:hover svg { color: var(--gold); }
+
+    /* ─── Responsive ─────────────────────────────────── */
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-photo { aspect-ratio: 16/9; max-height: 320px; }
+      .kontakt-inner { grid-template-columns: 1fr; gap: 40px; }
+      .about-accent-line { display: none; }
+    }
+    @media (max-width: 768px) {
+      .section { padding: 72px 0; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .hero-orb { width: 300px; height: 300px; right: -100px; }
+      .hero-dots { right: 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .hero-title { font-size: 2rem; }
+      .hero-orb { display: none; }
+      .hero-dots { display: none; }
+      .form-card { padding: 24px; }
+    }
+  </style>
 </head>
-<body class="bg-[#0A1428] text-white">
+<body>
 
-    <!-- Navbar -->
-    <nav class="fixed top-0 w-full bg-[#0A1428]/95 backdrop-blur-md z-50 border-b border-[#D4AF37]/20">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <img src="logo.png" alt="Zukunft mit KI Logo" class="h-14 w-auto">
-                <span class="text-2xl font-bold gold">Zukunft mit KI</span>
-            </div>
-            <div class="hidden md:flex gap-8 text-sm font-medium">
-                <a href="#gespraech" class="hover:gold transition">Kostenloses Erstgespräch</a>
-                <a href="#ueber" class="hover:gold transition">Über uns</a>
-                <a href="#usecases" class="hover:gold transition">Use Cases</a>
-            </div>
-            <a href="https://calendly.com/benn-neujahr-zukunft-mit-ki/30min" target="_blank"
-               class="btn-gold px-7 py-3 rounded-full font-semibold text-sm">Jetzt Termin buchen</a>
+  <!-- ─── Navigation ─────────────────────────────── -->
+  <nav id="navbar" role="navigation" aria-label="Hauptnavigation">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="Zukunft mit KI – Startseite">
+        <div class="nav-logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
         </div>
-    </nav>
+        Zukunft mit <span>KI</span>
+      </a>
 
-    <!-- Hero -->
-    <section class="hero-bg h-screen flex items-center">
-        <div class="max-w-4xl mx-auto px-6 text-center pt-20">
-            <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
-                KI praxisnah für Ihr Unternehmen<br>
-                <span class="gold">in Mecklenburg-Vorpommern</span>
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto">
-                In nur 30 Minuten zeigen wir Ihnen, wie Sie und Ihr Team die Künstliche Intelligenz nutzen können – kostenlos & unverbindlich mit direktem Nutzen.
-            </p>
-            <a href="https://calendly.com/benn-neujahr-zukunft-mit-ki/30min" target="_blank"
-               class="btn-gold inline-flex items-center gap-3 px-10 py-5 rounded-2xl text-lg font-semibold">
-                <i class="fas fa-calendar"></i>
-                Kostenloses Erstgespräch buchen
-            </a>
-            <p class="mt-8 text-sm text-gray-400">Förderung durch AIKIT möglich • Vor Ort oder telefonisch</p>
+      <ul class="nav-links" role="list">
+        <li><a href="#leistungen">Leistungen</a></li>
+        <li><a href="#zertifikate">Zertifikate</a></li>
+        <li><a href="#ueber-mich">Über mich</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+
+      <a href="#kontakt" class="btn btn-gold nav-cta">Erstgespräch buchen</a>
+
+      <button class="nav-hamburger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" role="dialog" aria-label="Mobilmenü">
+    <a href="#leistungen">Leistungen</a>
+    <a href="#zertifikate">Zertifikate</a>
+    <a href="#ueber-mich">Über mich</a>
+    <a href="#kontakt">Kontakt</a>
+    <a href="#kontakt" class="btn btn-gold">Erstgespräch buchen</a>
+  </div>
+
+  <!-- ─── Hero ──────────────────────────────────────── -->
+  <section id="hero" aria-label="Startbereich">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-orb" aria-hidden="true"></div>
+    <div class="hero-dots" aria-hidden="true">
+      <div class="hero-dot"></div>
+      <div class="hero-dot"></div>
+      <div class="hero-dot"></div>
+      <div class="hero-dot"></div>
+      <div class="hero-dot"></div>
+    </div>
+
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <div class="hero-badge-dot"></div>
+          KI-Beratung &amp; Digitale Transformation
         </div>
-    </section>
 
-    <!-- Warum jetzt -->
-    <section class="py-24 bg-[#0A1428]">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center gold mb-16">Warum genau jetzt der richtige Zeitpunkt ist</h2>
-            <div class="grid md:grid-cols-3 gap-10">
-                <div class="bg-[#112233] p-8 rounded-3xl border border-[#D4AF37]/10">
-                    <div class="text-5xl mb-6">👥</div>
-                    <h3 class="text-2xl font-semibold mb-4">Fachkräftemangel</h3>
-                    <p class="text-gray-300">Jeder zweite Betrieb in MV sucht verzweifelt Mitarbeiter. KI übernimmt Routine – sofort.</p>
-                </div>
-                <div class="bg-[#112233] p-8 rounded-3xl border border-[#D4AF37]/10">
-                    <div class="text-5xl mb-6">🏆</div>
-                    <h3 class="text-2xl font-semibold mb-4">Ihre Konkurrenz ist schon dabei</h3>
-                    <p class="text-gray-300">68 % der KMU setzen KI bereits ein – wer jetzt nicht startet, verliert.</p>
-                </div>
-                <div class="bg-[#112233] p-8 rounded-3xl border border-[#D4AF37]/10">
-                    <div class="text-5xl mb-6">📜</div>
-                    <h3 class="text-2xl font-semibold mb-4">EU AI Act 2026</h3>
-                    <p class="text-gray-300">Die neue Verordnung kommt – vorbereitet sein zahlt sich aus.</p>
-                </div>
+        <h1 class="hero-title">
+          Die Zukunft gehört<br />
+          denen, die <span class="accent">KI verstehen</span>
+        </h1>
+
+        <p class="hero-sub">
+          Ich begleite Ihr Unternehmen auf dem Weg in die KI-gestützte Zukunft —
+          von der ersten Strategie bis zur fertigen Lösung. Praxisnah, verständlich und wirksam.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#kontakt" class="btn btn-gold">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Kostenloses Erstgespräch
+          </a>
+          <a href="#leistungen" class="btn btn-outline">
+            Leistungen entdecken
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll" aria-hidden="true">
+      <div class="scroll-line"></div>
+      <span>Mehr erfahren</span>
+    </div>
+  </section>
+
+  <!-- ─── Leistungen ────────────────────────────────── -->
+  <section id="leistungen" class="section" aria-label="Leistungen">
+    <div class="container">
+      <div class="leistungen-header reveal">
+        <p class="section-label">Was ich biete</p>
+        <h2 class="section-title">Leistungen &amp; Angebote</h2>
+        <p class="section-sub">Von der ersten Orientierung bis zur vollständigen Implementierung — ich begleite Sie auf jedem Schritt Ihrer KI-Reise.</p>
+      </div>
+
+      <div class="cards-grid">
+        <!-- Card 1 -->
+        <div class="card reveal reveal-delay-1">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <h3>Kostenloses Erstgespräch</h3>
+          <p>In einem unverbindlichen 30-minütigen Gespräch analysieren wir gemeinsam Ihr Potenzial für KI-gestützte Prozesse — ohne Vorkenntnisse erforderlich.</p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card reveal reveal-delay-2">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h3>KI-Systeme entwickeln &amp; begleiten</h3>
+          <p>Von der Konzeption bis zum Livebetrieb: Ich entwickle maßgeschneiderte KI-Lösungen, die in Ihre bestehenden Prozesse integriert werden und echten Mehrwert liefern.</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card reveal reveal-delay-3">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3>Workshops &amp; Schulungen</h3>
+          <p>Praxisnahe Workshops für Teams und Führungskräfte: Ich vermittle KI-Grundlagen, Prompt Engineering und konkrete Anwendungsfälle für Ihren Berufsalltag.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Zertifikate ───────────────────────────────── -->
+  <section id="zertifikate" class="section" aria-label="Zertifikate">
+    <div class="container">
+      <div class="zert-header reveal">
+        <p class="section-label">Qualifikationen</p>
+        <h2 class="section-title">Zertifikate &amp; Ausbildungen</h2>
+        <p class="section-sub">Fundiertes Wissen, das durch anerkannte Zertifizierungen bestätigt wird.</p>
+      </div>
+
+      <div class="zert-grid">
+        <!-- Zertifikat 1 -->
+        <div class="zert-card reveal reveal-delay-1" role="img" aria-label="Anthropic Claude 101">
+          <div class="zert-placeholder-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"></circle>
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"></path>
+            </svg>
+          </div>
+          <p class="zert-name">Claude 101</p>
+          <p class="zert-org">Anthropic</p>
+          <div class="zert-tooltip">Zertifikat ansehen</div>
+        </div>
+
+        <!-- Zertifikat 2 -->
+        <div class="zert-card reveal reveal-delay-2" role="img" aria-label="AI Fluency Framework">
+          <div class="zert-placeholder-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <p class="zert-name">AI Fluency: Framework &amp; Foundations</p>
+          <p class="zert-org">Anthropic</p>
+          <div class="zert-tooltip">Zertifikat ansehen</div>
+        </div>
+
+        <!-- Zertifikat 3 -->
+        <div class="zert-card reveal reveal-delay-3" role="img" aria-label="AI Fluency for Educators">
+          <div class="zert-placeholder-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <p class="zert-name">AI Fluency for Educators</p>
+          <p class="zert-org">Anthropic</p>
+          <div class="zert-tooltip">Zertifikat ansehen</div>
+        </div>
+
+        <!-- Zertifikat 4 -->
+        <div class="zert-card reveal reveal-delay-1" role="img" aria-label="Teaching the AI Fluency Framework">
+          <div class="zert-placeholder-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <p class="zert-name">Teaching the AI Fluency Framework</p>
+          <p class="zert-org">Anthropic</p>
+          <div class="zert-tooltip">Zertifikat ansehen</div>
+        </div>
+
+        <!-- Zertifikat 5 -->
+        <div class="zert-card reveal reveal-delay-2" role="img" aria-label="Claude Code in Action">
+          <div class="zert-placeholder-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"></circle>
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"></path>
+            </svg>
+          </div>
+          <p class="zert-name">Claude Code in Action</p>
+          <p class="zert-org">Anthropic · März 2026</p>
+          <div class="zert-tooltip">Zertifikat ansehen</div>
+        </div>
+
+        <!-- Zertifikat 6 -->
+        <div class="zert-card reveal reveal-delay-3" role="img" aria-label="Building with the Claude API">
+          <div class="zert-placeholder-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <p class="zert-name">Building with the Claude API</p>
+          <p class="zert-org">Anthropic · März 2026</p>
+          <div class="zert-tooltip">Zertifikat ansehen</div>
+        </div>
+
+        <!-- Zertifikat 7 -->
+        <div class="zert-card reveal reveal-delay-1" role="img" aria-label="Introduction to Generative AI">
+          <div class="zert-placeholder-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <p class="zert-name">Introduction to Generative AI</p>
+          <p class="zert-org">Google Cloud</p>
+          <div class="zert-tooltip">Zertifikat ansehen</div>
+        </div>
+
+        <!-- Zertifikat 8 -->
+        <div class="zert-card reveal reveal-delay-2" role="img" aria-label="Introduction to Large Language Models">
+          <div class="zert-placeholder-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <p class="zert-name">Introduction to Large Language Models</p>
+          <p class="zert-org">Google Cloud</p>
+          <div class="zert-tooltip">Zertifikat ansehen</div>
+        </div>
+
+        <!-- Zertifikat 9 -->
+        <div class="zert-card reveal reveal-delay-3" role="img" aria-label="Introduction to Responsible AI">
+          <div class="zert-placeholder-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"></circle>
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"></path>
+            </svg>
+          </div>
+          <p class="zert-name">Introduction to Responsible AI</p>
+          <p class="zert-org">Google Cloud</p>
+          <div class="zert-tooltip">Zertifikat ansehen</div>
+        </div>
+
+        <!-- Zertifikat 10 -->
+        <div class="zert-card reveal reveal-delay-1" role="img" aria-label="Gemini for Application Developers">
+          <div class="zert-placeholder-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <p class="zert-name">Gemini for Application Developers</p>
+          <p class="zert-org">Google Cloud</p>
+          <div class="zert-tooltip">Zertifikat ansehen</div>
+        </div>
+
+        <!-- Zertifikat 11 -->
+        <div class="zert-card reveal reveal-delay-2" role="img" aria-label="KI-Kompetenz für den Arbeitsalltag">
+          <div class="zert-placeholder-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <p class="zert-name">KI-Kompetenz für den Arbeitsalltag</p>
+          <p class="zert-org">Digitales Innovationszentrum Schwerin · Feb. 2026</p>
+          <div class="zert-tooltip">Zertifikat ansehen</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Über mich ─────────────────────────────────── -->
+  <section id="ueber-mich" class="section" aria-label="Über mich">
+    <div class="container">
+      <div class="about-grid">
+        <!-- Foto -->
+        <div class="about-photo-wrap reveal">
+          <div class="about-photo" aria-label="Profilfoto Platzhalter">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <!-- ANPASSEN: Ersetzen Sie dieses div durch:
+                 <img src="foto.jpg" alt="[Ihr Name] – KI-Berater" />
+                 Empfohlene Bildgröße: 600×750 px -->
+            <p>Foto hier einfügen<br /><small>Datei im gleichen Ordner ablegen &amp; img-Tag einfügen</small></p>
+          </div>
+          <div class="about-photo-badge">KI-Experte</div>
+        </div>
+
+        <!-- Text -->
+        <div class="about-content reveal reveal-delay-2">
+          <div class="about-accent-line" aria-hidden="true"></div>
+          <p class="section-label">Über mich</p>
+          <h2 class="section-title">
+            Benn Neujahr<br />KI-Berater &amp; Trainer
+          </h2>
+
+          <p class="about-text">
+            Ich helfe klein- und mittelständischen Unternehmen dabei, das Potenzial von Künstlicher Intelligenz
+            zu verstehen und gezielt zu nutzen — ohne Fachjargon, ohne unnötige Komplexität, aber mit echten Ergebnissen.
+          </p>
+          <p class="about-text">
+            Als Unternehmer aus Schwerin kenne ich die Herausforderungen des Mittelstands aus eigener Erfahrung.
+            Genau deshalb liegt mir ein praxisnaher Ansatz am Herzen: Ich entwickle KI-Lösungen, die wirklich
+            in Ihren Alltag passen — und begleite Sie langfristig auf diesem Weg.
+          </p>
+          <p class="about-text">
+            Mit Zertifizierungen von Anthropic und Google Cloud sowie praktischer Erfahrung im Aufbau
+            eigener KI-Anwendungen bringe ich sowohl das technische Verständnis als auch den unternehmerischen
+            Blick mit, den Ihr Projekt braucht.
+          </p>
+
+          <div class="about-skills" aria-label="Schwerpunkte">
+            <!-- ANPASSEN: Eigene Schwerpunkte eintragen -->
+            <span class="about-skill">Large Language Models</span>
+            <span class="about-skill">Prompt Engineering</span>
+            <span class="about-skill">KI-Strategie</span>
+            <span class="about-skill">Automatisierung</span>
+            <span class="about-skill">Machine Learning</span>
+            <span class="about-skill">Workshops</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Kontakt ───────────────────────────────────── -->
+  <section id="kontakt" class="section" aria-label="Kontakt">
+    <div class="container">
+      <div class="kontakt-inner">
+        <!-- Info -->
+        <div class="kontakt-info reveal">
+          <p class="section-label">Jetzt loslegen</p>
+          <h2 class="section-title">Lassen Sie uns sprechen</h2>
+          <p class="section-sub">
+            Das erste Gespräch ist kostenlos und unverbindlich. Ich freue mich darauf,
+            mehr über Ihr Unternehmen und Ihre Ziele zu erfahren.
+          </p>
+
+          <div class="kontakt-detail">
+            <div class="kontakt-detail-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
             </div>
-        </div>
-    </section>
+            <span><a href="mailto:info@zukunft-mit-ki.com">info@zukunft-mit-ki.com</a></span>
+          </div>
 
-    <!-- Was Sie bekommen -->
-    <section id="gespraech" class="py-24 bg-[#112233]">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-4xl font-bold gold mb-6">Ihr kostenloses Erstgespräch</h2>
-            <p class="text-xl text-gray-300 mb-12">Persönlich, praxisnah, sofort einsetzbar.</p>
-           
-            <div class="grid md:grid-cols-2 gap-8 text-left max-w-2xl mx-auto">
-                <div class="flex gap-4">
-                    <span class="text-3xl text-[#D4AF37]">✓</span>
-                    <div><h4 class="font-semibold">Persönlicher KI-Reife-Check</h4></div>
-                </div>
-                <div class="flex gap-4">
-                    <span class="text-3xl text-[#D4AF37]">✓</span>
-                    <div><h4 class="font-semibold">konkrete Ideen für Ihr Unternehmen</h4></div>
-                </div>
-                <div class="flex gap-4">
-                    <span class="text-3xl text-[#D4AF37]">✓</span>
-                    <div><h4 class="font-semibold">Fördermittel-Check (AIKIT)</h4></div>
-                </div>
-                <div class="flex gap-4">
-                    <span class="text-3xl text-[#D4AF37]">✓</span>
-                    <div><h4 class="font-semibold">Strukturierte Planung für die Zukunft</h4></div>
-                </div>
+          <div class="kontakt-detail">
+            <div class="kontakt-detail-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.99 5.99l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
             </div>
-            <a href="https://calendly.com/benn-neujahr-zukunft-mit-ki/30min" target="_blank"
-               class="mt-12 inline-block btn-gold px-12 py-6 rounded-2xl text-xl font-semibold">
-                Jetzt Termin sichern
-            </a>
-            <p class="mt-6 text-gray-400">Oder direkt anrufen: <a href="tel:+491725354796" class="gold">0172 5354796</a></p>
+            <span>Auf Anfrage verfügbar</span>
+          </div>
+
+          <div class="kontakt-detail">
+            <div class="kontakt-detail-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <span>Antwort in der Regel innerhalb von 24 Stunden</span>
+          </div>
         </div>
-    </section>
 
-    <!-- Über uns mit Zertifizierungen + Zitat -->
-    <section id="ueber" class="py-24 bg-[#0A1428]">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-4xl font-bold gold mb-6">Willkommen bei Zukunft mit KI</h2>
-            <p class="text-lg text-gray-300 leading-relaxed max-w-2xl mx-auto">
-                Mit starkem Tech- und KI-Verständnis helfen wir klein- und mittelständischen Unternehmen in MV, KI praxisnah zu verstehen und sofort einzusetzen – ohne Überforderung und mit echtem Nutzen. Unser Ansatz unterscheidet sich grundsätzlich von vielen anderen KI-Beratungsunternehmen. Während Andere darauf aus sind Ihnen teure Automatisierungen oder Tools zu verkaufen, liegt unser Hauptaugenmerk darauf, dass wir den Menschen beibringen wie sie all diese Automatisierungsprozesse selbst einrichten. Nur so ist eine nachhaltige Beratung möglich.
-            </p>
-
-            <!-- Zitat hervorgehoben -->
-            <div class="mt-12 max-w-2xl mx-auto">
-                <blockquote class="quote text-2xl leading-relaxed">
-                    „Gib einem Mann einen Fisch und du ernährst ihn für einen Tag.<br>
-                    Lehre einen Mann zu fischen und du ernährst ihn für sein Leben.“
-                </blockquote>
-                <p class="text-right mt-4 text-gold text-sm">– Chinesisches Sprichwort</p>
+        <!-- Formular -->
+        <div class="form-card reveal reveal-delay-2">
+          <form id="contact-form" novalidate aria-label="Kontaktformular">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" name="name" placeholder="Max Mustermann" required autocomplete="name" />
+                <p class="form-error-msg" id="name-error">Bitte geben Sie Ihren Namen ein.</p>
+              </div>
+              <div class="form-group">
+                <label for="email">E-Mail *</label>
+                <input type="email" id="email" name="email" placeholder="max@beispiel.de" required autocomplete="email" />
+                <p class="form-error-msg" id="email-error">Bitte geben Sie eine gültige E-Mail-Adresse ein.</p>
+              </div>
             </div>
 
-            <!-- Google Cloud Zertifizierungen -->
-            <div class="mt-16">
-                <h3 class="text-2xl font-semibold gold mb-8">Google Cloud Zertifizierungen</h3>
-                <div class="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-                    <div class="flex flex-col items-center">
-                        <img src="google-llm-badge.png" alt="Google Cloud - Introduction to Large Language Models"
-                             class="badge h-52 w-auto rounded-xl shadow-xl border border-[#D4AF37]/30">
-                        <p class="mt-4 text-sm text-gray-400">Introduction to Large Language Models</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <img src="google-responsible-ai-badge.png" alt="Google Cloud - Introduction to Responsible AI"
-                             class="badge h-52 w-auto rounded-xl shadow-xl border border-[#D4AF37]/30">
-                        <p class="mt-4 text-sm text-gray-400">Introduction to Responsible AI</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <img src="google-generative-ai-badge.png" alt="Google Cloud - Introduction to Generative AI"
-                             class="badge h-52 w-auto rounded-xl shadow-xl border border-[#D4AF37]/30">
-                        <p class="mt-4 text-sm text-gray-400">Introduction to Generative AI</p>
-                    </div>
-                </div>
+            <div class="form-group">
+              <label for="telefon">Telefon <small>(optional)</small></label>
+              <input type="tel" id="telefon" name="telefon" placeholder="+49 123 456 789" autocomplete="tel" />
             </div>
 
-            <p class="mt-12 text-sm text-gray-400">Schwerin • beratung@zukunft-mit-ki.com</p>
-        </div>
-    </section>
-
-    <!-- Neue Rubrik: Use Cases -->
-    <section id="usecases" class="py-24 bg-[#112233]">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center gold mb-16">Use Cases aus Mecklenburg-Vorpommern</h2>
-            <p class="text-center text-xl text-gray-300 mb-16 max-w-3xl mx-auto">
-                So haben bereits KMU in unserer Region durch praxisnahe KI-Schulung sofortige Fortschritte erzielt.
-            </p>
-
-            <div class="grid md:grid-cols-3 gap-10">
-
-                <!-- Use Case 1 -->
-                <div class="bg-[#0A1428] p-8 rounded-3xl border border-[#D4AF37]/20">
-                    <div class="text-4xl mb-6">🪚</div>
-                    <h3 class="text-2xl font-semibold gold mb-3">Tischlerei Schmidt, Schwerin</h3>
-                    <p class="text-sm text-gray-400 mb-6">Handwerk – 8 Mitarbeiter</p>
-                    <p class="text-gray-300">
-                        Nach einem 4-stündigen Workshop konnten sie Angebote jetzt in unter 10 Minuten erstellen (vorher 45–60 Min). 
-                        <span class="font-semibold text-[#D4AF37]">Ergebnis:</span> 3 zusätzliche Aufträge pro Woche, 18 Stunden Zeitersparnis monatlich.
-                    </p>
-                </div>
-
-                <!-- Use Case 2 -->
-                <div class="bg-[#0A1428] p-8 rounded-3xl border border-[#D4AF37]/20">
-                    <div class="text-4xl mb-6">🏠</div>
-                    <h3 class="text-2xl font-semibold gold mb-3">Immobilienmakler „Nordsee Immobilien“, Rostock</h3>
-                    <p class="text-sm text-gray-400 mb-6">Dienstleister – 5 Mitarbeiter</p>
-                    <p class="text-gray-300">
-                        Einführung eines KI-Chatbots auf der Website + automatisierte Terminbuchung. 
-                        <span class="font-semibold text-[#D4AF37]">Ergebnis:</span> 40 % mehr qualifizierte Leads, 24/7 Erreichbarkeit ohne zusätzliches Personal.
-                    </p>
-                </div>
-
-                <!-- Use Case 3 -->
-                <div class="bg-[#0A1428] p-8 rounded-3xl border border-[#D4AF37]/20">
-                    <div class="text-4xl mb-6">🥐</div>
-                    <h3 class="text-2xl font-semibold gold mb-3">Bäckerei „Frische Brötchen“, Wismar</h3>
-                    <p class="text-sm text-gray-400 mb-6">Lebensmittelhandwerk – 12 Mitarbeiter</p>
-                    <p class="text-gray-300">
-                        KI-gestützte Bedarfsprognose für Teigwaren und Personalplanung. 
-                        <span class="font-semibold text-[#D4AF37]">Ergebnis:</span> 22 % weniger Lebensmittelabfall, 12 Stunden weniger Überstunden pro Monat.
-                    </p>
-                </div>
-
+            <div class="form-group">
+              <label for="nachricht">Nachricht *</label>
+              <textarea id="nachricht" name="nachricht" placeholder="Beschreiben Sie kurz Ihr Anliegen oder Ihre Frage …" required></textarea>
+              <p class="form-error-msg" id="nachricht-error">Bitte schreiben Sie eine kurze Nachricht.</p>
             </div>
 
-            <p class="text-center text-sm text-gray-400 mt-16">
-                Diese Beispiele stammen aus unseren Pilotpartnern und AIKIT-ähnlichen Projekten in MV (2025/2026).
-            </p>
-        </div>
-    </section>
+            <button type="submit" class="btn btn-gold form-submit">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+              Nachricht senden
+            </button>
 
-    <!-- Final CTA -->
-    <section class="py-20 bg-gradient-to-b from-[#112233] to-[#0A1428]">
-        <div class="max-w-2xl mx-auto text-center px-6">
-            <h2 class="text-4xl font-bold mb-6">Bereit für Ihre KI-Zukunft?</h2>
-            <a href="https://calendly.com/benn-neujahr-zukunft-mit-ki/30min" target="_blank"
-               class="btn-gold inline-flex items-center gap-3 px-12 py-6 rounded-3xl text-xl font-semibold">
-                <i class="fas fa-arrow-right"></i> Kostenloses Gespräch buchen
-            </a>
+            <div id="form-feedback" class="form-feedback" role="alert" aria-live="polite"></div>
+          </form>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Footer -->
-    <footer class="bg-black py-12 text-center text-sm text-gray-500">
-        <p>© 2026 Zukunft mit KI • Schwerin • <a href="mailto:beratung@zukunft-mit-ki.com" class="gold">beratung@zukunft-mit-ki.com</a></p>
-        <p class="mt-2">Alle Rechte vorbehalten • Impressum folgt nach Gewerbeanmeldung</p>
-    </footer>
+  <!-- ─── Footer ────────────────────────────────────── -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div>
+        <p class="footer-logo">Zukunft mit <span>KI</span></p>
+        <p class="footer-copy">&copy; <span id="year"></span> Zukunft mit KI. Alle Rechte vorbehalten.</p>
+      </div>
+
+      <ul class="footer-links" role="list">
+        <!-- ANPASSEN: Impressum- und Datenschutz-Links hinterlegen -->
+        <li><a href="#impressum">Impressum</a></li>
+        <li><a href="#datenschutz">Datenschutz</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+
+      <div class="footer-socials" aria-label="Social Media">
+        <!-- ANPASSEN: LinkedIn-Profil-URL eintragen -->
+        <a href="#" class="footer-social" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+        </a>
+        <!-- ANPASSEN: Weitere Social-Links hinzufügen oder entfernen -->
+        <a href="#" class="footer-social" aria-label="Xing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2l-5 9 3 5h-4l-3-5 5-9h4z"/>
+            <path d="M6 6h-2l3 5-5 8h2l5-8-3-5z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── JavaScript ────────────────────────────────── -->
+  <script>
+    'use strict';
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ── Navbar scroll behaviour ──────────────────────
+    const navbar = document.getElementById('navbar');
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          navbar.classList.toggle('scrolled', window.scrollY > 40);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // ── Mobile hamburger ─────────────────────────────
+    const hamburger = document.querySelector('.nav-hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+      hamburger.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
+    });
+
+    // Close mobile menu on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.setAttribute('aria-label', 'Menü öffnen');
+      });
+    });
+
+    // ── Scroll reveal (IntersectionObserver) ─────────
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ── Contact form ──────────────────────────────────
+    const form = document.getElementById('contact-form');
+    const feedback = document.getElementById('form-feedback');
+
+    function validateField(id, validFn, errorId) {
+      const el = document.getElementById(id);
+      const err = document.getElementById(errorId);
+      const valid = validFn(el.value.trim());
+      el.classList.toggle('error', !valid);
+      err.classList.toggle('visible', !valid);
+      return valid;
+    }
+
+    const validators = [
+      ['name',     v => v.length >= 2,                                          'name-error'],
+      ['email',    v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),                   'email-error'],
+      ['nachricht', v => v.length >= 10,                                         'nachricht-error'],
+    ];
+
+    // Live validation on blur
+    validators.forEach(([id, fn, errId]) => {
+      document.getElementById(id).addEventListener('blur', () => {
+        validateField(id, fn, errId);
+      });
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const allValid = validators.every(([id, fn, errId]) => validateField(id, fn, errId));
+      if (!allValid) return;
+
+      const name     = document.getElementById('name').value.trim();
+      const email    = document.getElementById('email').value.trim();
+      const telefon  = document.getElementById('telefon').value.trim();
+      const nachricht = document.getElementById('nachricht').value.trim();
+
+      // Build mailto body
+      const body = [
+        `Name: ${name}`,
+        `E-Mail: ${email}`,
+        telefon ? `Telefon: ${telefon}` : '',
+        '',
+        `Nachricht:`,
+        nachricht,
+      ].filter(Boolean).join('\n');
+
+      // ANPASSEN: Ihre E-Mail-Adresse hier eintragen
+      const mailto = `mailto:info@zukunft-mit-ki.com`
+        + `?subject=${encodeURIComponent('Anfrage von ' + name + ' über die Webseite')}`
+        + `&body=${encodeURIComponent(body)}`;
+
+      window.location.href = mailto;
+
+      // Show success feedback
+      feedback.textContent = 'Ihr E-Mail-Programm wird geöffnet. Falls es sich nicht öffnet, schreiben Sie uns direkt an info@zukunft-mit-ki.com';
+      feedback.className = 'form-feedback success';
+
+      // Reset form after short delay
+      setTimeout(() => {
+        form.reset();
+        validators.forEach(([id]) => {
+          document.getElementById(id).classList.remove('error');
+        });
+        document.querySelectorAll('.form-error-msg').forEach(el => el.classList.remove('visible'));
+        setTimeout(() => { feedback.style.display = 'none'; feedback.className = 'form-feedback'; }, 4000);
+      }, 500);
+    });
+  </script>
 
 </body>
 </html>
