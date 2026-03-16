@@ -1553,187 +1553,409 @@
 
     // ── Hero Interactive Background ───────────────────
     (function () {
-      const hero    = document.getElementById('hero');
-      const canvas  = document.getElementById('hero-canvas');
-      const heroBg  = hero.querySelector('.hero-bg');
-      const ctx     = canvas.getContext('2d');
-      const DPR     = Math.min(window.devicePixelRatio || 1, 2);
+      const hero   = document.getElementById('hero');
+      const canvas = document.getElementById('hero-canvas');
+      const heroBg = hero.querySelector('.hero-bg');
+      const ctx    = canvas.getContext('2d');
+      const DPR    = Math.min(window.devicePixelRatio || 1, 2);
+      const isMobile = () => W < 768;
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      let W, H, particles;
+      let W, H;
       let mouse = { x: -9999, y: -9999 };
+      // Smoothed parallax offsets (lerp toward raw mouse offset)
+      let smoothX = 0, smoothY = 0;
 
-      // ── Setup / Resize ──────────────────────────────
+      // ── Star layers ─────────────────────────────────
+      // Each star: { x, y, vx, vy, r, baseAlpha, twinkleSpeed, twinklePhase, twinkleDepth,
+      //              pFactor, colorPrefix, attractVx, attractVy }
+      let farStars = [], midStars = [], nearStars = [];
+
+      // ── Nebula wisps ────────────────────────────────
+      // 3 drifting radial gradient blobs drawn at bottom layer
+      let nebulae = [];
+
+      // ── Shooting stars ──────────────────────────────
+      // Pre-allocated pool of 3 slots
+      const METEOR_POOL = 3;
+      let meteors = [];
+      let lastMeteorTime = 0;
+      let nextMeteorDelay = 0;
+
+      // ── Constellation draw-in state ──────────────────
+      let conStartTime = null;
+      const CON_DRAW_DURATION = 2000; // ms
+
+      // ── Setup / Resize (debounced) ──────────────────
+      let resizeTimer = null;
       function resize() {
-        const rect = hero.getBoundingClientRect();
-        W = rect.width;
-        H = rect.height;
-        canvas.width  = W * DPR;
-        canvas.height = H * DPR;
-        canvas.style.width  = W + 'px';
-        canvas.style.height = H + 'px';
-        ctx.scale(DPR, DPR);
-        initParticles();
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          const rect = hero.getBoundingClientRect();
+          W = rect.width;
+          H = rect.height;
+          canvas.width  = W * DPR;
+          canvas.height = H * DPR;
+          canvas.style.width  = W + 'px';
+          canvas.style.height = H + 'px';
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.scale(DPR, DPR);
+          initStars();
+          initNebulae();
+        }, 150);
       }
 
       // ── Constellations ──────────────────────────────
       const CONSTELLATIONS = [
         {
-          // Orion-Gürtel (3 Sterne diagonal, oben rechts)
           stars: [[0.72,0.18],[0.79,0.23],[0.86,0.28]],
           lines: [[0,1],[1,2]]
         },
         {
-          // Cassiopeia W-Form (5 Sterne, oben links)
           stars: [[0.08,0.12],[0.13,0.22],[0.18,0.13],[0.23,0.22],[0.28,0.13]],
           lines: [[0,1],[1,2],[2,3],[3,4]]
         },
         {
-          // Süd-Dreieck (3 Sterne, unten rechts)
           stars: [[0.82,0.72],[0.90,0.58],[0.94,0.80]],
           lines: [[0,1],[1,2],[2,0]]
         }
       ];
 
-      function drawConstellations(t) {
+      function drawConstellations(t, elapsed) {
+        // Draw-in progress 0→1 over CON_DRAW_DURATION ms
+        const drawInProgress = Math.min(elapsed / CON_DRAW_DURATION, 1);
+
         CONSTELLATIONS.forEach((con, ci) => {
           const phase = ci * 2.1;
           const pulse = 0.5 + 0.5 * Math.sin(t * 0.0008 + phase);
-          const lineAlpha = 0.12 + pulse * 0.10;
-          const starAlpha = 0.55 + pulse * 0.30;
+          const lineAlpha = (0.12 + pulse * 0.08) * drawInProgress;
+          const starAlpha = (0.60 + pulse * 0.25) * drawInProgress;
 
-          // Linien
-          ctx.lineWidth = 0.7;
-          con.lines.forEach(([a, b]) => {
+          // Lines with animated draw-in
+          ctx.lineWidth = 0.8;
+          con.lines.forEach(([a, b], li) => {
+            const lineDelay = li / con.lines.length;
+            const lineProgress = Math.max(0, Math.min(1, (drawInProgress - lineDelay * 0.4) / 0.6));
+            if (lineProgress <= 0) return;
+            const ax = con.stars[a][0] * W, ay = con.stars[a][1] * H;
+            const bx = con.stars[b][0] * W, by = con.stars[b][1] * H;
             ctx.beginPath();
-            ctx.moveTo(con.stars[a][0] * W, con.stars[a][1] * H);
-            ctx.lineTo(con.stars[b][0] * W, con.stars[b][1] * H);
-            ctx.strokeStyle = `rgba(201,168,76,${lineAlpha})`;
+            ctx.moveTo(ax, ay);
+            ctx.lineTo(ax + (bx - ax) * lineProgress, ay + (by - ay) * lineProgress);
+            ctx.strokeStyle = 'rgba(201,168,76,' + lineAlpha.toFixed(3) + ')';
             ctx.stroke();
           });
 
-          // Sterne
+          // Stars — near-star style with glow batch
+          ctx.shadowColor = 'rgba(201,168,76,' + (starAlpha * 0.5).toFixed(3) + ')';
+          ctx.shadowBlur = 10;
           con.stars.forEach(([nx, ny]) => {
-            const sx = nx * W, sy = ny * H;
-            ctx.shadowColor = `rgba(201,168,76,${starAlpha * 0.6})`;
-            ctx.shadowBlur  = 8;
+            const sx = nx * W + smoothX * 0.10;
+            const sy = ny * H + smoothY * 0.10;
             ctx.beginPath();
-            ctx.arc(sx, sy, 2.2, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(201,168,76,${starAlpha})`;
+            ctx.arc(sx, sy, 2.4, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(201,168,76,' + starAlpha.toFixed(3) + ')';
             ctx.fill();
-            ctx.shadowBlur = 0;
           });
+          ctx.shadowBlur = 0;
         });
       }
 
-      // ── Particle class ──────────────────────────────
-      function Particle() {
-        this.reset();
+      // ── Star factory ────────────────────────────────
+      function makeStar(layer) {
+        const mobile = isMobile();
+        let r, colorPrefix, baseAlpha, twinkleDepth, pFactor;
+        if (layer === 'far') {
+          r = Math.random() * 0.4 + 0.4;
+          colorPrefix = 'rgba(180,200,255,';
+          baseAlpha = Math.random() * 0.25 + 0.25;
+          twinkleDepth = Math.random() * 0.05 + 0.03;
+          pFactor = 0.02;
+        } else if (layer === 'mid') {
+          r = Math.random() * 1.0 + 0.8;
+          colorPrefix = 'rgba(240,235,220,';
+          baseAlpha = Math.random() * 0.30 + 0.30;
+          twinkleDepth = Math.random() * 0.08 + 0.06;
+          pFactor = 0.06;
+        } else {
+          r = Math.random() * 1.7 + 1.8;
+          // 15% chance pure white, 85% gold
+          colorPrefix = Math.random() < 0.15 ? 'rgba(255,255,255,' : 'rgba(201,168,76,';
+          baseAlpha = Math.random() * 0.30 + 0.45;
+          twinkleDepth = Math.random() * 0.20 + 0.15;
+          pFactor = 0.12;
+        }
+        return {
+          x: Math.random() * W,
+          y: Math.random() * H,
+          vx: (Math.random() - 0.5) * (layer === 'far' ? 0.10 : layer === 'mid' ? 0.22 : 0.35),
+          vy: (Math.random() - 0.5) * (layer === 'far' ? 0.10 : layer === 'mid' ? 0.22 : 0.35),
+          r, colorPrefix, baseAlpha,
+          twinkleDepth,
+          twinkleSpeed: Math.random() * 0.8 + 0.4,
+          twinklePhase: Math.random() * Math.PI * 2,
+          pFactor,
+          attractVx: 0,
+          attractVy: 0
+        };
       }
-      Particle.prototype.reset = function () {
-        this.x    = Math.random() * W;
-        this.y    = Math.random() * H;
-        this.vx   = (Math.random() - 0.5) * 0.35;
-        this.vy   = (Math.random() - 0.5) * 0.35;
-        this.r    = Math.random() * 2.2 + 1.5;
-        this.base = Math.random() * 0.35 + 0.35;
-        this.a    = this.base;
-      };
 
-      function initParticles() {
-        const count = Math.floor((W * H) / 14000);  // ~70 auf Full-HD
-        particles = Array.from({ length: Math.min(count, 90) }, () => new Particle());
+      function initStars() {
+        const mobile = isMobile();
+        const farN  = mobile ? 60  : 180;
+        const midN  = mobile ? 25  : 60;
+        const nearN = mobile ? 8   : 18;
+        farStars  = Array.from({ length: farN  }, () => makeStar('far'));
+        midStars  = Array.from({ length: midN  }, () => makeStar('mid'));
+        nearStars = Array.from({ length: nearN }, () => makeStar('near'));
+        // Reset shooting stars on resize
+        meteors = Array.from({ length: METEOR_POOL }, () => ({ active: false }));
+        lastMeteorTime = performance.now();
+        nextMeteorDelay = 5000 + Math.random() * 7000;
+      }
+
+      // ── Nebula wisps ────────────────────────────────
+      function makeNebula() {
+        return {
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: Math.random() * 150 + 150,
+          opacity: Math.random() * 0.04 + 0.02,
+          vx: (Math.random() - 0.5) * 0.15,
+          vy: (Math.random() - 0.5) * 0.15,
+          // Cached gradient (rebuilt when pos drifts > 1px from last build)
+          grad: null, lastGX: -9999, lastGY: -9999
+        };
+      }
+
+      function initNebulae() {
+        nebulae = Array.from({ length: 3 }, makeNebula);
+      }
+
+      function drawNebulae() {
+        nebulae.forEach(n => {
+          n.x += n.vx; n.y += n.vy;
+          // Soft wrap
+          if (n.x < -n.r) n.x = W + n.r;
+          if (n.x > W + n.r) n.x = -n.r;
+          if (n.y < -n.r) n.y = H + n.r;
+          if (n.y > H + n.r) n.y = -n.r;
+
+          // Rebuild gradient only when drifted > 1px
+          const drift = Math.abs(n.x - n.lastGX) + Math.abs(n.y - n.lastGY);
+          if (!n.grad || drift > 1) {
+            const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
+            g.addColorStop(0, 'rgba(201,168,76,' + n.opacity.toFixed(3) + ')');
+            g.addColorStop(0.5, 'rgba(100,120,200,' + (n.opacity * 0.5).toFixed(3) + ')');
+            g.addColorStop(1, 'rgba(0,0,0,0)');
+            n.grad = g;
+            n.lastGX = n.x; n.lastGY = n.y;
+          }
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+          ctx.fillStyle = n.grad;
+          ctx.fill();
+        });
+      }
+
+      // ── Star batch draw ─────────────────────────────
+      function updateAndDrawStars(stars, t, useShadow) {
+        if (useShadow) {
+          ctx.shadowColor = 'rgba(201,168,76,0.55)';
+          ctx.shadowBlur  = 12;
+        }
+
+        stars.forEach(s => {
+          // Twinkling alpha
+          const twinkle = reducedMotion ? 0 : Math.sin(t * s.twinkleSpeed + s.twinklePhase) * s.twinkleDepth;
+          const alpha = Math.max(0, Math.min(1, s.baseAlpha + twinkle));
+
+          // Mouse interaction
+          const dx = s.x - mouse.x;
+          const dy = s.y - mouse.y;
+          const dist2 = dx * dx + dy * dy;
+          const dist = dist2 > 0 ? Math.sqrt(dist2) : 0.001;
+
+          // Zone 1: repulsion < 60px
+          if (dist < 60) {
+            const force = (60 - dist) / 60;
+            s.vx += (dx / dist) * force * 0.9;
+            s.vy += (dy / dist) * force * 0.9;
+          }
+
+          // Zone 2: attraction 60–200px (near + mid only via pFactor gate)
+          if (s.pFactor >= 0.06 && dist >= 60 && dist < 200) {
+            const force = (1 - dist / 200) * 0.08;
+            s.attractVx += (-dx / dist) * force;
+            s.attractVy += (-dy / dist) * force;
+          }
+          s.attractVx *= 0.90;
+          s.attractVy *= 0.90;
+
+          // Physics
+          s.vx *= 0.96; s.vy *= 0.96;
+          s.x += s.vx + s.attractVx;
+          s.y += s.vy + s.attractVy;
+
+          // Edge wrap
+          if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
+          if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
+
+          // Parallax draw offset (logical position never mutated)
+          const drawX = s.x + smoothX * s.pFactor;
+          const drawY = s.y + smoothY * s.pFactor;
+
+          ctx.beginPath();
+          ctx.arc(drawX, drawY, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = s.colorPrefix + alpha.toFixed(3) + ')';
+          ctx.fill();
+        });
+
+        if (useShadow) ctx.shadowBlur = 0;
+      }
+
+      // ── Near-star connections ───────────────────────
+      function drawConnections() {
+        const threshold = 130;
+        for (let i = 0; i < nearStars.length; i++) {
+          for (let j = i + 1; j < nearStars.length; j++) {
+            const dx = nearStars[i].x - nearStars[j].x;
+            const dy = nearStars[i].y - nearStars[j].y;
+            const d  = dx * dx + dy * dy;
+            if (d < threshold * threshold) {
+              const dist = Math.sqrt(d);
+              const alpha = (1 - dist / threshold) * 0.16;
+              ctx.beginPath();
+              ctx.moveTo(nearStars[i].x + smoothX * 0.12, nearStars[i].y + smoothY * 0.12);
+              ctx.lineTo(nearStars[j].x + smoothX * 0.12, nearStars[j].y + smoothY * 0.12);
+              ctx.strokeStyle = 'rgba(201,168,76,' + alpha.toFixed(3) + ')';
+              ctx.lineWidth   = 0.7;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      // ── Shooting stars ──────────────────────────────
+      function spawnMeteor() {
+        const slot = meteors.find(m => !m.active);
+        if (!slot) return;
+        const angle = (15 + Math.random() * 30) * Math.PI / 180;
+        const speed = 8 + Math.random() * 6;
+        // Start from top or left edge
+        const fromTop = Math.random() < 0.6;
+        Object.assign(slot, {
+          active: true,
+          x: fromTop ? Math.random() * W : 0,
+          y: fromTop ? 0 : Math.random() * H * 0.5,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          length: 80 + Math.random() * 100,
+          life: 1.0
+        });
+      }
+
+      function drawMeteors() {
+        meteors.forEach(m => {
+          if (!m.active) return;
+          m.x += m.vx; m.y += m.vy;
+          m.life -= 0.012;
+          if (m.life <= 0 || m.x > W + 50 || m.y > H + 50) {
+            m.active = false;
+            return;
+          }
+          const tailX = m.x - m.vx / Math.hypot(m.vx, m.vy) * m.length;
+          const tailY = m.y - m.vy / Math.hypot(m.vx, m.vy) * m.length;
+          const grad = ctx.createLinearGradient(m.x, m.y, tailX, tailY);
+          grad.addColorStop(0,   'rgba(255,255,255,' + (m.life * 0.9).toFixed(3) + ')');
+          grad.addColorStop(0.3, 'rgba(201,168,76,' + (m.life * 0.6).toFixed(3) + ')');
+          grad.addColorStop(1,   'rgba(201,168,76,0)');
+          ctx.beginPath();
+          ctx.moveTo(m.x, m.y);
+          ctx.lineTo(tailX, tailY);
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        });
       }
 
       // ── Animation loop ──────────────────────────────
-      function draw() {
+      let startTime = null;
+      function draw(now) {
+        if (!startTime) { startTime = now; conStartTime = now; }
+        const t = now * 0.001; // seconds
+        const elapsed = now - conStartTime;
+
         ctx.clearRect(0, 0, W, H);
-        const t = Date.now();
-        drawConstellations(t);
 
-        const gold = '201,168,76';
+        // Smooth parallax offset (lerp toward mouse-from-center)
+        const targetX = mouse.x > 0 ? mouse.x - W / 2 : 0;
+        const targetY = mouse.y > 0 ? mouse.y - H / 2 : 0;
+        smoothX += (targetX - smoothX) * 0.08;
+        smoothY += (targetY - smoothY) * 0.08;
 
-        particles.forEach(p => {
-          // Cursor repulsion
-          const dx = p.x - mouse.x;
-          const dy = p.y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const repulseR = 110;
+        // 1. Nebulae (bottom)
+        drawNebulae();
 
-          if (dist < repulseR && dist > 0) {
-            const force = (repulseR - dist) / repulseR;
-            p.vx += (dx / dist) * force * 0.9;
-            p.vy += (dy / dist) * force * 0.9;
-            p.a   = Math.min(p.base + force * 1.1, 1.0);
-          } else {
-            p.a += (p.base - p.a) * 0.04;
-          }
+        // 2. Far stars (no shadow)
+        updateAndDrawStars(farStars,  t, false);
 
-          // Velocity damping + drift
-          p.vx *= 0.96;
-          p.vy *= 0.96;
-          p.x  += p.vx;
-          p.y  += p.vy;
+        // 3. Mid stars (no shadow)
+        updateAndDrawStars(midStars,  t, false);
 
-          // Wrap edges
-          if (p.x < 0)  p.x = W;
-          if (p.x > W)  p.x = 0;
-          if (p.y < 0)  p.y = H;
-          if (p.y > H)  p.y = 0;
+        // 4. Connections between near stars only
+        drawConnections();
 
-          // Draw particle
-          ctx.shadowColor = `rgba(201,168,76,${p.a * 0.8})`;
-          ctx.shadowBlur  = p.r * 4;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${gold},${p.a})`;
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        });
+        // 5. Near stars (shadow batch)
+        updateAndDrawStars(nearStars, t, true);
 
-        // Draw connections
-        const lineThreshold = 120;
-        for (let i = 0; i < particles.length; i++) {
-          for (let j = i + 1; j < particles.length; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const d  = Math.sqrt(dx * dx + dy * dy);
-            if (d < lineThreshold) {
-              const alpha = (1 - d / lineThreshold) * 0.18;
-              ctx.beginPath();
-              ctx.moveTo(particles[i].x, particles[i].y);
-              ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.strokeStyle = `rgba(${gold},${alpha})`;
-              ctx.lineWidth   = 0.8;
-              ctx.stroke();
-            }
+        // 6. Constellations (draw-in + pulse)
+        drawConstellations(t * 1000, elapsed);
+
+        // 7. Shooting stars
+        if (!isMobile() && !reducedMotion) {
+          drawMeteors();
+          if (now - lastMeteorTime > nextMeteorDelay) {
+            spawnMeteor();
+            lastMeteorTime = now;
+            nextMeteorDelay = 5000 + Math.random() * 7000;
           }
         }
 
         requestAnimationFrame(draw);
       }
 
-      // ── Mouse tracking ──────────────────────────────
+      // ── Mouse / touch tracking ──────────────────────
       hero.addEventListener('mousemove', e => {
         const rect = hero.getBoundingClientRect();
         mouse.x = e.clientX - rect.left;
         mouse.y = e.clientY - rect.top;
 
         // Spotlight auf hero-bg
-        const pxPct = ((mouse.x / W) * 100).toFixed(1) + '%';
-        const pyPct = ((mouse.y / H) * 100).toFixed(1) + '%';
-        heroBg.style.setProperty('--mx', pxPct);
-        heroBg.style.setProperty('--my', pyPct);
-
+        heroBg.style.setProperty('--mx', ((mouse.x / W) * 100).toFixed(1) + '%');
+        heroBg.style.setProperty('--my', ((mouse.y / H) * 100).toFixed(1) + '%');
       }, { passive: true });
 
-      hero.addEventListener('mouseleave', () => {
-        mouse.x = -9999;
-        mouse.y = -9999;
-      });
+      hero.addEventListener('touchmove', e => {
+        const rect = hero.getBoundingClientRect();
+        mouse.x = e.touches[0].clientX - rect.left;
+        mouse.y = e.touches[0].clientY - rect.top;
+      }, { passive: true });
+
+      hero.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
 
       // ── Init ────────────────────────────────────────
-      resize();
-      draw();
+      // Immediate first sizing (no debounce)
+      (function initImmediate() {
+        const rect = hero.getBoundingClientRect();
+        W = rect.width; H = rect.height;
+        canvas.width  = W * DPR; canvas.height = H * DPR;
+        canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+        ctx.scale(DPR, DPR);
+        initStars();
+        initNebulae();
+      })();
+      requestAnimationFrame(draw);
       window.addEventListener('resize', resize, { passive: true });
     })();
   </script>
