@@ -4,7 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zukunft mit KI – KI-Beratung & Digitale Transformation</title>
-  <meta name="description" content="Professionelle KI-Beratung, Systementwicklung und Schulungen für Ihr Unternehmen. Kostenloses Erstgespräch buchen." />
+  <meta name="description" content="KI-Beratung & Digitale Transformation – Benn Neujahr begleitet Ihr Unternehmen von der KI-Strategie bis zur fertigen Lösung. Workshops, Systementwicklung, Prompt Engineering. Kostenloses Erstgespräch." />
+
+  <!-- Open Graph (LinkedIn, Facebook, WhatsApp) -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://www.zukunft-mit-ki.com/" />
+  <meta property="og:title"       content="Zukunft mit KI – KI-Beratung & Digitale Transformation" />
+  <meta property="og:description" content="Professionelle KI-Beratung, Systementwicklung und Workshops für Unternehmen. Von Schwerin aus deutschlandweit. Kostenloses Erstgespräch." />
+  <meta property="og:image"       content="https://www.zukunft-mit-ki.com/og-image.jpg" />
+  <meta property="og:locale"      content="de_DE" />
+  <meta property="og:site_name"   content="Zukunft mit KI" />
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Zukunft mit KI – KI-Beratung & Digitale Transformation" />
+  <meta name="twitter:description" content="Professionelle KI-Beratung, Systementwicklung und Workshops für Unternehmen. Kostenloses Erstgespräch." />
+  <meta name="twitter:image"       content="https://www.zukunft-mit-ki.com/og-image.jpg" />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://www.zukunft-mit-ki.com/" />
+
+  <!-- Erweiterte Meta-Tags -->
+  <meta name="keywords" content="KI-Beratung, Künstliche Intelligenz, KI-Unternehmensberatung, Digitale Transformation, KI-Workshops, KI-Systeme, Prompt Engineering, Schwerin, Deutschland, Anthropic, Claude, Google Cloud, Benn Neujahr" />
+  <meta name="author" content="Benn Neujahr" />
+  <meta name="robots" content="index, follow" />
+  <meta name="geo.region" content="DE-MV" />
+  <meta name="geo.placename" content="Schwerin" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -65,7 +91,7 @@
     .section-sub {
       font-size: 1.05rem;
       color: var(--text-muted);
-      max-width: 560px;
+      max-width: 720px;
     }
 
     /* ─── Scroll Reveal ──────────────────────────────── */
@@ -158,13 +184,13 @@
     }
     .nav-logo-icon {
       width: 36px; height: 36px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
-    .nav-logo-icon svg { width: 20px; height: 20px; }
+    .nav-logo-icon img { width: 36px; height: 36px; object-fit: contain; border-radius: 10px; }
     .nav-logo span { color: var(--gold); }
     .nav-links {
       display: flex;
@@ -252,6 +278,17 @@
         radial-gradient(ellipse 60% 80% at 20% 80%, rgba(34,43,69,0.8) 0%, transparent 60%),
         linear-gradient(160deg, var(--dark) 0%, #1e2840 50%, #1a2035 100%);
     }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle 450px at var(--mx, 70%) var(--my, 50%),
+        rgba(201,168,76,0.13) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
     /* Decorative grid */
     .hero-grid {
       position: absolute;
@@ -263,36 +300,12 @@
       mask-image: radial-gradient(ellipse 70% 70% at 70% 40%, black 0%, transparent 70%);
       -webkit-mask-image: radial-gradient(ellipse 70% 70% at 70% 40%, black 0%, transparent 70%);
     }
-    /* Animated orb */
-    .hero-orb {
+    /* Canvas overlay */
+    #hero-canvas {
       position: absolute;
-      width: 520px;
-      height: 520px;
-      right: -60px;
-      top: 50%;
-      transform: translateY(-50%);
-      border-radius: 50%;
-      background: conic-gradient(from 0deg, transparent 0%, rgba(201,168,76,0.12) 25%, transparent 50%, rgba(201,168,76,0.06) 75%, transparent 100%);
-      animation: orb-spin 20s linear infinite;
-    }
-    .hero-orb::before {
-      content: '';
-      position: absolute;
-      inset: 60px;
-      border-radius: 50%;
-      border: 1px solid rgba(201,168,76,0.2);
-      animation: orb-spin 15s linear infinite reverse;
-    }
-    .hero-orb::after {
-      content: '';
-      position: absolute;
-      inset: 130px;
-      border-radius: 50%;
-      border: 1px dashed rgba(201,168,76,0.15);
-      animation: orb-spin 10s linear infinite;
-    }
-    @keyframes orb-spin {
-      to { transform: rotate(360deg); }
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
     }
     /* Floating dots */
     .hero-dots {
@@ -471,14 +484,13 @@
       padding: 32px 24px;
       text-align: center;
       transition: border-color var(--transition), background var(--transition);
-      cursor: default;
+      cursor: pointer;
       position: relative;
     }
     .zert-card:hover {
       border-color: var(--gold);
       background: var(--gold-dim);
     }
-    .zert-card:hover .zert-tooltip { opacity: 1; transform: translateY(-4px); }
     .zert-placeholder-icon {
       width: 64px;
       height: 64px;
@@ -491,6 +503,15 @@
       margin: 0 auto 16px;
     }
     .zert-placeholder-icon svg { width: 30px; height: 30px; color: var(--gold); opacity: 0.7; }
+    .zert-img {
+      width: 100%;
+      max-width: 160px;
+      height: auto;
+      border-radius: 8px;
+      margin: 0 auto 16px;
+      display: block;
+      object-fit: contain;
+    }
     .zert-name {
       font-weight: 600;
       font-size: 0.9rem;
@@ -499,30 +520,6 @@
     .zert-org {
       font-size: 0.78rem;
       color: var(--text-muted);
-    }
-    .zert-tooltip {
-      position: absolute;
-      bottom: calc(100% + 10px);
-      left: 50%;
-      transform: translateX(-50%) translateY(0);
-      background: var(--dark);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 8px 14px;
-      font-size: 0.75rem;
-      color: var(--gold);
-      white-space: nowrap;
-      opacity: 0;
-      transition: opacity var(--transition), transform var(--transition);
-      pointer-events: none;
-    }
-    .zert-tooltip::after {
-      content: '';
-      position: absolute;
-      top: 100%; left: 50%;
-      transform: translateX(-50%);
-      border: 5px solid transparent;
-      border-top-color: var(--border);
     }
     .zert-hint {
       margin-top: 32px;
@@ -540,54 +537,85 @@
       font-size: 0.8rem;
       color: var(--gold-light);
     }
+    .zert-skills {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0;
+      text-align: left;
+    }
+    .zert-skills li {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      padding: 3px 0 3px 14px;
+      position: relative;
+      line-height: 1.4;
+    }
+    .zert-skills li::before {
+      content: '·';
+      position: absolute;
+      left: 4px;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    /* ─── Lightbox ───────────────────────────────────── */
+    .zert-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      background: rgba(0,0,0,0.82);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .zert-lightbox.active { display: flex; }
+    .zert-lightbox-inner {
+      position: relative;
+      max-width: min(70vw, 900px);
+      max-height: 88vh;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid rgba(201,168,76,0.3);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      overflow: hidden;
+    }
+    .zert-lightbox-img {
+      max-width: 100%;
+      max-height: calc(88vh - 80px);
+      object-fit: contain;
+      border-radius: 6px;
+    }
+    .zert-lightbox-title {
+      font-size: 0.9rem;
+      color: var(--gold);
+      font-weight: 600;
+      text-align: center;
+    }
+    .zert-lightbox-close {
+      position: absolute;
+      top: 12px; right: 14px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: color var(--transition);
+    }
+    .zert-lightbox-close:hover { color: var(--gold); }
 
     /* ─── Über mich ──────────────────────────────────── */
     #ueber-mich { background: var(--dark); }
     .about-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 64px;
       align-items: center;
-    }
-    /* Photo placeholder */
-    .about-photo-wrap {
-      position: relative;
-    }
-    .about-photo {
-      width: 100%;
-      aspect-ratio: 4/5;
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      color: var(--text-muted);
-      position: relative;
-      overflow: hidden;
-    }
-    .about-photo::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(201,168,76,0.05) 0%, transparent 60%);
-    }
-    .about-photo svg { width: 48px; height: 48px; opacity: 0.4; }
-    .about-photo p { font-size: 0.85rem; text-align: center; padding: 0 24px; }
-    .about-photo-badge {
-      position: absolute;
-      bottom: -12px;
-      right: -12px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      color: var(--dark);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 800;
-      font-size: 0.85rem;
-      padding: 10px 16px;
-      border-radius: var(--radius-sm);
-      box-shadow: 0 4px 20px rgba(201,168,76,0.35);
     }
     /* Text side */
     .about-content { position: relative; }
@@ -779,8 +807,7 @@
 
     /* ─── Responsive ─────────────────────────────────── */
     @media (max-width: 900px) {
-      .about-grid { grid-template-columns: 1fr; gap: 40px; }
-      .about-photo { aspect-ratio: 16/9; max-height: 320px; }
+      .about-grid { gap: 40px; }
       .kontakt-inner { grid-template-columns: 1fr; gap: 40px; }
       .about-accent-line { display: none; }
     }
@@ -788,18 +815,117 @@
       .section { padding: 72px 0; }
       .nav-links, .nav-cta { display: none; }
       .nav-hamburger { display: flex; }
-      .hero-orb { width: 300px; height: 300px; right: -100px; }
       .hero-dots { right: 20px; }
       .form-row { grid-template-columns: 1fr; }
       .footer-inner { flex-direction: column; text-align: center; }
+      .about-photo {
+        width: 180px;
+        height: 220px;
+        margin: 0 auto 28px;
+      }
+      .mobile-nav-cta {
+        display: block;
+        margin: 8px 24px 16px;
+        text-align: center;
+      }
+    }
+    @media (max-width: 500px) {
+      .zert-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .zert-card img {
+        max-height: 120px;
+      }
     }
     @media (max-width: 480px) {
       .hero-title { font-size: 2rem; }
-      .hero-orb { display: none; }
       .hero-dots { display: none; }
-      .form-card { padding: 24px; }
+      .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .hero-inner {
+        padding: 0 16px;
+        text-align: center;
+      }
+      .hero-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+      }
+      .hero-actions .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+      .form-card {
+        padding: 24px 16px;
+      }
+      .form-group input,
+      .form-group textarea {
+        font-size: 16px;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
     }
+    @media (max-width: 360px) {
+      .section { padding: 56px 12px; }
+    }
+    .mobile-nav-cta { display: none; }
   </style>
+
+  <!-- JSON-LD Strukturierte Daten (Schema.org) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["LocalBusiness", "ProfessionalService"],
+        "@id": "https://www.zukunft-mit-ki.com/#business",
+        "name": "Zukunft mit KI",
+        "url": "https://www.zukunft-mit-ki.com",
+        "logo": "https://www.zukunft-mit-ki.com/logo.png",
+        "image": "https://www.zukunft-mit-ki.com/og-image.jpg",
+        "description": "Professionelle KI-Beratung, Systementwicklung und Schulungen für Unternehmen. Von der ersten Strategie bis zur fertigen KI-Lösung.",
+        "email": "info@zukunft-mit-ki.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Schwerin",
+          "addressCountry": "DE"
+        },
+        "areaServed": {
+          "@type": "Country",
+          "name": "Deutschland"
+        },
+        "priceRange": "€€",
+        "serviceType": ["KI-Beratung", "KI-Systementwicklung", "KI-Workshops", "Prompt Engineering"],
+        "sameAs": []
+      },
+      {
+        "@type": "Person",
+        "@id": "https://www.zukunft-mit-ki.com/#person",
+        "name": "Benn Neujahr",
+        "jobTitle": "KI-Berater & Consultant",
+        "worksFor": { "@id": "https://www.zukunft-mit-ki.com/#business" },
+        "url": "https://www.zukunft-mit-ki.com",
+        "knowsAbout": ["Künstliche Intelligenz", "Prompt Engineering", "Digitale Transformation", "Claude", "Google Cloud AI"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.zukunft-mit-ki.com/#website",
+        "url": "https://www.zukunft-mit-ki.com",
+        "name": "Zukunft mit KI",
+        "inLanguage": "de",
+        "publisher": { "@id": "https://www.zukunft-mit-ki.com/#business" }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -808,11 +934,7 @@
     <div class="nav-inner">
       <a href="#" class="nav-logo" aria-label="Zukunft mit KI – Startseite">
         <div class="nav-logo-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5"/>
-            <path d="M2 12l10 5 10-5"/>
-          </svg>
+          <img src="Logo_neu.png" alt="Zukunft mit KI Logo" />
         </div>
         Zukunft mit <span>KI</span>
       </a>
@@ -838,14 +960,14 @@
     <a href="#zertifikate">Zertifikate</a>
     <a href="#ueber-mich">Über mich</a>
     <a href="#kontakt">Kontakt</a>
-    <a href="#kontakt" class="btn btn-gold">Erstgespräch buchen</a>
+    <a href="#kontakt" class="btn btn-gold mobile-nav-cta">Erstgespräch buchen</a>
   </div>
 
   <!-- ─── Hero ──────────────────────────────────────── -->
   <section id="hero" aria-label="Startbereich">
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="hero-grid" aria-hidden="true"></div>
-    <div class="hero-orb" aria-hidden="true"></div>
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
     <div class="hero-dots" aria-hidden="true">
       <div class="hero-dot"></div>
       <div class="hero-dot"></div>
@@ -956,143 +1078,146 @@
 
       <div class="zert-grid">
         <!-- Zertifikat 1 -->
-        <div class="zert-card reveal reveal-delay-1" role="img" aria-label="Anthropic Claude 101">
-          <div class="zert-placeholder-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="6"></circle>
-              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"></path>
-            </svg>
-          </div>
+        <div class="zert-card reveal reveal-delay-1" role="button" tabindex="0"
+             data-img="PNG/Anthropic_Claude 101.png" data-title="Claude 101 – Anthropic">
+          <img src="PNG/Anthropic_Claude 101.png" alt="Zertifikat: Claude 101 – Anthropic" class="zert-img" />
           <p class="zert-name">Claude 101</p>
           <p class="zert-org">Anthropic</p>
-          <div class="zert-tooltip">Zertifikat ansehen</div>
+          <ul class="zert-skills">
+            <li>Grundlagen moderner KI-Modelle</li>
+            <li>Prompts gezielt formulieren</li>
+            <li>KI-Grenzen realistisch einschätzen</li>
+          </ul>
         </div>
 
         <!-- Zertifikat 2 -->
-        <div class="zert-card reveal reveal-delay-2" role="img" aria-label="AI Fluency Framework">
-          <div class="zert-placeholder-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-          </div>
+        <div class="zert-card reveal reveal-delay-2" role="button" tabindex="0"
+             data-img="PNG/Anthropic_AI Fluency.png" data-title="AI Fluency: Framework &amp; Foundations – Anthropic">
+          <img src="PNG/Anthropic_AI Fluency.png" alt="Zertifikat: AI Fluency – Anthropic" class="zert-img" />
           <p class="zert-name">AI Fluency: Framework &amp; Foundations</p>
           <p class="zert-org">Anthropic</p>
-          <div class="zert-tooltip">Zertifikat ansehen</div>
+          <ul class="zert-skills">
+            <li>KI-Konzepte verständlich erklären</li>
+            <li>Einsatzpotenziale im Unternehmen erkennen</li>
+            <li>Entscheidungsrahmen für KI-Einführung entwickeln</li>
+          </ul>
         </div>
 
         <!-- Zertifikat 3 -->
-        <div class="zert-card reveal reveal-delay-3" role="img" aria-label="AI Fluency for Educators">
-          <div class="zert-placeholder-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            </svg>
-          </div>
+        <div class="zert-card reveal reveal-delay-3" role="button" tabindex="0"
+             data-img="PNG/Anthropic_AI Fluency for educators.png" data-title="AI Fluency for Educators – Anthropic">
+          <img src="PNG/Anthropic_AI Fluency for educators.png" alt="Zertifikat: AI Fluency for Educators – Anthropic" class="zert-img" />
           <p class="zert-name">AI Fluency for Educators</p>
           <p class="zert-org">Anthropic</p>
-          <div class="zert-tooltip">Zertifikat ansehen</div>
+          <ul class="zert-skills">
+            <li>KI-Wissen strukturiert vermitteln</li>
+            <li>Workshop-Inhalte zielgruppengerecht aufbereiten</li>
+            <li>Mitarbeiter praxisnah schulen</li>
+          </ul>
         </div>
 
         <!-- Zertifikat 4 -->
-        <div class="zert-card reveal reveal-delay-1" role="img" aria-label="Teaching the AI Fluency Framework">
-          <div class="zert-placeholder-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="16 18 22 12 16 6"></polyline>
-              <polyline points="8 6 2 12 8 18"></polyline>
-            </svg>
-          </div>
+        <div class="zert-card reveal reveal-delay-1" role="button" tabindex="0"
+             data-img="PNG/Anthropic_Teaching AI Fluency.png" data-title="Teaching the AI Fluency Framework – Anthropic">
+          <img src="PNG/Anthropic_Teaching AI Fluency.png" alt="Zertifikat: Teaching AI Fluency – Anthropic" class="zert-img" />
           <p class="zert-name">Teaching the AI Fluency Framework</p>
           <p class="zert-org">Anthropic</p>
-          <div class="zert-tooltip">Zertifikat ansehen</div>
+          <ul class="zert-skills">
+            <li>KI-Schulungen eigenständig leiten</li>
+            <li>Wissenstransfer nachhaltig gestalten</li>
+            <li>Teams zur KI-Nutzung befähigen</li>
+          </ul>
         </div>
 
         <!-- Zertifikat 5 -->
-        <div class="zert-card reveal reveal-delay-2" role="img" aria-label="Claude Code in Action">
-          <div class="zert-placeholder-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="6"></circle>
-              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"></path>
-            </svg>
-          </div>
+        <div class="zert-card reveal reveal-delay-2" role="button" tabindex="0"
+             data-img="PNG/Anthropic_Claude Code in Action.png" data-title="Claude Code in Action – Anthropic">
+          <img src="PNG/Anthropic_Claude Code in Action.png" alt="Zertifikat: Claude Code in Action – Anthropic" class="zert-img" />
           <p class="zert-name">Claude Code in Action</p>
           <p class="zert-org">Anthropic · März 2026</p>
-          <div class="zert-tooltip">Zertifikat ansehen</div>
+          <ul class="zert-skills">
+            <li>KI-gestütztes Coding in Workflows einsetzen</li>
+            <li>Entwicklungsprozesse beschleunigen</li>
+            <li>Prototypen und Automatisierungen bauen</li>
+          </ul>
         </div>
 
         <!-- Zertifikat 6 -->
-        <div class="zert-card reveal reveal-delay-3" role="img" aria-label="Building with the Claude API">
-          <div class="zert-placeholder-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-          </div>
+        <div class="zert-card reveal reveal-delay-3" role="button" tabindex="0"
+             data-img="PNG/Anthropic_Building with the Claude API.png" data-title="Building with the Claude API – Anthropic">
+          <img src="PNG/Anthropic_Building with the Claude API.png" alt="Zertifikat: Building with the Claude API – Anthropic" class="zert-img" />
           <p class="zert-name">Building with the Claude API</p>
           <p class="zert-org">Anthropic · März 2026</p>
-          <div class="zert-tooltip">Zertifikat ansehen</div>
+          <ul class="zert-skills">
+            <li>Eigene KI-Anwendungen entwickeln</li>
+            <li>API-Integrationen umsetzen</li>
+            <li>Maßgeschneiderte Lösungen für Ihr Unternehmen bauen</li>
+          </ul>
         </div>
 
         <!-- Zertifikat 7 -->
-        <div class="zert-card reveal reveal-delay-1" role="img" aria-label="Introduction to Generative AI">
-          <div class="zert-placeholder-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            </svg>
-          </div>
+        <div class="zert-card reveal reveal-delay-1" role="button" tabindex="0"
+             data-img="PNG/Google_generative badge.png" data-title="Introduction to Generative AI – Google Cloud">
+          <img src="PNG/Google_generative badge.png" alt="Zertifikat: Introduction to Generative AI – Google Cloud" class="zert-img" />
           <p class="zert-name">Introduction to Generative AI</p>
           <p class="zert-org">Google Cloud</p>
-          <div class="zert-tooltip">Zertifikat ansehen</div>
+          <ul class="zert-skills">
+            <li>Generative KI fundiert erklären und einordnen</li>
+            <li>Anwendungsfelder realistisch bewerten</li>
+            <li>Technologie von Hype trennen</li>
+          </ul>
         </div>
 
         <!-- Zertifikat 8 -->
-        <div class="zert-card reveal reveal-delay-2" role="img" aria-label="Introduction to Large Language Models">
-          <div class="zert-placeholder-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="16 18 22 12 16 6"></polyline>
-              <polyline points="8 6 2 12 8 18"></polyline>
-            </svg>
-          </div>
+        <div class="zert-card reveal reveal-delay-2" role="button" tabindex="0"
+             data-img="PNG/Google_llm badge.png" data-title="Introduction to Large Language Models – Google Cloud">
+          <img src="PNG/Google_llm badge.png" alt="Zertifikat: Introduction to Large Language Models – Google Cloud" class="zert-img" />
           <p class="zert-name">Introduction to Large Language Models</p>
           <p class="zert-org">Google Cloud</p>
-          <div class="zert-tooltip">Zertifikat ansehen</div>
+          <ul class="zert-skills">
+            <li>LLM-Funktionsweise verstehen und erklären</li>
+            <li>Modellauswahl fachkundig beraten</li>
+            <li>Technische Grenzen klar kommunizieren</li>
+          </ul>
         </div>
 
         <!-- Zertifikat 9 -->
-        <div class="zert-card reveal reveal-delay-3" role="img" aria-label="Introduction to Responsible AI">
-          <div class="zert-placeholder-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="6"></circle>
-              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"></path>
-            </svg>
-          </div>
+        <div class="zert-card reveal reveal-delay-3" role="button" tabindex="0"
+             data-img="PNG/Google_responsible ai badge.png" data-title="Introduction to Responsible AI – Google Cloud">
+          <img src="PNG/Google_responsible ai badge.png" alt="Zertifikat: Introduction to Responsible AI – Google Cloud" class="zert-img" />
           <p class="zert-name">Introduction to Responsible AI</p>
           <p class="zert-org">Google Cloud</p>
-          <div class="zert-tooltip">Zertifikat ansehen</div>
+          <ul class="zert-skills">
+            <li>KI-Risiken erkennen und bewerten</li>
+            <li>Ethische Leitlinien in der Praxis anwenden</li>
+            <li>Vertrauenswürdige KI-Nutzung sicherstellen</li>
+          </ul>
         </div>
 
         <!-- Zertifikat 10 -->
-        <div class="zert-card reveal reveal-delay-1" role="img" aria-label="Gemini for Application Developers">
-          <div class="zert-placeholder-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-          </div>
+        <div class="zert-card reveal reveal-delay-1" role="button" tabindex="0"
+             data-img="PNG/Google_application developer.png" data-title="Gemini for Application Developers – Google Cloud">
+          <img src="PNG/Google_application developer.png" alt="Zertifikat: Gemini for Application Developers – Google Cloud" class="zert-img" />
           <p class="zert-name">Gemini for Application Developers</p>
           <p class="zert-org">Google Cloud</p>
-          <div class="zert-tooltip">Zertifikat ansehen</div>
+          <ul class="zert-skills">
+            <li>Google KI-Ökosystem gezielt einsetzen</li>
+            <li>Herstellerunabhängige Strategien entwickeln</li>
+            <li>Multi-Modell-Ansätze umsetzen</li>
+          </ul>
         </div>
 
         <!-- Zertifikat 11 -->
-        <div class="zert-card reveal reveal-delay-2" role="img" aria-label="KI-Kompetenz für den Arbeitsalltag">
-          <div class="zert-placeholder-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            </svg>
-          </div>
+        <div class="zert-card reveal reveal-delay-2" role="button" tabindex="0"
+             data-img="PNG/Digitales Innovationszentrum_Zertifikat_KI VO.png" data-title="KI-Kompetenz für den Arbeitsalltag – DIZ Schwerin">
+          <img src="PNG/Digitales Innovationszentrum_Zertifikat_KI VO.png" alt="Zertifikat: KI-Kompetenz für den Arbeitsalltag – DIZ Schwerin" class="zert-img" />
           <p class="zert-name">KI-Kompetenz für den Arbeitsalltag</p>
           <p class="zert-org">Digitales Innovationszentrum Schwerin · Feb. 2026</p>
-          <div class="zert-tooltip">Zertifikat ansehen</div>
+          <ul class="zert-skills">
+            <li>KI in bestehende Betriebsabläufe integrieren</li>
+            <li>Mittelstandsperspektive einbringen</li>
+            <li>Praxisnahe Umsetzung ohne IT-Abteilung</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -1102,21 +1227,6 @@
   <section id="ueber-mich" class="section" aria-label="Über mich">
     <div class="container">
       <div class="about-grid">
-        <!-- Foto -->
-        <div class="about-photo-wrap reveal">
-          <div class="about-photo" aria-label="Profilfoto Platzhalter">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <!-- ANPASSEN: Ersetzen Sie dieses div durch:
-                 <img src="foto.jpg" alt="[Ihr Name] – KI-Berater" />
-                 Empfohlene Bildgröße: 600×750 px -->
-            <p>Foto hier einfügen<br /><small>Datei im gleichen Ordner ablegen &amp; img-Tag einfügen</small></p>
-          </div>
-          <div class="about-photo-badge">KI-Experte</div>
-        </div>
-
         <!-- Text -->
         <div class="about-content reveal reveal-delay-2">
           <div class="about-accent-line" aria-hidden="true"></div>
@@ -1130,14 +1240,20 @@
             zu verstehen und gezielt zu nutzen — ohne Fachjargon, ohne unnötige Komplexität, aber mit echten Ergebnissen.
           </p>
           <p class="about-text">
-            Als Unternehmer aus Schwerin kenne ich die Herausforderungen des Mittelstands aus eigener Erfahrung.
-            Genau deshalb liegt mir ein praxisnaher Ansatz am Herzen: Ich entwickle KI-Lösungen, die wirklich
-            in Ihren Alltag passen — und begleite Sie langfristig auf diesem Weg.
+            Ich bin in Schwerin geboren, aufgewachsen und lebe hier — ohne Unterbrechung, ohne Umwege.
+            Mecklenburg-Vorpommern ist nicht nur mein Arbeitsort, es ist meine Heimat. Und genau deshalb liegt mir
+            die Zukunft dieser Region am Herzen: 97,5 % der Unternehmen in MV sind kleine und mittlere Betriebe.
+            Sie sind das Rückgrat unserer Wirtschaft — und sie verdienen es, in der KI-Ära nicht abgehängt zu werden.
           </p>
           <p class="about-text">
-            Mit Zertifizierungen von Anthropic und Google Cloud sowie praktischer Erfahrung im Aufbau
-            eigener KI-Anwendungen bringe ich sowohl das technische Verständnis als auch den unternehmerischen
-            Blick mit, den Ihr Projekt braucht.
+            Mein Antrieb ist einfach: Ich möchte, dass Schwerin und MV auch morgen noch lebenswert und wirtschaftlich
+            stark sind. KI ist kein Luxus für Großkonzerne — sie ist ein Werkzeug, das jedem Unternehmen offensteht.
+            Als Unternehmer kenne ich die Herausforderungen des Mittelstands aus eigener Erfahrung und spreche Ihre Sprache.
+          </p>
+          <p class="about-text">
+            Mit Zertifizierungen von Anthropic und Google Cloud sowie praktischer Erfahrung im Aufbau eigener
+            KI-Anwendungen bringe ich sowohl das technische Verständnis als auch den unternehmerischen Blick mit,
+            den Ihr Projekt braucht.
           </p>
 
           <div class="about-skills" aria-label="Schwerpunkte">
@@ -1274,6 +1390,15 @@
     </div>
   </footer>
 
+  <!-- ─── Lightbox ─────────────────────────────────── -->
+  <div class="zert-lightbox" id="zertLightbox" role="dialog" aria-modal="true" aria-label="Zertifikat Ansicht">
+    <div class="zert-lightbox-inner">
+      <button class="zert-lightbox-close" id="zertLightboxClose" aria-label="Schließen">&times;</button>
+      <img class="zert-lightbox-img" id="zertLightboxImg" src="" alt="" />
+      <p class="zert-lightbox-title" id="zertLightboxTitle"></p>
+    </div>
+  </div>
+
   <!-- ─── JavaScript ────────────────────────────────── -->
   <script>
     'use strict';
@@ -1398,6 +1523,219 @@
         setTimeout(() => { feedback.style.display = 'none'; feedback.className = 'form-feedback'; }, 4000);
       }, 500);
     });
+
+    // ── Lightbox ──────────────────────────────────────
+    const lightbox = document.getElementById('zertLightbox');
+    const lbImg    = document.getElementById('zertLightboxImg');
+    const lbTitle  = document.getElementById('zertLightboxTitle');
+    const lbClose  = document.getElementById('zertLightboxClose');
+
+    document.querySelectorAll('.zert-card').forEach(card => {
+      card.addEventListener('click', () => {
+        lbImg.src   = card.dataset.img;
+        lbImg.alt   = card.dataset.title;
+        lbTitle.textContent = card.dataset.title;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') card.click();
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    lbClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    // ── Hero Interactive Background ───────────────────
+    (function () {
+      const hero    = document.getElementById('hero');
+      const canvas  = document.getElementById('hero-canvas');
+      const heroBg  = hero.querySelector('.hero-bg');
+      const ctx     = canvas.getContext('2d');
+      const DPR     = Math.min(window.devicePixelRatio || 1, 2);
+
+      let W, H, particles;
+      let mouse = { x: -9999, y: -9999 };
+
+      // ── Setup / Resize ──────────────────────────────
+      function resize() {
+        const rect = hero.getBoundingClientRect();
+        W = rect.width;
+        H = rect.height;
+        canvas.width  = W * DPR;
+        canvas.height = H * DPR;
+        canvas.style.width  = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.scale(DPR, DPR);
+        initParticles();
+      }
+
+      // ── Constellations ──────────────────────────────
+      const CONSTELLATIONS = [
+        {
+          // Orion-Gürtel (3 Sterne diagonal, oben rechts)
+          stars: [[0.72,0.18],[0.79,0.23],[0.86,0.28]],
+          lines: [[0,1],[1,2]]
+        },
+        {
+          // Cassiopeia W-Form (5 Sterne, oben links)
+          stars: [[0.08,0.12],[0.13,0.22],[0.18,0.13],[0.23,0.22],[0.28,0.13]],
+          lines: [[0,1],[1,2],[2,3],[3,4]]
+        },
+        {
+          // Süd-Dreieck (3 Sterne, unten rechts)
+          stars: [[0.82,0.72],[0.90,0.58],[0.94,0.80]],
+          lines: [[0,1],[1,2],[2,0]]
+        }
+      ];
+
+      function drawConstellations(t) {
+        CONSTELLATIONS.forEach((con, ci) => {
+          const phase = ci * 2.1;
+          const pulse = 0.5 + 0.5 * Math.sin(t * 0.0008 + phase);
+          const lineAlpha = 0.12 + pulse * 0.10;
+          const starAlpha = 0.55 + pulse * 0.30;
+
+          // Linien
+          ctx.lineWidth = 0.7;
+          con.lines.forEach(([a, b]) => {
+            ctx.beginPath();
+            ctx.moveTo(con.stars[a][0] * W, con.stars[a][1] * H);
+            ctx.lineTo(con.stars[b][0] * W, con.stars[b][1] * H);
+            ctx.strokeStyle = `rgba(201,168,76,${lineAlpha})`;
+            ctx.stroke();
+          });
+
+          // Sterne
+          con.stars.forEach(([nx, ny]) => {
+            const sx = nx * W, sy = ny * H;
+            ctx.shadowColor = `rgba(201,168,76,${starAlpha * 0.6})`;
+            ctx.shadowBlur  = 8;
+            ctx.beginPath();
+            ctx.arc(sx, sy, 2.2, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(201,168,76,${starAlpha})`;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          });
+        });
+      }
+
+      // ── Particle class ──────────────────────────────
+      function Particle() {
+        this.reset();
+      }
+      Particle.prototype.reset = function () {
+        this.x    = Math.random() * W;
+        this.y    = Math.random() * H;
+        this.vx   = (Math.random() - 0.5) * 0.35;
+        this.vy   = (Math.random() - 0.5) * 0.35;
+        this.r    = Math.random() * 2.2 + 1.5;
+        this.base = Math.random() * 0.35 + 0.35;
+        this.a    = this.base;
+      };
+
+      function initParticles() {
+        const count = Math.floor((W * H) / 14000);  // ~70 auf Full-HD
+        particles = Array.from({ length: Math.min(count, 90) }, () => new Particle());
+      }
+
+      // ── Animation loop ──────────────────────────────
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        const t = Date.now();
+        drawConstellations(t);
+
+        const gold = '201,168,76';
+
+        particles.forEach(p => {
+          // Cursor repulsion
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const repulseR = 110;
+
+          if (dist < repulseR && dist > 0) {
+            const force = (repulseR - dist) / repulseR;
+            p.vx += (dx / dist) * force * 0.9;
+            p.vy += (dy / dist) * force * 0.9;
+            p.a   = Math.min(p.base + force * 1.1, 1.0);
+          } else {
+            p.a += (p.base - p.a) * 0.04;
+          }
+
+          // Velocity damping + drift
+          p.vx *= 0.96;
+          p.vy *= 0.96;
+          p.x  += p.vx;
+          p.y  += p.vy;
+
+          // Wrap edges
+          if (p.x < 0)  p.x = W;
+          if (p.x > W)  p.x = 0;
+          if (p.y < 0)  p.y = H;
+          if (p.y > H)  p.y = 0;
+
+          // Draw particle
+          ctx.shadowColor = `rgba(201,168,76,${p.a * 0.8})`;
+          ctx.shadowBlur  = p.r * 4;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${gold},${p.a})`;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        });
+
+        // Draw connections
+        const lineThreshold = 120;
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const d  = Math.sqrt(dx * dx + dy * dy);
+            if (d < lineThreshold) {
+              const alpha = (1 - d / lineThreshold) * 0.18;
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(${gold},${alpha})`;
+              ctx.lineWidth   = 0.8;
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      // ── Mouse tracking ──────────────────────────────
+      hero.addEventListener('mousemove', e => {
+        const rect = hero.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+
+        // Spotlight auf hero-bg
+        const pxPct = ((mouse.x / W) * 100).toFixed(1) + '%';
+        const pyPct = ((mouse.y / H) * 100).toFixed(1) + '%';
+        heroBg.style.setProperty('--mx', pxPct);
+        heroBg.style.setProperty('--my', pyPct);
+
+      }, { passive: true });
+
+      hero.addEventListener('mouseleave', () => {
+        mouse.x = -9999;
+        mouse.y = -9999;
+      });
+
+      // ── Init ────────────────────────────────────────
+      resize();
+      draw();
+      window.addEventListener('resize', resize, { passive: true });
+    })();
   </script>
 
 </body>
