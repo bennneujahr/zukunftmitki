@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Angebots-Demo Handwerk – by Zukunft mit KI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8f9fb;
+  --white: #ffffff;
+  --surface: #ffffff;
+  --surface2: #f2f4f7;
+  --surface3: #e8ebf0;
+  --border: #e2e6ed;
+  --border-focus: #2563eb;
+  --text: #0f172a;
+  --text-secondary: #64748b;
+  --text-light: #94a3b8;
+  --blue: #2563eb;
+  --blue-light: #dbeafe;
+  --blue-mid: #eff6ff;
+  --green: #16a34a;
+  --green-light: #dcfce7;
+  --orange: #ea580c;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.04);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* HEADER */
+.header {
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.97); backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
+}
+.header-logo {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800; font-size: 16px; color: var(--text);
+  display: flex; align-items: center; gap: 8px;
+}
+.header-logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+.header-center { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+.header-badge {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+  background: var(--blue-light); color: var(--blue);
+  border: 1px solid #bfdbfe;
+  padding: 4px 10px; border-radius: 20px;
+}
+
+/* CONTAINER */
+.container { max-width: 680px; margin: 0 auto; padding: 40px 20px 100px; }
+
+/* PROGRESS */
+.progress-wrap { margin-bottom: 36px; }
+.progress-bar { display: flex; gap: 4px; margin-bottom: 10px; }
+.progress-step { flex: 1; height: 4px; border-radius: 2px; background: var(--surface3); transition: background 0.4s ease; }
+.progress-step.done { background: var(--blue); }
+.progress-step.active { background: var(--blue); opacity: 0.4; }
+.progress-info { display: flex; justify-content: space-between; align-items: center; }
+.progress-label { font-size: 12px; color: var(--text-light); }
+.progress-title { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+
+/* STEP CARDS */
+.step-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 16px; padding: 36px;
+  box-shadow: var(--shadow-md);
+  display: none; animation: slideIn 0.3s ease;
+}
+.step-card.active { display: block; }
+@keyframes slideIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+.step-num {
+  font-size: 11px; font-weight: 600; color: var(--blue);
+  letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px;
+}
+.step-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(20px,3.5vw,26px); font-weight: 700;
+  line-height: 1.25; margin-bottom: 8px; color: var(--text);
+}
+.step-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 28px; line-height: 1.65; }
+
+/* FORM FIELDS */
+.field { margin-bottom: 16px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+label {
+  font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  letter-spacing: 0.3px; display: block; margin-bottom: 6px;
+}
+input[type=text], input[type=email], input[type=tel], textarea, select {
+  width: 100%; background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 11px 14px;
+  font-size: 14px; font-family: 'Inter', sans-serif;
+  color: var(--text); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s; resize: none;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+input::placeholder, textarea::placeholder { color: var(--text-light); }
+
+/* HANDWERK GRID */
+.handwerk-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.hw-card {
+  border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 14px 12px 12px;
+  cursor: pointer; transition: all 0.18s;
+  background: var(--white); text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.hw-card:hover { border-color: var(--blue); background: var(--blue-mid); box-shadow: var(--shadow-sm); }
+.hw-card.selected { border-color: var(--blue); background: var(--blue-light); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.hw-icon { font-size: 22px; line-height: 1; }
+.hw-label { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.3; }
+.hw-card.selected .hw-label { color: var(--blue); }
+.hw-card.selected::after { content: '✓'; font-size: 10px; color: var(--blue); font-weight: 700; }
+
+/* PHOTO UPLOAD */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px; padding: 36px 24px;
+  text-align: center; cursor: pointer;
+  transition: all 0.2s; background: var(--surface2);
+  position: relative;
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--blue); background: var(--blue-mid);
+}
+.upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.upload-icon { font-size: 32px; margin-bottom: 10px; }
+.upload-label { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.upload-sub { font-size: 12px; color: var(--text-light); }
+
+.photo-previews { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px,1fr)); gap: 8px; margin-top: 14px; }
+.photo-preview { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 1; background: var(--surface3); }
+.photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+.photo-remove {
+  position: absolute; top: 4px; right: 4px;
+  background: rgba(0,0,0,0.6); color: white; border: none;
+  width: 20px; height: 20px; border-radius: 50%; cursor: pointer;
+  font-size: 11px; display: flex; align-items: center; justify-content: center;
+}
+.photo-count { font-size: 12px; font-weight: 600; color: var(--green); margin-top: 10px; }
+
+/* TIPS BOX */
+.tips-box {
+  background: var(--blue-mid); border: 1px solid #bfdbfe;
+  border-radius: 10px; padding: 14px 16px; margin-top: 16px;
+}
+.tips-title { font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+.tips-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tip-tag { font-size: 12px; color: var(--blue); background: var(--blue-light); border: 1px solid #bfdbfe; padding: 3px 10px; border-radius: 20px; }
+
+/* AI ANALYZING */
+.ai-analyzing {
+  background: var(--blue-mid); border: 1px solid #bfdbfe;
+  border-radius: 12px; padding: 20px; margin-bottom: 20px; display: none;
+}
+.ai-analyzing.active { display: block; }
+.ai-analyzing-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); animation: pulse 1.2s infinite; flex-shrink: 0; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(0.7);} }
+.ai-analyzing-title { font-size: 13px; font-weight: 600; color: var(--blue); }
+.ai-sub { font-size: 13px; color: var(--text-secondary); }
+
+.ai-questions { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+.ai-question { font-size: 14px; padding-left: 0; line-height: 1.5; }
+.ai-q-text { font-weight: 600; color: var(--text); margin-bottom: 10px; font-size: 14px; }
+
+/* PRICE CARD */
+.price-card {
+  background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+  border: 1.5px solid #bfdbfe; border-radius: 14px;
+  padding: 24px 28px; margin-bottom: 16px;
+}
+.price-header { font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
+.price-range-display { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.price-low, .price-high {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 30px; font-weight: 800; color: var(--text);
+}
+.price-separator { font-size: 18px; color: var(--text-light); }
+.price-note { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+.price-factors { margin-top: 14px; display: flex; flex-direction: column; gap: 5px; }
+.price-factor { font-size: 13px; color: var(--text-secondary); padding-left: 14px; position: relative; }
+.price-factor::before { content: '·'; position: absolute; left: 4px; color: var(--blue); font-weight: 700; }
+
+.visit-banner {
+  background: var(--green-light); border: 1px solid #bbf7d0;
+  border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.visit-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.visit-text { font-size: 13px; color: #15803d; line-height: 1.65; }
+.visit-text strong { color: var(--green); }
+
+/* TIME GRID */
+.time-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 20px; }
+.time-card {
+  border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 12px 8px; cursor: pointer; transition: all 0.18s;
+  background: var(--white); text-align: center;
+  font-size: 12px; font-weight: 500; color: var(--text-secondary);
+  line-height: 1.5;
+}
+.time-card:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-mid); }
+.time-card.selected { border-color: var(--blue); background: var(--blue-light); color: var(--blue); font-weight: 600; }
+
+/* LOADING */
+.loading-overlay { display: none; text-align: center; padding: 60px 0; }
+.loading-overlay.active { display: block; }
+.spinner { width: 40px; height: 40px; margin: 0 auto 20px; border: 3px solid var(--surface3); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 14px; color: var(--text-secondary); }
+
+/* BUTTONS */
+.btn-row { display: flex; gap: 10px; margin-top: 28px; justify-content: flex-end; }
+.btn { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; padding: 11px 22px; border-radius: 10px; cursor: pointer; border: none; transition: all 0.18s; }
+.btn-ghost { background: transparent; color: var(--text-secondary); border: 1.5px solid var(--border); }
+.btn-ghost:hover { border-color: var(--text-secondary); color: var(--text); background: var(--surface2); }
+.btn-primary { background: var(--blue); color: white; box-shadow: 0 2px 8px rgba(37,99,235,0.25); }
+.btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+.btn-green { background: var(--green); color: white; box-shadow: 0 2px 8px rgba(22,163,74,0.25); }
+.btn-green:hover { background: #15803d; transform: translateY(-1px); }
+
+/* SUCCESS */
+.success-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 16px; padding: 48px 36px; text-align: center;
+  box-shadow: var(--shadow-lg); display: none; animation: slideIn 0.4s ease;
+}
+.success-card.active { display: block; }
+.success-icon { font-size: 52px; margin-bottom: 16px; }
+.success-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+.success-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; max-width: 400px; margin: 0 auto 28px; }
+.success-details { background: var(--surface2); border-radius: 12px; padding: 20px; text-align: left; max-width: 380px; margin: 0 auto; }
+.success-detail { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+.success-detail:last-child { border-bottom: none; }
+.success-detail-label { color: var(--text-secondary); flex-shrink: 0; }
+.success-detail-val { font-weight: 600; color: var(--text); text-align: right; }
+
+/* COMPANY CARDS */
+.companies-section { margin-top: 24px; }
+.companies-header {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.companies-header-badge {
+  font-size: 11px; font-weight: 600; background: var(--blue-light);
+  color: var(--blue); border: 1px solid #bfdbfe;
+  padding: 2px 8px; border-radius: 10px;
+}
+.companies-searching {
+  background: var(--blue-mid); border: 1px solid #bfdbfe;
+  border-radius: 10px; padding: 16px 18px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px; color: var(--blue);
+}
+.companies-grid { display: flex; flex-direction: column; gap: 10px; }
+.company-card {
+  border: 1.5px solid var(--border); border-radius: 12px;
+  padding: 16px 18px; cursor: pointer; transition: all 0.18s;
+  background: var(--white); display: flex; align-items: flex-start;
+  justify-content: space-between; gap: 12px;
+}
+.company-card:hover { border-color: var(--blue); box-shadow: var(--shadow-sm); }
+.company-card.selected { border-color: var(--blue); background: var(--blue-mid); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.company-card-left { flex: 1; min-width: 0; }
+.company-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.company-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.company-trade {
+  font-size: 11px; font-weight: 600; background: var(--surface2);
+  color: var(--text-secondary); padding: 2px 8px; border-radius: 10px;
+}
+.company-card.selected .company-trade { background: var(--blue-light); color: var(--blue); }
+.company-contacts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.company-contact { font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
+.company-maps { font-size: 12px; color: var(--blue); text-decoration: none; font-weight: 500; }
+.company-maps:hover { text-decoration: underline; }
+.company-check {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--border); display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; transition: all 0.18s;
+  font-size: 11px; color: transparent;
+}
+.company-card.selected .company-check { background: var(--blue); border-color: var(--blue); color: white; }
+.companies-hint { font-size: 12px; color: var(--text-light); margin-top: 10px; text-align: center; }
+.companies-none { font-size: 13px; color: var(--text-secondary); text-align: center; padding: 20px; background: var(--surface2); border-radius: 10px; }
+
+/* EMAIL PREVIEW */
+.email-preview {
+  background: var(--surface2); border: 1.5px solid var(--border);
+  border-radius: 12px; overflow: hidden; margin-bottom: 16px;
+}
+.email-header-bar {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 14px 18px; display: flex; flex-direction: column; gap: 6px;
+}
+.email-field { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; }
+.email-field-label { font-weight: 600; color: var(--text-secondary); min-width: 50px; flex-shrink: 0; }
+.email-field-val { color: var(--text); line-height: 1.5; word-break: break-all; }
+.email-body-area { padding: 18px; font-size: 13px; color: var(--text); line-height: 1.8; white-space: pre-wrap; }
+.mailto-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; background: var(--blue); color: white;
+  border: none; border-radius: 12px; padding: 16px 24px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: all 0.18s; text-decoration: none; font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+  margin-bottom: 10px;
+}
+.mailto-btn:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37,99,235,0.35); }
+.copy-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; background: transparent; color: var(--text-secondary);
+  border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 24px;
+  font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.18s;
+  font-family: 'Inter', sans-serif;
+}
+.copy-btn:hover { border-color: var(--text-secondary); color: var(--text); }
+.copy-btn.copied { border-color: var(--green); color: var(--green); background: var(--green-light); }
+.selected-summary {
+  background: var(--blue-mid); border: 1px solid #bfdbfe;
+  border-radius: 10px; padding: 14px 16px; margin-bottom: 16px;
+  font-size: 13px; color: var(--blue); line-height: 1.6;
+}
+.selected-summary strong { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+
+@media (max-width: 600px) {
+  .field-row { grid-template-columns: 1fr; }
+  .handwerk-grid { grid-template-columns: repeat(2,1fr); }
+  .time-grid { grid-template-columns: repeat(2,1fr); }
+  .step-card { padding: 24px 18px; }
+  .header { padding: 0 16px; }
+  .container { padding: 24px 14px 80px; }
+  .price-low, .price-high { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">
+    <div class="header-logo-dot"></div>
+    Angebots-Demo Handwerk
+  </div>
+  <div class="header-center">Angebots-Demo</div>
+  <div class="header-badge">KI-GESTÜTZT</div>
+</div>
+
+<div class="container">
+
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar">
+      <div class="progress-step active" id="ps1"></div>
+      <div class="progress-step" id="ps2"></div>
+      <div class="progress-step" id="ps3"></div>
+      <div class="progress-step" id="ps4"></div>
+      <div class="progress-step" id="ps5"></div>
+      <div class="progress-step" id="ps6"></div>
+    </div>
+    <div class="progress-info">
+      <span class="progress-label" id="progressLabel">Schritt 1 von 6</span>
+      <span class="progress-label" id="progressTitle">Ihre Daten</span>
+    </div>
+  </div>
+
+  <!-- STEP 1: KONTAKT -->
+  <div class="step-card active" id="step1">
+    <div class="step-num">Schritt 01 · 06</div>
+    <div class="step-title">Starten wir mit Ihren Kontaktdaten</div>
+    <div class="step-desc">Damit wir Ihre Anfrage persönlich bearbeiten können.</div>
+    <div class="field field-row">
+      <div><label>Vorname *</label><input type="text" id="vorname" placeholder="Max" /></div>
+      <div><label>Nachname *</label><input type="text" id="nachname" placeholder="Mustermann" /></div>
+    </div>
+    <div class="field"><label>E-Mail *</label><input type="email" id="email" placeholder="max@beispiel.de" /></div>
+    <div class="field field-row">
+      <div><label>Telefon *</label><input type="tel" id="telefon" placeholder="0385 / …" /></div>
+      <div><label>Ort</label><input type="text" id="ort" placeholder="Schwerin" /></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goStep(2)">Weiter →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: PROJEKTART -->
+  <!-- STEP 2: PROJEKTART -->
+  <div class="step-card" id="step2">
+    <div class="step-num">Schritt 02 · 06</div>
+    <div class="step-title">Welches Handwerk wird benötigt?</div>
+    <div class="step-desc">Wählen Sie den passenden Bereich. Wenn Sie unsicher sind, gibt es auch eine Option dafür.</div>
+    <div class="handwerk-grid" id="projektGrid">
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🏠</div><div class="hw-label">Dachdecker</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🪵</div><div class="hw-label">Zimmermann</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🪑</div><div class="hw-label">Tischler</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🔧</div><div class="hw-label">Klempner / Sanitär</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🧱</div><div class="hw-label">Trockenbau / Gips</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🖌️</div><div class="hw-label">Maler / Lackierer</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">⚡</div><div class="hw-label">Elektriker</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🪟</div><div class="hw-label">Fensterbauer / Glaser</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🧰</div><div class="hw-label">Schlosser / Metallbau</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🏗️</div><div class="hw-label">Maurer / Betonbau</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🌡️</div><div class="hw-label">Heizung / Lüftung</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🪴</div><div class="hw-label">Garten- & Landschaftsbau</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🏠</div><div class="hw-label">Bodenleger / Fliesen</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)"><div class="hw-icon">🛠️</div><div class="hw-label">Gerüstbau</div></div>
+      <div class="hw-card" onclick="selectProjekt(this)" style="border-style:dashed;background:var(--surface2);"><div class="hw-icon">🤔</div><div class="hw-label">Ich weiss es nicht genau</div></div>
+    </div>
+    <div class="field">
+      <label>Beschreiben Sie kurz, was Sie sich vorstellen</label>
+      <textarea id="projektFreitext" rows="3" placeholder="z. B. Mein Dach hat nach dem Sturm einen Schaden. Oder: Ich möchte mein Bad renovieren lassen. Kein Fachwissen nötig."></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goStep(1)">← Zurück</button>
+      <button class="btn btn-primary" onclick="goStep(3)">Weiter →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: FOTOS -->
+  <div class="step-card" id="step3">
+    <div class="step-num">Schritt 03 · 06</div>
+    <div class="step-title">Zeigen Sie uns Ihr Projekt.</div>
+    <div class="step-desc">Fotos helfen uns, den Aufwand realistisch einzuschätzen – und schützen Sie vor Überraschungen beim Preis. Laden Sie so viele Bilder hoch wie Sie möchten.</div>
+
+    <div class="upload-zone" id="uploadZone" ondragover="handleDrag(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+      <input type="file" id="photoInput" accept="image/*" multiple onchange="handleFiles(this.files)" />
+      <div class="upload-icon">📷</div>
+      <div class="upload-label">Fotos hier ablegen oder tippen zum Auswählen</div>
+      <div class="upload-sub">JPG, PNG, HEIC · Mehrere Fotos möglich · Max. 10 MB pro Bild</div>
+    </div>
+
+    <div class="photo-previews" id="photoPreviews"></div>
+    <div class="photo-count" id="photoCount"></div>
+
+    <div style="margin-top:20px; background:var(--surface2); border-radius:10px; padding:16px 18px;">
+      <div style="font-size:12px; color:var(--muted); margin-bottom:8px; font-family:'DM Mono',monospace; letter-spacing:0.5px;">GUTE FOTOS ZEIGEN:</div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:12px; color:var(--muted); background:var(--surface3); padding:4px 10px; border-radius:20px;">Den Gesamtbereich</span>
+        <span style="font-size:12px; color:var(--muted); background:var(--surface3); padding:4px 10px; border-radius:20px;">Schäden oder Probleme</span>
+        <span style="font-size:12px; color:var(--muted); background:var(--surface3); padding:4px 10px; border-radius:20px;">Zugänge und Umgebung</span>
+        <span style="font-size:12px; color:var(--muted); background:var(--surface3); padding:4px 10px; border-radius:20px;">Details die wichtig sind</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goStep(2)">← Zurück</button>
+      <button class="btn btn-primary" onclick="goStep(4)">Weiter →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: KI-RÜCKFRAGEN -->
+  <div class="step-card" id="step4">
+    <div class="step-num">Schritt 04 · 06</div>
+    <div class="step-title">Ein paar kurze Fragen.</div>
+    <div class="step-desc">Unser KI-Assistent hat Ihre Angaben analysiert und stellt Ihnen gezielte Rückfragen – damit das Angebot so genau wie möglich wird.</div>
+
+    <div class="ai-analyzing active" id="aiAnalyzing">
+      <div class="ai-analyzing-header">
+        <div class="pulse"></div>
+        <div class="ai-analyzing-title">KI analysiert Ihre Anfrage…</div>
+      </div>
+      <div style="font-size:13px; color:var(--muted);">Bitte warten Sie einen Moment.</div>
+    </div>
+
+    <div id="aiQuestionsContainer" style="display:none;">
+      <ul class="ai-questions" id="aiQuestionsList"></ul>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goStep(3)">← Zurück</button>
+      <button class="btn btn-primary" id="toStep5Btn" style="display:none" onclick="goStep(5)">Weiter →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: PREISSPANNE + FIRMEN -->
+  <div class="step-card" id="step5">
+    <div class="step-num">Schritt 05 · 06</div>
+    <div class="step-title">Ihre Orientierung.</div>
+    <div class="step-desc">Preisspanne, Hinweise – und passende Betriebe in Ihrer Nähe, die Sie direkt anfragen können.</div>
+
+    <div class="price-card" id="priceCard">
+      <div class="price-header">Geschätzter Rahmen (Richtwert)</div>
+      <div class="price-range-display">
+        <div class="price-low" id="priceLow">–</div>
+        <div class="price-separator">bis</div>
+        <div class="price-high" id="priceHigh">–</div>
+      </div>
+      <div class="price-note" id="priceNote"></div>
+      <div class="price-factors" id="priceFactors"></div>
+    </div>
+
+    <div class="visit-banner">
+      <div class="visit-icon">🔍</div>
+      <div class="visit-text">
+        <strong>Ein Vor-Ort-Termin ist der nächste Schritt.</strong><br>
+        Diese Spanne ist eine Orientierung. Der genaue Preis hängt von Details ab, die ein Fachmann erst vor Ort beurteilen kann. Wählen Sie unten passende Betriebe aus – wir bereiten Ihre Anfrage vor.
+      </div>
+    </div>
+
+    <div class="companies-section">
+      <div class="companies-header">
+        Passende Betriebe in Ihrer Nähe
+        <span class="companies-header-badge" id="companiesCount"></span>
+      </div>
+      <div class="companies-searching" id="companiesSearching">
+        <div class="pulse"></div>
+        Suche nach Betrieben in Ihrer Region…
+      </div>
+      <div class="companies-grid" id="companiesGrid"></div>
+      <div class="companies-hint" id="companiesHint" style="display:none;">
+        Mehrfachauswahl möglich – auch gewerksübergreifend
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goStep(4)">← Zurück</button>
+      <button class="btn btn-green" id="toStep6Btn" onclick="goStep(6)" disabled style="opacity:0.5;cursor:not-allowed;">Weiter zur Anfrage →</button>
+    </div>
+  </div>
+
+  <!-- STEP 6: E-MAIL ANFRAGE -->
+  <div class="step-card" id="step6">
+    <div class="step-num">Schritt 06 · 06</div>
+    <div class="step-title">Ihre Anfrage ist fertig.</div>
+    <div class="step-desc">Wir haben eine personalisierte E-Mail vorbereitet. Klicken Sie auf „E-Mail öffnen" – Ihr Mailprogramm öffnet sich automatisch mit allen Empfängern und dem Text.</div>
+
+    <div class="selected-summary" id="selectedSummary"></div>
+
+    <div class="email-preview" id="emailPreview">
+      <div class="email-header-bar">
+        <div class="email-field">
+          <span class="email-field-label">An:</span>
+          <span class="email-field-val" id="emailTo"></span>
+        </div>
+        <div class="email-field">
+          <span class="email-field-label">Betreff:</span>
+          <span class="email-field-val" id="emailSubject"></span>
+        </div>
+      </div>
+      <div class="email-body-area" id="emailBody"></div>
+    </div>
+
+    <a class="mailto-btn" id="mailtoBtn" href="#" target="_blank">
+      📨 E-Mail jetzt öffnen
+    </a>
+    <button class="copy-btn" id="copyBtn" onclick="copyEmailText()">
+      📋 E-Mail-Text kopieren (für Gmail / Webmail)
+    </button>
+
+    <div style="font-size:12px;color:var(--text-light);text-align:center;margin-top:12px;line-height:1.7;">
+      Der Button öffnet Ihr Standard-Mailprogramm (Outlook, Apple Mail, Thunderbird usw.).<br>
+      Für Gmail oder andere Webmail-Dienste nutzen Sie bitte „Text kopieren".
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingText">Anfrage wird verarbeitet…</div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-card" id="successCard">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Anfrage eingegangen!</div>
+    <div class="success-desc">Vielen Dank. Wir haben Ihre Anfrage erhalten und melden uns innerhalb von 24 Stunden, um einen Vor-Ort-Termin zu vereinbaren.</div>
+    <div class="success-details" id="successDetails"></div>
+  </div>
+
+</div>
+
+<script>
+let currentStep = 1;
+let selectedProjekt = '';
+let uploadedPhotos = [];
+let aiAnswers = {};
+let generatedPriceData = null;
+let foundCompanies = [];
+let selectedCompanies = [];
+let generatedEmailBody = '';
+let generatedEmailSubject = '';
+
+const stepTitles = ['Ihre Daten','Ihr Projekt','Fotos','Rückfragen','Preisspanne & Betriebe','Ihre Anfrage'];
+
+function updateProgress(n) {
+  for (let i=1;i<=6;i++) {
+    const el = document.getElementById('ps'+i);
+    el.className = 'progress-step';
+    if (i<n) el.classList.add('done');
+    else if (i===n) el.classList.add('active');
+  }
+  document.getElementById('progressLabel').textContent = `Schritt ${n} von 6`;
+  document.getElementById('progressTitle').textContent = stepTitles[n-1];
+}
+
+function goStep(n) {
+  if (n===2 && !validateStep1()) return;
+  if (n===4) startAIQuestions();
+  if (n===5) { generatePriceRange(); searchNearbyCompanies(); }
+  if (n===6) buildEmailPreview();
+
+  document.getElementById('step'+currentStep).classList.remove('active');
+  currentStep = n;
+  document.getElementById('step'+currentStep).classList.add('active');
+  updateProgress(n);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function validateStep1() {
+  const v = document.getElementById('vorname').value.trim();
+  const na = document.getElementById('nachname').value.trim();
+  const e = document.getElementById('email').value.trim();
+  const t = document.getElementById('telefon').value.trim();
+  if (!v||!na||!e||!t) { alert('Bitte füllen Sie Vor- und Nachname, E-Mail und Telefon aus.'); return false; }
+  return true;
+}
+
+function selectProjekt(el) {
+  document.querySelectorAll('#projektGrid .hw-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedProjekt = el.querySelector('.hw-label').textContent;
+}
+
+// PHOTO UPLOAD
+function handleDrag(e) { e.preventDefault(); document.getElementById('uploadZone').classList.add('dragover'); }
+function handleDragLeave(e) { document.getElementById('uploadZone').classList.remove('dragover'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('dragover');
+  handleFiles(e.dataTransfer.files);
+}
+function handleFiles(files) {
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      uploadedPhotos.push({ name: file.name, dataUrl: e.target.result });
+      renderPreviews();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function renderPreviews() {
+  const container = document.getElementById('photoPreviews');
+  container.innerHTML = '';
+  uploadedPhotos.forEach((photo, i) => {
+    const div = document.createElement('div');
+    div.className = 'photo-preview';
+    div.innerHTML = `<img src="${photo.dataUrl}" alt="Foto ${i+1}" /><button class="photo-remove" onclick="removePhoto(${i})">✕</button>`;
+    container.appendChild(div);
+  });
+  const count = document.getElementById('photoCount');
+  count.textContent = uploadedPhotos.length > 0 ? `✓ ${uploadedPhotos.length} Foto${uploadedPhotos.length>1?'s':''} hochgeladen` : '';
+}
+function removePhoto(i) { uploadedPhotos.splice(i,1); renderPreviews(); }
+
+// AI QUESTIONS
+async function startAIQuestions() {
+  document.getElementById('aiAnalyzing').classList.add('active');
+  document.getElementById('aiQuestionsContainer').style.display = 'none';
+  document.getElementById('toStep5Btn').style.display = 'none';
+
+  const projekt = selectedProjekt || 'allgemeines Handwerk';
+  const freitext = document.getElementById('projektFreitext').value || '';
+  const photoCount = uploadedPhotos.length;
+
+  const prompt = `Du bist ein erfahrener Handwerksberater mit Wissen in allen Gewerken. Ein Kunde stellt eine Anfrage für folgendes Projekt:
+
+Gewerk: ${projekt}
+Beschreibung: ${freitext || 'keine weitere Beschreibung'}
+Anzahl hochgeladener Fotos: ${photoCount}
+
+Stelle genau 6 gezielte Rückfragen an den Kunden, die den Arbeitsaufwand und Preis erheblich beeinflussen. Die Fragen sollen:
+- In einfacher Alltagssprache formuliert sein (KEIN Fachvokabular - Laien müssen sie verstehen)
+- Direkt auf das genannte Gewerk und die Beschreibung zugeschnitten sein
+- Informationen liefern, die den Aufwand wirklich verändern (z.B. Zugänglichkeit, Bestandssituation, Materialwunsch, Größe, Dringlichkeit, Zusatzarbeiten)
+- Mit kurzen Auswahloptionen oder als Texteingabe beantwortbar sein
+- Abwechselnd verschiedene Aspekte abdecken: Zustand/Bestand, Größe/Umfang, Zugänglichkeit, Materialwunsch, Zeitplan, Besonderheiten
+
+Antworte NUR mit einem JSON-Array mit genau 6 Objekten:
+[{"frage": "...", "typ": "choice", "optionen": ["Option A","Option B","Option C"]}, ...]
+
+Typ ist entweder "choice" (mit 2-4 kurzen Optionen) oder "text" (freie Eingabe, dann optionen weglassen).
+Mindestens 4 davon sollen vom Typ "choice" sein.
+Kein Text vor oder nach dem JSON.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1500, messages:[{role:'user',content:prompt}] })
+    });
+    const data = await res.json();
+    const raw = data.content?.map(b=>b.text||'').join('') || '[]';
+    const clean = raw.replace(/```json|```/g,'').trim();
+    renderQuestions(JSON.parse(clean));
+  } catch(e) {
+    renderQuestions([
+      {frage:"Wie ist der aktuelle Zustand des Bereichs?", typ:"choice", optionen:["Neuinstallation / Neubau","Erneuerung / Modernisierung","Reparatur eines Schadens","Bin mir nicht sicher"]},
+      {frage:"Wie gut ist der Bereich zugänglich?", typ:"choice", optionen:["Sehr gut – alles frei zugänglich","Etwas eingeschränkt","Schwer zugänglich"]},
+      {frage:"Wie groß ist der betroffene Bereich ungefähr?", typ:"choice", optionen:["Klein (unter 10 m²)","Mittel (10–30 m²)","Groß (über 30 m²)","Nicht flächenbezogen"]},
+      {frage:"Haben Sie konkrete Vorstellungen zu Materialien?", typ:"choice", optionen:["Ja, genaue Vorstellung","Grobe Idee, offen für Empfehlung","Komplett offen"]},
+      {frage:"Wie dringend ist die Arbeit?", typ:"choice", optionen:["So bald wie möglich","In 1–3 Monaten","Kein konkreter Zeitdruck"]},
+      {frage:"Gibt es Besonderheiten, die wir wissen sollten?", typ:"text"}
+    ]);
+  }
+}
+
+function renderQuestions(questions) {
+  document.getElementById('aiAnalyzing').classList.remove('active');
+  const container = document.getElementById('aiQuestionsContainer');
+  const list = document.getElementById('aiQuestionsList');
+  list.innerHTML = '';
+  aiAnswers = {};
+
+  questions.forEach((q, i) => {
+    const li = document.createElement('li');
+    li.className = 'ai-question';
+    li.innerHTML = `<div class="ai-q-text">${q.frage}</div>`;
+
+    if (q.typ === 'choice' && q.optionen) {
+      const optGrid = document.createElement('div');
+      optGrid.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;';
+      q.optionen.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.textContent = opt;
+        btn.style.cssText = 'background:var(--white);border:1.5px solid var(--border);color:var(--text-secondary);font-size:13px;padding:7px 14px;border-radius:20px;cursor:pointer;transition:all 0.18s;font-family:Inter,sans-serif;';
+        btn.onclick = () => {
+          optGrid.querySelectorAll('button').forEach(b => {
+            b.style.background='var(--white)'; b.style.borderColor='var(--border)'; b.style.color='var(--text-secondary)';
+          });
+          btn.style.background='var(--blue-light)'; btn.style.borderColor='var(--blue)'; btn.style.color='var(--blue)';
+          aiAnswers[i] = opt;
+          checkAllAnswered(questions.length);
+        };
+        optGrid.appendChild(btn);
+      });
+      li.appendChild(optGrid);
+    } else {
+      const inp = document.createElement('input');
+      inp.type='text'; inp.placeholder='Ihre Antwort…';
+      inp.style.cssText='width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text);outline:none;font-family:Inter,sans-serif;';
+      inp.oninput = () => { aiAnswers[i] = inp.value; checkAllAnswered(questions.length); };
+      li.appendChild(inp);
+    }
+
+    list.appendChild(li);
+    if (i < questions.length-1) {
+      const sep = document.createElement('div');
+      sep.style.cssText='height:1px;background:var(--border);margin:16px 0;';
+      list.appendChild(sep);
+    }
+  });
+
+  container.style.display = 'block';
+}
+
+function checkAllAnswered(total) {
+  if (Object.keys(aiAnswers).length >= total) {
+    document.getElementById('toStep5Btn').style.display = 'inline-flex';
+  }
+}
+
+// PRICE RANGE
+async function generatePriceRange() {
+  const projekt = selectedProjekt || 'Handwerksarbeiten';
+  const freitext = document.getElementById('projektFreitext').value || '';
+  const answers = Object.values(aiAnswers).join(', ');
+
+  const prompt = `Du bist ein neutraler Handwerksberater mit Erfahrung in allen Gewerken. Erstelle eine realistische Preisspanne für folgende Anfrage:
+
+Gewerk: ${projekt}
+Beschreibung: ${freitext}
+Antworten des Kunden auf Rückfragen: ${answers}
+Fotos hochgeladen: ${uploadedPhotos.length > 0 ? 'Ja' : 'Nein'}
+
+Wichtig: Gib eine Preisspanne passend zum genannten Gewerk an – unabhängig davon, ob es sich um Sanitär, Elektro, Maler, Zimmermann oder ein anderes Handwerk handelt. Berücksichtige deutsche Marktpreise 2025 inklusive Lohn und Material.
+
+Antworte NUR mit einem JSON-Objekt – kein Text davor oder danach:
+{
+  "preisVon": 1500,
+  "preisBis": 4500,
+  "einheit": "EUR inkl. MwSt.",
+  "hinweis": "Kurzer Satz warum die Spanne variiert (max 100 Zeichen)",
+  "faktoren": ["Konkreter Faktor 1", "Konkreter Faktor 2", "Konkreter Faktor 3"]
+}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:500, messages:[{role:'user',content:prompt}] })
+    });
+    const data = await res.json();
+    const raw = data.content?.map(b=>b.text||'').join('') || '{}';
+    generatedPriceData = JSON.parse(raw.replace(/```json|```/g,'').trim());
+  } catch(e) {
+    generatedPriceData = { preisVon:2000, preisBis:6000, einheit:'EUR inkl. MwSt.', hinweis:'Hängt von Materialwahl und Aufwand ab.', faktoren:['Materialqualität','Zugänglichkeit','Umfang der Arbeiten'] };
+  }
+
+  const fmt = n => n.toLocaleString('de-DE') + ' ' + generatedPriceData.einheit;
+  document.getElementById('priceLow').textContent = fmt(generatedPriceData.preisVon);
+  document.getElementById('priceHigh').textContent = fmt(generatedPriceData.preisBis);
+  document.getElementById('priceNote').textContent = generatedPriceData.hinweis;
+  document.getElementById('priceFactors').innerHTML = (generatedPriceData.faktoren||[]).map(f=>`<div class="price-factor">${f}</div>`).join('');
+}
+
+// COMPANY SEARCH
+async function searchNearbyCompanies() {
+  foundCompanies = [];
+  selectedCompanies = [];
+  document.getElementById('companiesGrid').innerHTML = '';
+  document.getElementById('companiesSearching').style.display = 'flex';
+  document.getElementById('companiesHint').style.display = 'none';
+  document.getElementById('companiesCount').textContent = '';
+  const btn = document.getElementById('toStep6Btn');
+  btn.disabled = true; btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed';
+
+  const ort = document.getElementById('ort').value.trim() || 'Deutschland';
+  const projekt = selectedProjekt || 'Handwerk';
+  const freitext = document.getElementById('projektFreitext').value || '';
+
+  const prompt = `Suche im Internet nach echten Handwerksbetrieben für folgende Anfrage:
+
+Gewerk: ${projekt}
+Projektbeschreibung: ${freitext}
+Standort des Kunden: ${ort}
+
+Finde 4 bis 6 real existierende Handwerksbetriebe in der Nähe von "${ort}" die für dieses Gewerk qualifiziert sind.
+
+Für jeden Betrieb, gib an:
+- Firmenname (echt, verifiziert)
+- Gewerk / Spezialisierung
+- Telefonnummer (wenn öffentlich auffindbar)
+- E-Mail-Adresse (wenn öffentlich auffindbar)
+- Google Maps Suchlink (format: https://www.google.com/maps/search/FIRMENNAME+ORT)
+
+Antworte NUR mit einem JSON-Array – kein Text davor oder danach:
+[{
+  "name": "Musterbetrieb GmbH",
+  "gewerk": "Dachdecker",
+  "telefon": "0385 123456",
+  "email": "info@musterbetrieb.de",
+  "maps": "https://www.google.com/maps/search/Musterbetrieb+${encodeURIComponent(ort)}"
+}]
+
+Wenn keine E-Mail bekannt ist, lass das Feld leer (""). Gleiches für Telefon.
+Nur echte, verifizierbare Betriebe angeben.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:1500,
+        tools:[{ type:'web_search_20250305', name:'web_search' }],
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    const textBlocks = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+    const clean = textBlocks.replace(/```json|```/g,'').trim();
+    const jsonMatch = clean.match(/\[[\s\S]*\]/);
+    if (jsonMatch) foundCompanies = JSON.parse(jsonMatch[0]);
+  } catch(e) {
+    foundCompanies = [];
+  }
+
+  document.getElementById('companiesSearching').style.display = 'none';
+
+  if (foundCompanies.length === 0) {
+    document.getElementById('companiesGrid').innerHTML = `<div class="companies-none">Es konnten keine Betriebe in Ihrer Region gefunden werden.<br>Bitte suchen Sie direkt über <a href="https://www.google.com/maps/search/${encodeURIComponent(projekt+' '+ort)}" target="_blank" style="color:var(--blue);">Google Maps</a> nach passenden Betrieben.</div>`;
+    return;
+  }
+
+  document.getElementById('companiesCount').textContent = `${foundCompanies.length} gefunden`;
+  document.getElementById('companiesHint').style.display = 'block';
+
+  const grid = document.getElementById('companiesGrid');
+  foundCompanies.forEach((c, i) => {
+    const card = document.createElement('div');
+    card.className = 'company-card';
+    card.onclick = () => toggleCompany(card, i);
+    card.innerHTML = `
+      <div class="company-card-left">
+        <div class="company-card-top">
+          <div class="company-name">${c.name}</div>
+          <div class="company-trade">${c.gewerk}</div>
+        </div>
+        <div class="company-contacts">
+          ${c.telefon ? `<div class="company-contact">📞 ${c.telefon}</div>` : ''}
+          ${c.email ? `<div class="company-contact">✉️ ${c.email}</div>` : '<div class="company-contact" style="color:var(--text-light)">Keine E-Mail hinterlegt</div>'}
+          <a class="company-maps" href="${c.maps}" target="_blank" onclick="event.stopPropagation()">📍 Google Maps →</a>
+        </div>
+      </div>
+      <div class="company-check">✓</div>`;
+    grid.appendChild(card);
+  });
+}
+
+function toggleCompany(card, idx) {
+  card.classList.toggle('selected');
+  const company = foundCompanies[idx];
+  const alreadyIdx = selectedCompanies.findIndex(c=>c.name===company.name);
+  if (alreadyIdx >= 0) selectedCompanies.splice(alreadyIdx, 1);
+  else selectedCompanies.push(company);
+
+  const btn = document.getElementById('toStep6Btn');
+  if (selectedCompanies.length > 0) {
+    btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+  } else {
+    btn.disabled = true; btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed';
+  }
+}
+
+// EMAIL BUILDER
+async function buildEmailPreview() {
+  const vorname = document.getElementById('vorname').value;
+  const nachname = document.getElementById('nachname').value;
+  const telefon = document.getElementById('telefon').value;
+  const emailAbs = document.getElementById('email').value;
+  const ort = document.getElementById('ort').value || '';
+  const freitext = document.getElementById('projektFreitext').value || '';
+  const answers = Object.entries(aiAnswers).map(([k,v])=>v).join(', ');
+  const preis = generatedPriceData ? `${generatedPriceData.preisVon.toLocaleString('de-DE')} – ${generatedPriceData.preisBis.toLocaleString('de-DE')} EUR` : '';
+
+  const empfaengerMitMail = selectedCompanies.filter(c=>c.email);
+  const empfaengerOhneMail = selectedCompanies.filter(c=>!c.email);
+
+  // Summary
+  let summaryHTML = `<strong>Ausgewählte Betriebe (${selectedCompanies.length})</strong>`;
+  selectedCompanies.forEach(c => {
+    summaryHTML += `${c.name} – ${c.gewerk}${c.email ? '' : ' (keine E-Mail hinterlegt)'}\n`;
+  });
+  document.getElementById('selectedSummary').innerHTML = `<strong>Ausgewählte Betriebe (${selectedCompanies.length})</strong><br>${selectedCompanies.map(c=>`${c.name} – ${c.gewerk}${c.email ? '' : ' ⚠ keine E-Mail'}`).join('<br>')}`;
+
+  // Generate personalized email body
+  const prompt = `Schreibe eine höfliche, professionelle Anfrage-E-Mail auf Deutsch für folgenden Kunden:
+
+Kunde: ${vorname} ${nachname}, aus ${ort}
+Telefon: ${telefon}
+Gewerk gesucht: ${selectedProjekt}
+Projektbeschreibung: ${freitext}
+Weitere Details: ${answers}
+Geschätzte Preisspanne (zur Info): ${preis}
+
+Die E-Mail soll:
+- Kurz und präzise sein (max. 12 Zeilen Haupttext)
+- Um einen kostenlosen Vor-Ort-Termin zur Angebotserstellung bitten
+- Die wichtigsten Projektdetails zusammenfassen
+- Kontaktdaten des Kunden enthalten
+- Freundlich und professionell klingen
+- KEIN "Sehr geehrte Damen und Herren" verwenden, da mehrere Firmen gleichzeitig angeschrieben werden
+
+Antworte NUR mit dem E-Mail-Text (ohne Betreff), beginnend mit der Anrede.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:600, messages:[{role:'user',content:prompt}] })
+    });
+    const data = await res.json();
+    generatedEmailBody = data.content?.map(b=>b.text||'').join('') || '';
+  } catch(e) {
+    generatedEmailBody = `Guten Tag,\n\nmein Name ist ${vorname} ${nachname} und ich bin auf der Suche nach einem qualifizierten Fachbetrieb für folgendes Projekt:\n\nGewerk: ${selectedProjekt}\nBeschreibung: ${freitext}\n\nIch würde mich über einen kostenlosen Vor-Ort-Termin zur Angebotserstellung freuen.\n\nSie erreichen mich unter:\nTelefon: ${telefon}\nE-Mail: ${emailAbs}\n\nMit freundlichen Grüßen\n${vorname} ${nachname}`;
+  }
+
+  generatedEmailSubject = `Angebotsanfrage: ${selectedProjekt} – ${vorname} ${nachname}`;
+  const toAddresses = empfaengerMitMail.map(c=>c.email).join(',');
+
+  // Show preview
+  document.getElementById('emailTo').textContent = empfaengerMitMail.length > 0
+    ? empfaengerMitMail.map(c=>`${c.name} <${c.email}>`).join(', ')
+    : 'Keine E-Mail-Adressen verfügbar – bitte Google Maps nutzen';
+  document.getElementById('emailSubject').textContent = generatedEmailSubject;
+  document.getElementById('emailBody').textContent = generatedEmailBody;
+
+  // Build mailto link
+  if (toAddresses) {
+    const mailtoHref = `mailto:${toAddresses}?subject=${encodeURIComponent(generatedEmailSubject)}&body=${encodeURIComponent(generatedEmailBody)}`;
+    document.getElementById('mailtoBtn').href = mailtoHref;
+    document.getElementById('mailtoBtn').style.display = 'flex';
+  } else {
+    document.getElementById('mailtoBtn').style.display = 'none';
+  }
+
+  // Show warning for companies without email
+  if (empfaengerOhneMail.length > 0) {
+    const warn = document.createElement('div');
+    warn.style.cssText = 'font-size:12px;color:var(--orange);background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 14px;margin-top:10px;line-height:1.6;';
+    warn.innerHTML = `⚠ ${empfaengerOhneMail.map(c=>c.name).join(', ')} ${empfaengerOhneMail.length===1?'hat':'haben'} keine öffentlich verfügbare E-Mail-Adresse. Bitte kontaktieren Sie ${empfaengerOhneMail.length===1?'diesen Betrieb':'diese Betriebe'} direkt über Google Maps oder Telefon.`;
+    document.getElementById('emailPreview').after(warn);
+  }
+}
+
+function copyEmailText() {
+  const full = `Betreff: ${generatedEmailSubject}\n\n${generatedEmailBody}`;
+  navigator.clipboard.writeText(full).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.classList.add('copied');
+    btn.textContent = '✓ Kopiert!';
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '📋 E-Mail-Text kopieren (für Gmail / Webmail)'; }, 2500);
+  });
+}
+</script>
+</body>
+</html>
