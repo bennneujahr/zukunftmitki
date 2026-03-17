@@ -877,6 +877,154 @@
       .section { padding: 56px 12px; }
     }
     .mobile-nav-cta { display: none; }
+
+    /* ─── Handwerker-Tool Promo ──────────────────────── */
+    #handwerker-tool { background: var(--dark-2); padding: 96px 0; }
+    .tool-promo-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .tool-promo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold-dim);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .tool-promo-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .tool-promo-title .accent { color: var(--gold); }
+    .tool-promo-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      max-width: 480px;
+    }
+    .tool-steps {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .tool-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .tool-step span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .tool-step-arrow {
+      color: var(--border);
+      font-size: 1.1rem;
+    }
+    .tool-promo-btn {
+      font-size: 1rem;
+      padding: 15px 32px;
+    }
+    /* Decorative preview card */
+    .tool-preview-card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .tool-preview-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    }
+    .tpc-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .tpc-field {
+      background: var(--dark);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius-sm);
+      height: 40px;
+      margin-bottom: 12px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+    }
+    .tpc-field-text {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+    .tpc-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .tpc-chip {
+      background: var(--gold-dim);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 0.78rem;
+      color: var(--gold);
+      font-weight: 500;
+    }
+    .tpc-btn-mock {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-radius: 100px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-top: 8px;
+    }
+    @media (max-width: 900px) {
+      .tool-promo-layout { grid-template-columns: 1fr; gap: 40px; }
+      .tool-preview-card { max-width: 480px; }
+      #handwerker-tool { padding: 72px 0; }
+    }
+    @media (max-width: 480px) {
+      .tool-steps { gap: 8px; }
+      .tool-step-arrow { display: none; }
+    }
   </style>
 
   <!-- JSON-LD Strukturierte Daten (Schema.org) -->
@@ -943,6 +1091,7 @@
         <li><a href="#leistungen">Leistungen</a></li>
         <li><a href="#zertifikate">Zertifikate</a></li>
         <li><a href="#ueber-mich">Über mich</a></li>
+        <li><a href="/Angebots-Tool.html">🔧 Handwerker finden</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
       </ul>
 
@@ -959,6 +1108,7 @@
     <a href="#leistungen">Leistungen</a>
     <a href="#zertifikate">Zertifikate</a>
     <a href="#ueber-mich">Über mich</a>
+    <a href="/Angebots-Tool.html">🔧 Handwerker finden</a>
     <a href="#kontakt">Kontakt</a>
     <a href="#kontakt" class="btn btn-gold mobile-nav-cta">Erstgespräch buchen</a>
   </div>
@@ -1062,6 +1212,53 @@
           </div>
           <h3>Workshops &amp; Schulungen</h3>
           <p>Praxisnahe Workshops für Teams und Führungskräfte: Ich vermittle KI-Grundlagen, Prompt Engineering und konkrete Anwendungsfälle für Ihren Berufsalltag.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Handwerker-Tool Promo ─────────────────────── -->
+  <section id="handwerker-tool" aria-label="Handwerker-Tool">
+    <div class="container">
+      <div class="tool-promo-layout">
+        <!-- Left: Text -->
+        <div class="reveal">
+          <div class="tool-promo-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+            Neu — KI-gestütztes Tool
+          </div>
+          <h2 class="tool-promo-title">
+            Finden Sie in <span class="accent">3 Minuten</span><br>
+            den richtigen Handwerker – mit KI
+          </h2>
+          <p class="tool-promo-sub">
+            Projekt beschreiben, Preisspanne erhalten, passende Betriebe in
+            Ihrer Nähe kontaktieren – vollautomatisch.
+          </p>
+          <div class="tool-steps">
+            <div class="tool-step"><span>1</span> Projekt beschreiben</div>
+            <div class="tool-step-arrow">→</div>
+            <div class="tool-step"><span>2</span> Preis &amp; Betriebe</div>
+            <div class="tool-step-arrow">→</div>
+            <div class="tool-step"><span>3</span> Anfrage senden</div>
+          </div>
+          <a href="/Angebots-Tool.html" class="btn btn-gold tool-promo-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Jetzt kostenlos starten →
+          </a>
+        </div>
+        <!-- Right: Decorative preview card -->
+        <div class="tool-preview-card reveal reveal-delay-2" aria-hidden="true">
+          <div class="tpc-label">Ihre Anfrage</div>
+          <div class="tpc-chips">
+            <div class="tpc-chip">⚡ Elektro</div>
+            <div class="tpc-chip">🔧 Sanitär</div>
+            <div class="tpc-chip">🪟 Fenster</div>
+          </div>
+          <div class="tpc-field"><span class="tpc-field-text">Projekt beschreiben …</span></div>
+          <div class="tpc-field"><span class="tpc-field-text">19055 Schwerin</span></div>
+          <div class="tpc-field"><span class="tpc-field-text">500 – 2.000 €</span></div>
+          <div class="tpc-btn-mock">Passende Betriebe finden →</div>
         </div>
       </div>
     </div>
