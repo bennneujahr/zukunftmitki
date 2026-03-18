@@ -652,7 +652,7 @@ const OPENROUTER_API_KEY = '__OPENROUTER_API_KEY__';
 const AI_MODEL   = 'google/gemma-3-27b-it:free';
 const AI_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
-async function callAI(prompt, maxTokens = 1500) {
+async function callAI(prompt, maxTokens = 1500, _attempt = 1) {
   const res = await fetch(AI_API_URL, {
     method: 'POST',
     headers: {
@@ -667,6 +667,13 @@ async function callAI(prompt, maxTokens = 1500) {
       messages: [{ role: 'user', content: prompt }]
     })
   });
+
+  if (res.status === 429 && _attempt <= 3) {
+    const wait = Math.max(parseInt(res.headers.get('Retry-After') || '5', 10), 5) * 1000;
+    await new Promise(r => setTimeout(r, wait));
+    return callAI(prompt, maxTokens, _attempt + 1);
+  }
+
   if (!res.ok) throw new Error(`OpenRouter ${res.status}: ${res.statusText}`);
   const data = await res.json();
   return data.choices?.[0]?.message?.content || '';
