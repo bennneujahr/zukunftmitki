@@ -651,6 +651,7 @@ let generatedEmailSubject = '';
 const OPENROUTER_API_KEY = '__OPENROUTER_API_KEY__';
 const AI_MODEL   = 'google/gemma-3-27b-it:free';
 const AI_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const GOOGLE_PLACES_API_KEY = '__GOOGLE_PLACES_API_KEY__';
 
 async function callAI(prompt, maxTokens = 1500, _attempt = 1) {
   const res = await fetch(AI_API_URL, {
@@ -915,60 +916,48 @@ function escHtml(s) {
     .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
-// GEWERK → OSM-Tag Mapping
-const TRADE_TAGS = {
-  'Dachdecker':               [['craft','roofer']],
-  'Zimmermann':               [['craft','carpenter']],
-  'Tischler':                 [['craft','joiner'], ['craft','carpenter']],
-  'Klempner / Sanitär':       [['craft','plumber']],
-  'Trockenbau / Gips':        [['craft','plasterer'], ['craft','drywall_construction']],
-  'Maler / Lackierer':        [['craft','painter']],
-  'Elektriker':               [['craft','electrician']],
-  'Fensterbauer / Glaser':    [['craft','glaziery'], ['craft','window_construction']],
-  'Schlosser / Metallbau':    [['craft','metal_construction'], ['craft','blacksmith']],
-  'Maurer / Betonbau':        [['craft','construction'], ['craft','bricklayer']],
-  'Heizung / Lüftung':        [['craft','hvac_technician'], ['craft','heating_engineer']],
-  'Garten- & Landschaftsbau': [['craft','gardener'], ['shop','garden_centre']],
-  'Bodenleger / Fliesen':     [['craft','tiler'], ['craft','floorer']],
-  'Gerüstbau':                [['craft','scaffolder']],
-};
-
-function buildOverpassQuery(lat, lon, radiusM, tags) {
-  const parts = tags.flatMap(([key, val]) => [
-    `node["${key}"="${val}"](around:${radiusM},${lat},${lon});`,
-    `way["${key}"="${val}"](around:${radiusM},${lat},${lon});`,
-  ]);
-  return `[out:json][timeout:15];\n(\n  ${parts.join('\n  ')}\n);\nout body center 20;`;
-}
-
-function buildGenericOverpassQuery(lat, lon, radiusM) {
-  return `[out:json][timeout:15];\n(\n  node["craft"](around:${radiusM},${lat},${lon});\n  way["craft"](around:${radiusM},${lat},${lon});\n);\nout body center 20;`;
-}
-
-function osmToCompany(el, gewerk, ort) {
-  const t = el.tags || {};
+// Maps Google Places result → internes company-Objekt
+function placesToCompany(place, gewerk) {
   return {
-    name:    t.name || t['name:de'] || 'Unbekannter Betrieb',
-    gewerk:  t['craft'] || t['shop'] || gewerk,
-    telefon: t.phone || t['contact:phone'] || t['phone:de'] || '',
-    email:   t.email || t['contact:email'] || '',
-    maps:    `https://www.google.com/maps/search/${encodeURIComponent((t.name || '') + ' ' + ort)}`,
-    website: t.website || t['contact:website'] || '',
+    name:        place.displayName?.text || 'Unbekannter Betrieb',
+    gewerk:      gewerk,
+    adresse:     place.formattedAddress || '',
+    telefon:     place.nationalPhoneNumber || '',
+    rating:      place.rating || null,
+    ratingCount: place.userRatingCount || 0,
+    website:     place.websiteUri || '',
+    maps:        place.googleMapsUri || `https://www.google.com/maps/search/${encodeURIComponent(place.displayName?.text || '')}`,
   };
 }
 
-async function queryOverpass(lat, lon, radiusM, tags) {
-  const query = tags.length > 0
-    ? buildOverpassQuery(lat, lon, radiusM, tags)
-    : buildGenericOverpassQuery(lat, lon, radiusM);
-  const res = await fetch('https://overpass-api.de/api/interpreter', {
+// Google Places Text Search v1 (CORS-fähig für Browser-Requests)
+async function searchPlaces(query, gewerk) {
+  const res = await fetch('https://places.googleapis.com/v1/places:searchText', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: 'data=' + encodeURIComponent(query),
+    headers: {
+      'Content-Type':     'application/json',
+      'X-Goog-Api-Key':   GOOGLE_PLACES_API_KEY,
+      'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.rating,places.userRatingCount,places.googleMapsUri,places.websiteUri',
+    },
+    body: JSON.stringify({
+      textQuery:      query,
+      languageCode:   'de',
+      regionCode:     'DE',
+      maxResultCount: 12,
+    }),
   });
-  if (!res.ok) throw new Error('Overpass-Fehler ' + res.status);
+  if (!res.ok) throw new Error(`Places API ${res.status}: ${res.statusText}`);
   const data = await res.json();
-  return data.elements || [];
+  return (data.places || []).map(p => placesToCompany(p, gewerk));
+}
+
+function renderStars(rating, count) {
+  if (!rating) return '';
+  const full  = Math.floor(rating);
+  const half  = (rating - full) >= 0.5 ? 1 : 0;
+  const empty = 5 - full - half;
+  return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(empty)
+         + ` <span style="font-size:0.8em;color:var(--text-muted)">${rating.toFixed(1)} (${count})</span>`;
 }
 
 // COMPANY SEARCH
@@ -984,49 +973,15 @@ async function searchNearbyCompanies() {
 
   const ort = document.getElementById('ort').value.trim() || 'Deutschland';
   const projekt = selectedProjekt || 'Handwerk';
-  const tags = TRADE_TAGS[projekt] || [];
 
   try {
-    // 1. Geocode: Ort → lat/lon via Nominatim
-    const geoRes = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(ort)}&format=json&limit=1&countrycodes=de`,
-      { headers: { 'User-Agent': 'ZukunftMitKI-AngebotsTool/1.0' } }
-    );
-    if (!geoRes.ok) throw new Error('Nominatim-Fehler ' + geoRes.status);
-    const geoData = await geoRes.json();
-
-    if (!geoData.length) {
-      document.getElementById('companiesSearching').style.display = 'none';
-      document.getElementById('companiesGrid').innerHTML =
-        `<div class="companies-none">Ort „${escHtml(ort)}" konnte nicht gefunden werden. Bitte geben Sie einen genaueren Ort ein.</div>`;
-      return;
-    }
-
-    const lat = parseFloat(geoData[0].lat);
-    const lon = parseFloat(geoData[0].lon);
-
-    // 2. Overpass: erst 20 km, bei 0 Ergebnissen 40 km
-    let elements = await queryOverpass(lat, lon, 20000, tags);
-    if (elements.length === 0) {
-      elements = await queryOverpass(lat, lon, 40000, tags);
-    }
-
-    // 3. Transformation + Deduplizierung nach Name
-    const seen = new Set();
-    foundCompanies = elements
-      .map(el => osmToCompany(el, projekt, ort))
-      .filter(c => {
-        if (c.name === 'Unbekannter Betrieb') return false;
-        if (seen.has(c.name)) return false;
-        seen.add(c.name);
-        return true;
-      })
-      .slice(0, 12);
-
+    foundCompanies = await searchPlaces(projekt + ' in ' + ort, projekt);
   } catch(e) {
     document.getElementById('companiesSearching').style.display = 'none';
     document.getElementById('companiesGrid').innerHTML =
-      `<div class="companies-none">Suche fehlgeschlagen. Bitte versuchen Sie es erneut oder suchen Sie direkt über <a href="https://www.google.com/maps/search/${encodeURIComponent(projekt + ' ' + ort)}" target="_blank" style="color:var(--blue);">Google Maps</a>.</div>`;
+      '<div class="companies-none">Suche fehlgeschlagen. Bitte versuchen Sie es erneut oder suchen Sie direkt über'
+      + ' <a href="https://www.google.com/maps/search/' + encodeURIComponent(projekt + ' ' + ort)
+      + '" target="_blank" style="color:var(--blue);">Google Maps</a>.</div>';
     return;
   }
 
@@ -1034,33 +989,84 @@ async function searchNearbyCompanies() {
 
   if (foundCompanies.length === 0) {
     document.getElementById('companiesGrid').innerHTML =
-      `<div class="companies-none">Es konnten keine Betriebe in Ihrer Region gefunden werden.<br>Bitte suchen Sie direkt über <a href="https://www.google.com/maps/search/${encodeURIComponent(projekt + ' ' + ort)}" target="_blank" style="color:var(--blue);">Google Maps</a> nach passenden Betrieben.</div>`;
+      '<div class="companies-none">Es konnten keine Betriebe in Ihrer Region gefunden werden.<br>'
+      + 'Bitte suchen Sie direkt über <a href="https://www.google.com/maps/search/' + encodeURIComponent(projekt + ' ' + ort)
+      + '" target="_blank" style="color:var(--blue);">Google Maps</a> nach passenden Betrieben.</div>';
     return;
   }
 
-  document.getElementById('companiesCount').textContent = `${foundCompanies.length} gefunden`;
+  document.getElementById('companiesCount').textContent = foundCompanies.length + ' gefunden';
   document.getElementById('companiesHint').style.display = 'block';
 
   const grid = document.getElementById('companiesGrid');
-  foundCompanies.forEach((c, i) => {
+  foundCompanies.forEach(function(c, i) {
     const card = document.createElement('div');
     card.className = 'company-card';
-    card.onclick = () => toggleCompany(card, i);
-    // All OSM-sourced strings are escaped; URLs use encodeURIComponent
-    card.innerHTML = `
-      <div class="company-card-left">
-        <div class="company-card-top">
-          <div class="company-name">${escHtml(c.name)}</div>
-          <div class="company-trade">${escHtml(c.gewerk)}</div>
-        </div>
-        <div class="company-contacts">
-          ${c.telefon ? `<div class="company-contact">📞 ${escHtml(c.telefon)}</div>` : ''}
-          ${c.email ? `<div class="company-contact">✉️ ${escHtml(c.email)}</div>` : '<div class="company-contact" style="color:var(--text-light)">Keine E-Mail hinterlegt</div>'}
-          ${c.website ? `<a class="company-maps" href="${encodeURI(c.website)}" target="_blank" onclick="event.stopPropagation()">🌐 Website →</a>` : ''}
-          <a class="company-maps" href="${encodeURI(c.maps)}" target="_blank" onclick="event.stopPropagation()">📍 Google Maps →</a>
-        </div>
-      </div>
-      <div class="company-check">✓</div>`;
+    card.onclick = function() { toggleCompany(card, i); };
+    const starsHtml = renderStars(c.rating, c.ratingCount);
+
+    // Build card via DOM to avoid innerHTML with interpolated content
+    const left = document.createElement('div');
+    left.className = 'company-card-left';
+
+    const top = document.createElement('div');
+    top.className = 'company-card-top';
+    const nameEl = document.createElement('div');
+    nameEl.className = 'company-name';
+    nameEl.textContent = c.name;
+    const tradeEl = document.createElement('div');
+    tradeEl.className = 'company-trade';
+    tradeEl.textContent = c.gewerk;
+    top.appendChild(nameEl);
+    top.appendChild(tradeEl);
+
+    const contacts = document.createElement('div');
+    contacts.className = 'company-contacts';
+
+    if (c.adresse) {
+      const adr = document.createElement('div');
+      adr.className = 'company-contact';
+      adr.textContent = '📍 ' + c.adresse;
+      contacts.appendChild(adr);
+    }
+    if (starsHtml) {
+      const stars = document.createElement('div');
+      stars.className = 'company-contact';
+      stars.innerHTML = '⭐ ' + starsHtml; // starsHtml is generated only from number literals
+      contacts.appendChild(stars);
+    }
+    if (c.telefon) {
+      const tel = document.createElement('div');
+      tel.className = 'company-contact';
+      tel.textContent = '📞 ' + c.telefon;
+      contacts.appendChild(tel);
+    }
+    if (c.website) {
+      const webLink = document.createElement('a');
+      webLink.className = 'company-maps';
+      webLink.href = c.website;
+      webLink.target = '_blank';
+      webLink.textContent = '🌐 Website →';
+      webLink.onclick = function(e) { e.stopPropagation(); };
+      contacts.appendChild(webLink);
+    }
+    const mapsLink = document.createElement('a');
+    mapsLink.className = 'company-maps';
+    mapsLink.href = c.maps;
+    mapsLink.target = '_blank';
+    mapsLink.textContent = '🗺️ Google Maps →';
+    mapsLink.onclick = function(e) { e.stopPropagation(); };
+    contacts.appendChild(mapsLink);
+
+    left.appendChild(top);
+    left.appendChild(contacts);
+
+    const check = document.createElement('div');
+    check.className = 'company-check';
+    check.textContent = '✓';
+
+    card.appendChild(left);
+    card.appendChild(check);
     grid.appendChild(card);
   });
 }
