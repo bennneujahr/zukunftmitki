@@ -263,22 +263,6 @@ input::placeholder, textarea::placeholder { color: var(--text-light); }
 .btn-green { background: var(--green); color: white; box-shadow: 0 2px 8px rgba(34,197,94,0.3); }
 .btn-green:hover { background: #16a34a; transform: translateY(-1px); }
 
-/* SUCCESS */
-.success-card {
-  background: var(--surface); border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 16px; padding: 48px 36px; text-align: center;
-  box-shadow: var(--shadow-lg); display: none; animation: slideIn 0.4s ease;
-}
-.success-card.active { display: block; }
-.success-icon { font-size: 52px; margin-bottom: 16px; }
-.success-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 10px; }
-.success-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; max-width: 400px; margin: 0 auto 28px; }
-.success-details { background: var(--surface2); border-radius: 12px; padding: 20px; text-align: left; max-width: 380px; margin: 0 auto; }
-.success-detail { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); gap: 12px; }
-.success-detail:last-child { border-bottom: none; }
-.success-detail-label { color: var(--text-secondary); flex-shrink: 0; }
-.success-detail-val { font-weight: 600; color: var(--text); text-align: right; }
-
 /* COMPANY CARDS */
 .companies-section { margin-top: 24px; }
 .companies-header {
@@ -439,7 +423,7 @@ footer {
     <div class="field"><label>E-Mail *</label><input type="email" id="email" placeholder="max@beispiel.de" /></div>
     <div class="field field-row">
       <div><label>Telefon *</label><input type="tel" id="telefon" placeholder="0385 / …" /></div>
-      <div><label>Ort</label><input type="text" id="ort" placeholder="Schwerin" /></div>
+      <div><label>Ort *</label><input type="text" id="ort" placeholder="Schwerin" /></div>
     </div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="goStep(2)">Weiter →</button>
@@ -622,13 +606,6 @@ footer {
     <div class="loading-text" id="loadingText">Anfrage wird verarbeitet…</div>
   </div>
 
-  <!-- SUCCESS -->
-  <div class="success-card" id="successCard">
-    <div class="success-icon">✅</div>
-    <div class="success-title">Anfrage eingegangen!</div>
-    <div class="success-desc">Vielen Dank. Wir haben Ihre Anfrage erhalten und melden uns innerhalb von 24 Stunden, um einen Vor-Ort-Termin zu vereinbaren.</div>
-    <div class="success-details" id="successDetails"></div>
-  </div>
 
 </div>
 
@@ -666,7 +643,39 @@ let selectedCompanies = [];
 let generatedEmailBody = '';
 let generatedEmailSubject = '';
 
-const stepTitles = ['Ihre Daten','Ihr Projekt','Fotos','Rückfragen','Preisspanne & Betriebe','Ihre Anfrage'];
+// ============================================================
+// KONFIGURATION – OpenRouter API-Key hier eintragen
+// Kostenlos unter: https://openrouter.ai (keine Kreditkarte nötig)
+// ============================================================
+const OPENROUTER_API_KEY = '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';
+const AI_MODEL   = 'google/gemma-3-27b-it:free';
+const AI_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+
+async function callAI(prompt, maxTokens = 1500) {
+  const res = await fetch(AI_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+      'HTTP-Referer': 'https://zukunft-mit-ki.com',
+      'X-Title': 'Angebots-Demo Handwerk'
+    },
+    body: JSON.stringify({
+      model: AI_MODEL,
+      max_tokens: maxTokens,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  if (!res.ok) throw new Error(`OpenRouter ${res.status}: ${res.statusText}`);
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+function stripAI(raw) {
+  return raw.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/```json|```/g, '').trim();
+}
+
+const stepTitles =['Ihre Daten','Ihr Projekt','Fotos','Rückfragen','Preisspanne & Betriebe','Ihre Anfrage'];
 
 function updateProgress(n) {
   for (let i=1;i<=6;i++) {
@@ -693,11 +702,15 @@ function goStep(n) {
 }
 
 function validateStep1() {
-  const v = document.getElementById('vorname').value.trim();
+  const v  = document.getElementById('vorname').value.trim();
   const na = document.getElementById('nachname').value.trim();
-  const e = document.getElementById('email').value.trim();
-  const t = document.getElementById('telefon').value.trim();
-  if (!v||!na||!e||!t) { alert('Bitte füllen Sie Vor- und Nachname, E-Mail und Telefon aus.'); return false; }
+  const e  = document.getElementById('email').value.trim();
+  const t  = document.getElementById('telefon').value.trim();
+  const o  = document.getElementById('ort').value.trim();
+  if (!v||!na||!e||!t||!o) {
+    alert('Bitte füllen Sie Vor- und Nachname, E-Mail, Telefon und Ort aus.');
+    return false;
+  }
   return true;
 }
 
@@ -771,14 +784,10 @@ Mindestens 4 davon sollen vom Typ "choice" sein.
 Kein Text vor oder nach dem JSON.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1500, messages:[{role:'user',content:prompt}] })
-    });
-    const data = await res.json();
-    const raw = data.content?.map(b=>b.text||'').join('') || '[]';
-    const clean = raw.replace(/```json|```/g,'').trim();
-    renderQuestions(JSON.parse(clean));
+    const raw = await callAI(prompt, 1500);
+    const questions = JSON.parse(stripAI(raw));
+    if (!Array.isArray(questions) || questions.length === 0) throw new Error('Ungültiges Format');
+    renderQuestions(questions);
   } catch(e) {
     renderQuestions([
       {frage:"Wie ist der aktuelle Zustand des Bereichs?", typ:"choice", optionen:["Neuinstallation / Neubau","Erneuerung / Modernisierung","Reparatur eines Schadens","Bin mir nicht sicher"]},
@@ -871,17 +880,13 @@ Antworte NUR mit einem JSON-Objekt – kein Text davor oder danach:
 }`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:500, messages:[{role:'user',content:prompt}] })
-    });
-    const data = await res.json();
-    const raw = data.content?.map(b=>b.text||'').join('') || '{}';
-    generatedPriceData = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    const raw = await callAI(prompt, 500);
+    generatedPriceData = JSON.parse(stripAI(raw));
   } catch(e) {
     generatedPriceData = { preisVon:2000, preisBis:6000, einheit:'EUR inkl. MwSt.', hinweis:'Hängt von Materialwahl und Aufwand ab.', faktoren:['Materialqualität','Zugänglichkeit','Umfang der Arbeiten'] };
   }
 
+  if (!generatedPriceData) return;
   const fmt = n => n.toLocaleString('de-DE') + ' ' + generatedPriceData.einheit;
   document.getElementById('priceLow').textContent = fmt(generatedPriceData.preisVon);
   document.getElementById('priceHigh').textContent = fmt(generatedPriceData.preisBis);
@@ -973,6 +978,7 @@ async function searchNearbyCompanies() {
       `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(ort)}&format=json&limit=1&countrycodes=de`,
       { headers: { 'User-Agent': 'ZukunftMitKI-AngebotsTool/1.0' } }
     );
+    if (!geoRes.ok) throw new Error('Nominatim-Fehler ' + geoRes.status);
     const geoData = await geoRes.json();
 
     if (!geoData.length) {
@@ -1075,10 +1081,6 @@ async function buildEmailPreview() {
   const empfaengerOhneMail = selectedCompanies.filter(c=>!c.email);
 
   // Summary
-  let summaryHTML = `<strong>Ausgewählte Betriebe (${selectedCompanies.length})</strong>`;
-  selectedCompanies.forEach(c => {
-    summaryHTML += `${c.name} – ${c.gewerk}${c.email ? '' : ' (keine E-Mail hinterlegt)'}\n`;
-  });
   document.getElementById('selectedSummary').innerHTML = `<strong>Ausgewählte Betriebe (${selectedCompanies.length})</strong><br>${selectedCompanies.map(c=>`${c.name} – ${c.gewerk}${c.email ? '' : ' ⚠ keine E-Mail'}`).join('<br>')}`;
 
   // Generate personalized email body
@@ -1102,12 +1104,7 @@ Die E-Mail soll:
 Antworte NUR mit dem E-Mail-Text (ohne Betreff), beginnend mit der Anrede.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:600, messages:[{role:'user',content:prompt}] })
-    });
-    const data = await res.json();
-    generatedEmailBody = data.content?.map(b=>b.text||'').join('') || '';
+    generatedEmailBody = await callAI(prompt, 600);
   } catch(e) {
     generatedEmailBody = `Guten Tag,\n\nmein Name ist ${vorname} ${nachname} und ich bin auf der Suche nach einem qualifizierten Fachbetrieb für folgendes Projekt:\n\nGewerk: ${selectedProjekt}\nBeschreibung: ${freitext}\n\nIch würde mich über einen kostenlosen Vor-Ort-Termin zur Angebotserstellung freuen.\n\nSie erreichen mich unter:\nTelefon: ${telefon}\nE-Mail: ${emailAbs}\n\nMit freundlichen Grüßen\n${vorname} ${nachname}`;
   }
@@ -1131,11 +1128,18 @@ Antworte NUR mit dem E-Mail-Text (ohne Betreff), beginnend mit der Anrede.`;
     document.getElementById('mailtoBtn').style.display = 'none';
   }
 
-  // Show warning for companies without email
+  // Show warning for companies without email (remove previous instance first)
+  const oldWarn = document.getElementById('emailPreview').nextElementSibling;
+  if (oldWarn && oldWarn.dataset.warnType === 'noEmail') oldWarn.remove();
+
   if (empfaengerOhneMail.length > 0) {
     const warn = document.createElement('div');
+    warn.dataset.warnType = 'noEmail';
     warn.style.cssText = 'font-size:12px;color:var(--orange);background:rgba(234,88,12,0.1);border:1px solid rgba(234,88,12,0.25);border-radius:8px;padding:10px 14px;margin-top:10px;line-height:1.6;';
-    warn.innerHTML = `⚠ ${empfaengerOhneMail.map(c=>c.name).join(', ')} ${empfaengerOhneMail.length===1?'hat':'haben'} keine öffentlich verfügbare E-Mail-Adresse. Bitte kontaktieren Sie ${empfaengerOhneMail.length===1?'diesen Betrieb':'diese Betriebe'} direkt über Google Maps oder Telefon.`;
+    const names = empfaengerOhneMail.map(c => c.name).join(', ');
+    const haben = empfaengerOhneMail.length === 1 ? 'hat' : 'haben';
+    const betrieb = empfaengerOhneMail.length === 1 ? 'diesen Betrieb' : 'diese Betriebe';
+    warn.textContent = `⚠ ${names} ${haben} keine öffentlich verfügbare E-Mail-Adresse. Bitte kontaktieren Sie ${betrieb} direkt über Google Maps oder Telefon.`;
     document.getElementById('emailPreview').after(warn);
   }
 }
