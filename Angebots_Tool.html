@@ -375,6 +375,15 @@ footer {
 .footer-socials { display: flex; gap: 10px; }
 .footer-social { width: 34px; height: 34px; border-radius: 8px; background: var(--surface); border: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: center; transition: var(--transition); color: var(--text-secondary); }
 .footer-social:hover { border-color: var(--border); background: var(--gold-dim); color: var(--gold); }
+
+/* AI OPTION BUTTONS & FORM */
+.ai-opt-btn { background:var(--surface2);border:1.5px solid rgba(255,255,255,0.1);color:var(--text-secondary);font-size:13px;padding:7px 14px;border-radius:20px;cursor:pointer;transition:all 0.18s;font-family:Inter,sans-serif; }
+.ai-opt-btn.selected { background:var(--blue-light);border-color:var(--blue);color:var(--blue); }
+.ai-question-sep { height:1px;background:var(--border);margin:16px 0; }
+.ai-text-inp { width:100%;background:var(--surface2);border:1.5px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text);outline:none;font-family:Inter,sans-serif; }
+
+/* WARNING BOX */
+.warn-no-email { font-size:12px;color:var(--orange);background:rgba(234,88,12,0.1);border:1px solid rgba(234,88,12,0.25);border-radius:8px;padding:10px 14px;margin-top:10px;line-height:1.6; }
 </style>
 </head>
 <body>
@@ -637,12 +646,28 @@ document.getElementById('year-footer').textContent = new Date().getFullYear();
 let currentStep = 1;
 let selectedProjekt = '';
 let uploadedPhotos = [];
-let aiAnswers = {};
+let aiAnswers = [];
 let generatedPriceData = null;
 let foundCompanies = [];
 let selectedCompanies = [];
 let generatedEmailBody = '';
 let generatedEmailSubject = '';
+
+// Cache flags — prevent redundant AI/API calls on back/forward navigation
+let aiQuestionsLoaded = false;
+let companiesSearched = false;
+let emailBuilt = false;
+
+// Cached DOM refs for the 6 progress step elements
+const _progressStepEls = [1,2,3,4,5,6].map(i => document.getElementById('ps'+i));
+
+// Helper: enable/disable the Step-6 button
+function setStep6BtnEnabled(enabled) {
+  const btn = document.getElementById('toStep6Btn');
+  btn.disabled = !enabled;
+  btn.style.opacity = enabled ? '1' : '0.5';
+  btn.style.cursor  = enabled ? 'pointer' : 'not-allowed';
+}
 
 // ============================================================
 // KONFIGURATION – OpenRouter API-Key hier eintragen
@@ -670,7 +695,7 @@ async function callAI(prompt, maxTokens = 1500, _attempt = 1) {
   });
 
   if (res.status === 429 && _attempt <= 3) {
-    const wait = Math.max(parseInt(res.headers.get('Retry-After') || '5', 10), 5) * 1000;
+    const wait = Math.max(parseInt(res.headers.get('Retry-After') || '20', 10), 20) * 1000;
     await new Promise(r => setTimeout(r, wait));
     return callAI(prompt, maxTokens, _attempt + 1);
   }
@@ -687,21 +712,20 @@ function stripAI(raw) {
 const stepTitles =['Ihre Daten','Ihr Projekt','Fotos','Rückfragen','Preisspanne & Betriebe','Ihre Anfrage'];
 
 function updateProgress(n) {
-  for (let i=1;i<=6;i++) {
-    const el = document.getElementById('ps'+i);
+  _progressStepEls.forEach((el, i) => {
     el.className = 'progress-step';
-    if (i<n) el.classList.add('done');
-    else if (i===n) el.classList.add('active');
-  }
+    if (i+1 < n) el.classList.add('done');
+    else if (i+1 === n) el.classList.add('active');
+  });
   document.getElementById('progressLabel').textContent = `Schritt ${n} von 6`;
   document.getElementById('progressTitle').textContent = stepTitles[n-1];
 }
 
 function goStep(n) {
   if (n===2 && !validateStep1()) return;
-  if (n===4) startAIQuestions();
-  if (n===5) { generatePriceRange(); searchNearbyCompanies(); }
-  if (n===6) buildEmailPreview();
+  if (n===4 && !aiQuestionsLoaded) startAIQuestions();
+  if (n===5) { generatePriceRange(); if (!companiesSearched) searchNearbyCompanies(); }
+  if (n===6 && !emailBuilt) buildEmailPreview();
 
   document.getElementById('step'+currentStep).classList.remove('active');
   currentStep = n;
@@ -738,12 +762,14 @@ function handleDrop(e) {
   handleFiles(e.dataTransfer.files);
 }
 function handleFiles(files) {
-  Array.from(files).forEach(file => {
-    if (!file.type.startsWith('image/')) return;
+  const imageFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+  if (!imageFiles.length) return;
+  let pending = imageFiles.length;
+  imageFiles.forEach(file => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      uploadedPhotos.push({ name: file.name, dataUrl: e.target.result });
-      renderPreviews();
+      uploadedPhotos = [...uploadedPhotos, { name: file.name, dataUrl: e.target.result }];
+      if (--pending === 0) renderPreviews();
     };
     reader.readAsDataURL(file);
   });
@@ -760,7 +786,7 @@ function renderPreviews() {
   const count = document.getElementById('photoCount');
   count.textContent = uploadedPhotos.length > 0 ? `✓ ${uploadedPhotos.length} Foto${uploadedPhotos.length>1?'s':''} hochgeladen` : '';
 }
-function removePhoto(i) { uploadedPhotos.splice(i,1); renderPreviews(); }
+function removePhoto(i) { uploadedPhotos = uploadedPhotos.filter((_, idx) => idx !== i); renderPreviews(); }
 
 // AI QUESTIONS
 async function startAIQuestions() {
@@ -797,6 +823,7 @@ Kein Text vor oder nach dem JSON.`;
     const questions = JSON.parse(stripAI(raw));
     if (!Array.isArray(questions) || questions.length === 0) throw new Error('Ungültiges Format');
     renderQuestions(questions);
+    aiQuestionsLoaded = true;
     const titleEl = document.querySelector('#step4 .step-title');
     if (titleEl) titleEl.dataset.aiStatus = 'ok';
   } catch(e) {
@@ -809,6 +836,7 @@ Kein Text vor oder nach dem JSON.`;
       {frage:"Wie dringend ist die Arbeit?", typ:"choice", optionen:["So bald wie möglich","In 1–3 Monaten","Kein konkreter Zeitdruck"]},
       {frage:"Gibt es Besonderheiten, die wir wissen sollten?", typ:"text"}
     ]);
+    aiQuestionsLoaded = true;
     const titleEl = document.querySelector('#step4 .step-title');
     if (titleEl) { titleEl.dataset.aiStatus = 'fallback'; titleEl.textContent += ' (Fallback)'; }
   }
@@ -819,7 +847,7 @@ function renderQuestions(questions) {
   const container = document.getElementById('aiQuestionsContainer');
   const list = document.getElementById('aiQuestionsList');
   list.innerHTML = '';
-  aiAnswers = {};
+  aiAnswers = [];
 
   questions.forEach((q, i) => {
     const li = document.createElement('li');
@@ -832,12 +860,10 @@ function renderQuestions(questions) {
       q.optionen.forEach(opt => {
         const btn = document.createElement('button');
         btn.textContent = opt;
-        btn.style.cssText = 'background:var(--surface2);border:1.5px solid rgba(255,255,255,0.1);color:var(--text-secondary);font-size:13px;padding:7px 14px;border-radius:20px;cursor:pointer;transition:all 0.18s;font-family:Inter,sans-serif;';
+        btn.className = 'ai-opt-btn';
         btn.onclick = () => {
-          optGrid.querySelectorAll('button').forEach(b => {
-            b.style.background='var(--surface2)'; b.style.borderColor='rgba(255,255,255,0.1)'; b.style.color='var(--text-secondary)';
-          });
-          btn.style.background='var(--blue-light)'; btn.style.borderColor='var(--blue)'; btn.style.color='var(--blue)';
+          optGrid.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
           aiAnswers[i] = opt;
           checkAllAnswered(questions.length);
         };
@@ -847,7 +873,7 @@ function renderQuestions(questions) {
     } else {
       const inp = document.createElement('input');
       inp.type='text'; inp.placeholder='Ihre Antwort…';
-      inp.style.cssText='width:100%;background:var(--surface2);border:1.5px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text);outline:none;font-family:Inter,sans-serif;';
+      inp.className = 'ai-text-inp';
       inp.oninput = () => { aiAnswers[i] = inp.value; checkAllAnswered(questions.length); };
       li.appendChild(inp);
     }
@@ -855,7 +881,7 @@ function renderQuestions(questions) {
     list.appendChild(li);
     if (i < questions.length-1) {
       const sep = document.createElement('div');
-      sep.style.cssText='height:1px;background:var(--border);margin:16px 0;';
+      sep.className = 'ai-question-sep';
       list.appendChild(sep);
     }
   });
@@ -864,7 +890,7 @@ function renderQuestions(questions) {
 }
 
 function checkAllAnswered(total) {
-  if (Object.keys(aiAnswers).length >= total) {
+  if (aiAnswers.filter(v => v !== undefined).length >= total) {
     document.getElementById('toStep5Btn').style.display = 'inline-flex';
   }
 }
@@ -873,7 +899,7 @@ function checkAllAnswered(total) {
 async function generatePriceRange() {
   const projekt = selectedProjekt || 'Handwerksarbeiten';
   const freitext = document.getElementById('projektFreitext').value || '';
-  const answers = Object.values(aiAnswers).join(', ');
+  const answers = aiAnswers.filter(v => v !== undefined).join(', ');
 
   const prompt = `Du bist ein neutraler Handwerksberater mit Erfahrung in allen Gewerken. Erstelle eine realistische Preisspanne für folgende Anfrage:
 
@@ -946,6 +972,7 @@ async function searchPlaces(query, gewerk) {
       maxResultCount: 12,
     }),
   });
+  if (res.status === 403) throw new Error('PLACES_403');
   if (!res.ok) throw new Error(`Places API ${res.status}: ${res.statusText}`);
   const data = await res.json();
   return (data.places || []).map(p => placesToCompany(p, gewerk));
@@ -968,8 +995,7 @@ async function searchNearbyCompanies() {
   document.getElementById('companiesSearching').style.display = 'flex';
   document.getElementById('companiesHint').style.display = 'none';
   document.getElementById('companiesCount').textContent = '';
-  const btn = document.getElementById('toStep6Btn');
-  btn.disabled = true; btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed';
+  setStep6BtnEnabled(false);
 
   const ort = document.getElementById('ort').value.trim() || 'Deutschland';
   const projekt = selectedProjekt || 'Handwerk';
@@ -978,10 +1004,18 @@ async function searchNearbyCompanies() {
     foundCompanies = await searchPlaces(projekt + ' in ' + ort, projekt);
   } catch(e) {
     document.getElementById('companiesSearching').style.display = 'none';
-    document.getElementById('companiesGrid').innerHTML =
-      '<div class="companies-none">Suche fehlgeschlagen. Bitte versuchen Sie es erneut oder suchen Sie direkt über'
-      + ' <a href="https://www.google.com/maps/search/' + encodeURIComponent(projekt + ' ' + ort)
-      + '" target="_blank" style="color:var(--blue);">Google Maps</a>.</div>';
+    if (e.message === 'PLACES_403') {
+      document.getElementById('companiesGrid').textContent = '';
+      const notice = document.createElement('div');
+      notice.className = 'companies-none';
+      notice.textContent = 'Google Places API nicht aktiviert. Bitte \u201ePlaces API (New)\u201c in der Google Cloud Console aktivieren.';
+      document.getElementById('companiesGrid').appendChild(notice);
+    } else {
+      document.getElementById('companiesGrid').innerHTML =
+        '<div class="companies-none">Suche fehlgeschlagen. Bitte versuchen Sie es erneut oder suchen Sie direkt \u00fcber'
+        + ' <a href="https://www.google.com/maps/search/' + encodeURIComponent(projekt + ' ' + ort)
+        + '" target="_blank" style="color:var(--blue);">Google Maps</a>.</div>';
+    }
     return;
   }
 
@@ -1069,21 +1103,18 @@ async function searchNearbyCompanies() {
     card.appendChild(check);
     grid.appendChild(card);
   });
+  companiesSearched = true;
 }
 
 function toggleCompany(card, idx) {
   card.classList.toggle('selected');
   const company = foundCompanies[idx];
-  const alreadyIdx = selectedCompanies.findIndex(c=>c.name===company.name);
-  if (alreadyIdx >= 0) selectedCompanies.splice(alreadyIdx, 1);
-  else selectedCompanies.push(company);
-
-  const btn = document.getElementById('toStep6Btn');
-  if (selectedCompanies.length > 0) {
-    btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
-  } else {
-    btn.disabled = true; btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed';
-  }
+  const exists = selectedCompanies.some(c => c.name === company.name);
+  selectedCompanies = exists
+    ? selectedCompanies.filter(c => c.name !== company.name)
+    : [...selectedCompanies, company];
+  emailBuilt = false;
+  setStep6BtnEnabled(selectedCompanies.length > 0);
 }
 
 // EMAIL BUILDER
@@ -1094,14 +1125,14 @@ async function buildEmailPreview() {
   const emailAbs = document.getElementById('email').value;
   const ort = document.getElementById('ort').value || '';
   const freitext = document.getElementById('projektFreitext').value || '';
-  const answers = Object.entries(aiAnswers).map(([k,v])=>v).join(', ');
+  const answers = aiAnswers.filter(v => v !== undefined).join(', ');
   const preis = generatedPriceData ? `${generatedPriceData.preisVon.toLocaleString('de-DE')} – ${generatedPriceData.preisBis.toLocaleString('de-DE')} EUR` : '';
 
   const empfaengerMitMail = selectedCompanies.filter(c=>c.email);
   const empfaengerOhneMail = selectedCompanies.filter(c=>!c.email);
 
-  // Summary
-  document.getElementById('selectedSummary').innerHTML = `<strong>Ausgewählte Betriebe (${selectedCompanies.length})</strong><br>${selectedCompanies.map(c=>`${c.name} – ${c.gewerk}${c.email ? '' : ' ⚠ keine E-Mail'}`).join('<br>')}`;
+  // Summary — escHtml guards against XSS from API-provided company names
+  document.getElementById('selectedSummary').innerHTML = `<strong>Ausgewählte Betriebe (${selectedCompanies.length})</strong><br>${selectedCompanies.map(c=>`${escHtml(c.name)} – ${escHtml(c.gewerk)}${c.email ? '' : ' ⚠ keine E-Mail'}`).join('<br>')}`;
 
   // Generate personalized email body
   const prompt = `Schreibe eine höfliche, professionelle Anfrage-E-Mail auf Deutsch für folgenden Kunden:
@@ -1149,14 +1180,15 @@ Antworte NUR mit dem E-Mail-Text (ohne Betreff), beginnend mit der Anrede.`;
     document.getElementById('mailtoBtn').style.display = 'none';
   }
 
-  // Show warning for companies without email (remove previous instance first)
-  const oldWarn = document.getElementById('emailPreview').nextElementSibling;
-  if (oldWarn && oldWarn.dataset.warnType === 'noEmail') oldWarn.remove();
+  emailBuilt = true;
+
+  // Show warning for companies without email (stable ID for safe re-render)
+  document.getElementById('emailNoMailWarn')?.remove();
 
   if (empfaengerOhneMail.length > 0) {
     const warn = document.createElement('div');
-    warn.dataset.warnType = 'noEmail';
-    warn.style.cssText = 'font-size:12px;color:var(--orange);background:rgba(234,88,12,0.1);border:1px solid rgba(234,88,12,0.25);border-radius:8px;padding:10px 14px;margin-top:10px;line-height:1.6;';
+    warn.id = 'emailNoMailWarn';
+    warn.className = 'warn-no-email';
     const names = empfaengerOhneMail.map(c => c.name).join(', ');
     const haben = empfaengerOhneMail.length === 1 ? 'hat' : 'haben';
     const betrieb = empfaengerOhneMail.length === 1 ? 'diesen Betrieb' : 'diese Betriebe';
