@@ -108,6 +108,37 @@
     .reveal-delay-2 { transition-delay: 0.2s; }
     .reveal-delay-3 { transition-delay: 0.3s; }
 
+    /* Certificate stagger via JS-injected --i */
+    .zert-card.reveal { transition-delay: calc(var(--i, 0) * 60ms); }
+
+    /* ─── Reveal Variants ────────────────────────────── */
+    /* Section labels: slide in from left */
+    .reveal .section-label {
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1) 0.05s,
+                  transform 0.55s cubic-bezier(0.22,1,0.36,1) 0.05s;
+    }
+    .reveal.visible .section-label { opacity: 1; transform: translateX(0); }
+
+    /* Section titles: spring fade-up after label */
+    .reveal .section-title {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1) 0.15s,
+                  transform 0.65s cubic-bezier(0.22,1,0.36,1) 0.15s;
+    }
+    .reveal.visible .section-title { opacity: 1; transform: translateY(0); }
+
+    /* Service cards: fan-in with slight rotation */
+    .cards-grid .card.reveal {
+      transform: translateY(24px) rotate(-1.5deg);
+      opacity: 0;
+      transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.6s cubic-bezier(0.22,1,0.36,1);
+    }
+    .cards-grid .card.reveal.visible { opacity: 1; transform: translateY(0) rotate(0deg); }
+
     /* ─── Buttons ────────────────────────────────────── */
     .btn {
       display: inline-flex;
@@ -249,8 +280,12 @@
       z-index: 99;
       flex-direction: column;
       gap: 20px;
+      opacity: 0;
+      transform: translateY(-12px);
+      transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.22,1,0.36,1);
     }
-    #mobile-menu.open { display: flex; }
+    #mobile-menu.menu-visible { display: flex; }
+    #mobile-menu.menu-open    { opacity: 1; transform: translateY(0); }
     #mobile-menu a {
       font-size: 1.1rem;
       font-weight: 500;
@@ -351,7 +386,7 @@
       font-weight: 600;
       color: var(--gold);
       margin-bottom: 24px;
-      animation: fade-up 0.6s ease 0.1s both;
+      animation: fade-up 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s both;
     }
     .hero-badge-dot {
       width: 6px; height: 6px;
@@ -368,7 +403,7 @@
       font-weight: 800;
       line-height: 1.1;
       margin-bottom: 24px;
-      animation: fade-up 0.6s ease 0.25s both;
+      animation: fade-up 0.7s cubic-bezier(0.22,1,0.36,1) 0.35s both;
     }
     .hero-title .accent { color: var(--gold); }
     .hero-sub {
@@ -376,13 +411,13 @@
       color: var(--text-muted);
       margin-bottom: 40px;
       max-width: 520px;
-      animation: fade-up 0.6s ease 0.4s both;
+      animation: fade-up 0.7s cubic-bezier(0.22,1,0.36,1) 0.50s both;
     }
     .hero-actions {
       display: flex;
       gap: 16px;
       flex-wrap: wrap;
-      animation: fade-up 0.6s ease 0.55s both;
+      animation: fade-up 0.7s cubic-bezier(0.22,1,0.36,1) 0.65s both;
     }
     .hero-scroll {
       position: absolute;
@@ -398,7 +433,7 @@
       font-weight: 500;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      animation: fade-up 0.6s ease 0.7s both;
+      animation: fade-up 0.7s cubic-bezier(0.22,1,0.36,1) 0.85s both;
     }
     .scroll-line {
       width: 1px;
@@ -413,7 +448,7 @@
       100% { transform: scaleY(0); transform-origin: bottom; }
     }
     @keyframes fade-up {
-      from { opacity: 0; transform: translateY(24px); }
+      from { opacity: 0; transform: translateY(30px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
@@ -433,6 +468,17 @@
       transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
       position: relative;
       overflow: hidden;
+      will-change: transform;
+    }
+    .card.tilt-active {
+      transition: border-color var(--transition),
+                  transform 0.12s ease-out,
+                  box-shadow var(--transition);
+    }
+    .card.tilt-reset {
+      transition: border-color var(--transition),
+                  transform 0.45s cubic-bezier(0.22,1,0.36,1),
+                  box-shadow var(--transition);
     }
     .card::before {
       content: '';
@@ -568,8 +614,11 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
     }
-    .zert-lightbox.active { display: flex; }
+    .zert-lightbox.lb-visible { display: flex; }
+    .zert-lightbox.lb-open    { opacity: 1; }
     .zert-lightbox-inner {
       position: relative;
       max-width: min(70vw, 900px);
@@ -583,6 +632,13 @@
       align-items: center;
       gap: 12px;
       overflow: hidden;
+      transform: scale(0.88);
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), opacity 0.25s ease;
+    }
+    .zert-lightbox.lb-open .zert-lightbox-inner {
+      transform: scale(1);
+      opacity: 1;
     }
     .zert-lightbox-img {
       max-width: 100%;
@@ -1025,6 +1081,24 @@
       .tool-steps { gap: 8px; }
       .tool-step-arrow { display: none; }
     }
+
+    /* ─── Reduced Motion ─────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-badge, .hero-title, .hero-sub, .hero-actions, .hero-scroll {
+        animation: none; opacity: 1; transform: none;
+      }
+      .hero-dot, .hero-badge-dot, .scroll-line { animation: none; }
+      .reveal, .reveal .section-label, .reveal .section-title {
+        opacity: 1; transform: none; transition: none;
+      }
+      .cards-grid .card.reveal { transform: none; opacity: 1; transition: none; }
+      .zert-lightbox, .zert-lightbox-inner { transition: none; }
+      .zert-lightbox.lb-open .zert-lightbox-inner { transform: scale(1); opacity: 1; }
+      #mobile-menu { transition: none; }
+      .card.tilt-active, .card.tilt-reset {
+        transition: border-color var(--transition), box-shadow var(--transition);
+      }
+    }
   </style>
 
   <!-- JSON-LD Strukturierte Daten (Schema.org) -->
@@ -1273,7 +1347,7 @@
 
       <div class="zert-grid">
         <!-- Zertifikat 1 -->
-        <div class="zert-card reveal reveal-delay-1" role="button" tabindex="0"
+        <div class="zert-card reveal" role="button" tabindex="0"
              data-img="PNG/Anthropic_Claude 101.png" data-title="Claude 101 – Anthropic">
           <img src="PNG/Anthropic_Claude 101.png" alt="Zertifikat: Claude 101 – Anthropic" class="zert-img" />
           <p class="zert-name">Claude 101</p>
@@ -1286,7 +1360,7 @@
         </div>
 
         <!-- Zertifikat 2 -->
-        <div class="zert-card reveal reveal-delay-2" role="button" tabindex="0"
+        <div class="zert-card reveal" role="button" tabindex="0"
              data-img="PNG/Anthropic_AI Fluency.png" data-title="AI Fluency: Framework &amp; Foundations – Anthropic">
           <img src="PNG/Anthropic_AI Fluency.png" alt="Zertifikat: AI Fluency – Anthropic" class="zert-img" />
           <p class="zert-name">AI Fluency: Framework &amp; Foundations</p>
@@ -1299,7 +1373,7 @@
         </div>
 
         <!-- Zertifikat 3 -->
-        <div class="zert-card reveal reveal-delay-3" role="button" tabindex="0"
+        <div class="zert-card reveal" role="button" tabindex="0"
              data-img="PNG/Anthropic_AI Fluency for educators.png" data-title="AI Fluency for Educators – Anthropic">
           <img src="PNG/Anthropic_AI Fluency for educators.png" alt="Zertifikat: AI Fluency for Educators – Anthropic" class="zert-img" />
           <p class="zert-name">AI Fluency for Educators</p>
@@ -1312,7 +1386,7 @@
         </div>
 
         <!-- Zertifikat 4 -->
-        <div class="zert-card reveal reveal-delay-1" role="button" tabindex="0"
+        <div class="zert-card reveal" role="button" tabindex="0"
              data-img="PNG/Anthropic_Teaching AI Fluency.png" data-title="Teaching the AI Fluency Framework – Anthropic">
           <img src="PNG/Anthropic_Teaching AI Fluency.png" alt="Zertifikat: Teaching AI Fluency – Anthropic" class="zert-img" />
           <p class="zert-name">Teaching the AI Fluency Framework</p>
@@ -1325,7 +1399,7 @@
         </div>
 
         <!-- Zertifikat 5 -->
-        <div class="zert-card reveal reveal-delay-2" role="button" tabindex="0"
+        <div class="zert-card reveal" role="button" tabindex="0"
              data-img="PNG/Anthropic_Claude Code in Action.png" data-title="Claude Code in Action – Anthropic">
           <img src="PNG/Anthropic_Claude Code in Action.png" alt="Zertifikat: Claude Code in Action – Anthropic" class="zert-img" />
           <p class="zert-name">Claude Code in Action</p>
@@ -1338,7 +1412,7 @@
         </div>
 
         <!-- Zertifikat 6 -->
-        <div class="zert-card reveal reveal-delay-3" role="button" tabindex="0"
+        <div class="zert-card reveal" role="button" tabindex="0"
              data-img="PNG/Anthropic_Building with the Claude API.png" data-title="Building with the Claude API – Anthropic">
           <img src="PNG/Anthropic_Building with the Claude API.png" alt="Zertifikat: Building with the Claude API – Anthropic" class="zert-img" />
           <p class="zert-name">Building with the Claude API</p>
@@ -1351,7 +1425,7 @@
         </div>
 
         <!-- Zertifikat 7 -->
-        <div class="zert-card reveal reveal-delay-1" role="button" tabindex="0"
+        <div class="zert-card reveal" role="button" tabindex="0"
              data-img="PNG/Google_generative badge.png" data-title="Introduction to Generative AI – Google Cloud">
           <img src="PNG/Google_generative badge.png" alt="Zertifikat: Introduction to Generative AI – Google Cloud" class="zert-img" />
           <p class="zert-name">Introduction to Generative AI</p>
@@ -1364,7 +1438,7 @@
         </div>
 
         <!-- Zertifikat 8 -->
-        <div class="zert-card reveal reveal-delay-2" role="button" tabindex="0"
+        <div class="zert-card reveal" role="button" tabindex="0"
              data-img="PNG/Google_llm badge.png" data-title="Introduction to Large Language Models – Google Cloud">
           <img src="PNG/Google_llm badge.png" alt="Zertifikat: Introduction to Large Language Models – Google Cloud" class="zert-img" />
           <p class="zert-name">Introduction to Large Language Models</p>
@@ -1377,7 +1451,7 @@
         </div>
 
         <!-- Zertifikat 9 -->
-        <div class="zert-card reveal reveal-delay-3" role="button" tabindex="0"
+        <div class="zert-card reveal" role="button" tabindex="0"
              data-img="PNG/Google_responsible ai badge.png" data-title="Introduction to Responsible AI – Google Cloud">
           <img src="PNG/Google_responsible ai badge.png" alt="Zertifikat: Introduction to Responsible AI – Google Cloud" class="zert-img" />
           <p class="zert-name">Introduction to Responsible AI</p>
@@ -1390,7 +1464,7 @@
         </div>
 
         <!-- Zertifikat 10 -->
-        <div class="zert-card reveal reveal-delay-1" role="button" tabindex="0"
+        <div class="zert-card reveal" role="button" tabindex="0"
              data-img="PNG/Google_application developer.png" data-title="Gemini for Application Developers – Google Cloud">
           <img src="PNG/Google_application developer.png" alt="Zertifikat: Gemini for Application Developers – Google Cloud" class="zert-img" />
           <p class="zert-name">Gemini for Application Developers</p>
@@ -1403,7 +1477,7 @@
         </div>
 
         <!-- Zertifikat 11 -->
-        <div class="zert-card reveal reveal-delay-2" role="button" tabindex="0"
+        <div class="zert-card reveal" role="button" tabindex="0"
              data-img="PNG/Digitales Innovationszentrum_Zertifikat_KI VO.png" data-title="KI-Kompetenz für den Arbeitsalltag – DIZ Schwerin">
           <img src="PNG/Digitales Innovationszentrum_Zertifikat_KI VO.png" alt="Zertifikat: KI-Kompetenz für den Arbeitsalltag – DIZ Schwerin" class="zert-img" />
           <p class="zert-name">KI-Kompetenz für den Arbeitsalltag</p>
@@ -1617,21 +1691,32 @@
     const hamburger = document.querySelector('.nav-hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
 
+    function openMenu() {
+      mobileMenu.classList.add('menu-visible');
+      requestAnimationFrame(() => mobileMenu.classList.add('menu-open'));
+      hamburger.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      hamburger.setAttribute('aria-label', 'Menü schließen');
+    }
+
+    function closeMenu() {
+      mobileMenu.classList.remove('menu-open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.setAttribute('aria-label', 'Menü öffnen');
+      mobileMenu.addEventListener('transitionend', function h() {
+        mobileMenu.classList.remove('menu-visible');
+        mobileMenu.removeEventListener('transitionend', h);
+      });
+    }
+
     hamburger.addEventListener('click', () => {
-      const isOpen = mobileMenu.classList.toggle('open');
-      hamburger.classList.toggle('open', isOpen);
-      hamburger.setAttribute('aria-expanded', String(isOpen));
-      hamburger.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
+      mobileMenu.classList.contains('menu-open') ? closeMenu() : openMenu();
     });
 
     // Close mobile menu on link click
     mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('open');
-        hamburger.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        hamburger.setAttribute('aria-label', 'Menü öffnen');
-      });
+      link.addEventListener('click', closeMenu);
     });
 
     // ── Scroll reveal (IntersectionObserver) ─────────
@@ -1648,6 +1733,35 @@
     );
 
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ── Certificate card stagger ──────────────────────
+    document.querySelectorAll('.zert-card').forEach((card, i) => {
+      card.style.setProperty('--i', i);
+    });
+
+    // ── Card 3D hover tilt ────────────────────────────
+    const rmq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        if (rmq.matches) return;
+        const r = card.getBoundingClientRect();
+        const cx = ((e.clientX - r.left) / r.width  - 0.5) * 2;
+        const cy = ((e.clientY - r.top)  / r.height - 0.5) * 2;
+        card.classList.add('tilt-active');
+        card.classList.remove('tilt-reset');
+        card.style.transform =
+          `translateY(-4px) perspective(800px) rotateX(${(-cy * 5).toFixed(2)}deg) rotateY(${(cx * 5).toFixed(2)}deg)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.classList.remove('tilt-active');
+        card.classList.add('tilt-reset');
+        card.style.transform = '';
+        card.addEventListener('transitionend', function h() {
+          card.classList.remove('tilt-reset');
+          card.removeEventListener('transitionend', h);
+        });
+      });
+    });
 
     // ── Contact form ──────────────────────────────────
     const form = document.getElementById('contact-form');
@@ -1724,23 +1838,30 @@
     const lbTitle  = document.getElementById('zertLightboxTitle');
     const lbClose  = document.getElementById('zertLightboxClose');
 
-    document.querySelectorAll('.zert-card').forEach(card => {
-      card.addEventListener('click', () => {
-        lbImg.src   = card.dataset.img;
-        lbImg.alt   = card.dataset.title;
-        lbTitle.textContent = card.dataset.title;
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
+    function openLightbox(img, title) {
+      lbImg.src = img; lbImg.alt = title;
+      lbTitle.textContent = title;
+      lightbox.classList.add('lb-visible');
+      requestAnimationFrame(() => lightbox.classList.add('lb-open'));
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('lb-open');
+      lightbox.addEventListener('transitionend', function h() {
+        lightbox.classList.remove('lb-visible');
+        lightbox.removeEventListener('transitionend', h);
       });
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.zert-card').forEach(card => {
+      card.addEventListener('click', () => openLightbox(card.dataset.img, card.dataset.title));
       card.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') card.click();
+        if (e.key === 'Enter' || e.key === ' ') openLightbox(card.dataset.img, card.dataset.title);
       });
     });
 
-    function closeLightbox() {
-      lightbox.classList.remove('active');
-      document.body.style.overflow = '';
-    }
     lbClose.addEventListener('click', closeLightbox);
     lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
