@@ -300,8 +300,12 @@ input::placeholder, textarea::placeholder { color: var(--text-light); }
 .company-card.selected .company-trade { background: var(--gold-dim); color: var(--gold); }
 .company-contacts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 .company-contact { font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
-.company-maps { font-size: 12px; color: var(--gold); text-decoration: none; font-weight: 500; }
-.company-maps:hover { text-decoration: underline; }
+.company-maps {
+  font-size: 12px; color: var(--gold); text-decoration: none; font-weight: 600;
+  background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.3);
+  padding: 3px 10px; border-radius: 20px; transition: all 0.18s; display: inline-flex; align-items: center;
+}
+.company-maps:hover { background: rgba(201,168,76,0.25); border-color: var(--gold); }
 .company-check {
   width: 22px; height: 22px; border-radius: 50%;
   border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center;
@@ -325,16 +329,18 @@ input::placeholder, textarea::placeholder { color: var(--text-light); }
 .email-field-label { font-weight: 600; color: var(--text-secondary); min-width: 50px; flex-shrink: 0; }
 .email-field-val { color: var(--text); line-height: 1.5; word-break: break-all; }
 .email-body-area { padding: 18px; font-size: 13px; color: var(--text); line-height: 1.8; white-space: pre-wrap; }
-.mailto-btn {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: #1a2035;
-  border: none; border-radius: 12px; padding: 16px 24px;
-  font-size: 15px; font-weight: 700; cursor: pointer;
-  transition: all 0.18s; text-decoration: none; font-family: 'Inter', sans-serif;
-  box-shadow: 0 4px 14px rgba(201,168,76,0.35);
-  margin-bottom: 10px;
+
+/* Per-Firma Maps-Buttons in Schritt 6 */
+.maps-buttons-wrap { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.maps-firm-btn {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  width: 100%; background: var(--gold-dim); color: var(--gold);
+  border: 1.5px solid rgba(201,168,76,0.4); border-radius: 12px; padding: 14px 20px;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  transition: all 0.18s; font-family: 'Inter', sans-serif; text-align: left;
 }
-.mailto-btn:hover { box-shadow: 0 6px 20px rgba(201,168,76,0.5); transform: translateY(-1px); }
+.maps-firm-btn:hover { background: rgba(201,168,76,0.25); border-color: var(--gold); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+
 .copy-btn {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   width: 100%; background: transparent; color: var(--text-secondary);
@@ -382,8 +388,6 @@ footer {
 .ai-question-sep { height:1px;background:var(--border);margin:16px 0; }
 .ai-text-inp { width:100%;background:var(--surface2);border:1.5px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text);outline:none;font-family:Inter,sans-serif; }
 
-/* WARNING BOX */
-.warn-no-email { font-size:12px;color:var(--orange);background:rgba(234,88,12,0.1);border:1px solid rgba(234,88,12,0.25);border-radius:8px;padding:10px 14px;margin-top:10px;line-height:1.6; }
 </style>
 </head>
 <body>
@@ -575,20 +579,16 @@ footer {
     </div>
   </div>
 
-  <!-- STEP 6: E-MAIL ANFRAGE -->
+  <!-- STEP 6: ANFRAGE ABSENDEN -->
   <div class="step-card" id="step6">
     <div class="step-num">Schritt 06 · 06</div>
     <div class="step-title">Ihre Anfrage ist fertig.</div>
-    <div class="step-desc">Wir haben eine personalisierte E-Mail vorbereitet. Klicken Sie auf „E-Mail öffnen" – Ihr Mailprogramm öffnet sich automatisch mit allen Empfängern und dem Text.</div>
+    <div class="step-desc">Wir haben eine Anfrage-Vorlage für Sie vorbereitet. Öffnen Sie die ausgewählten Firmen auf Google Maps und senden Sie ihnen den kopierten Text über das jeweilige Kontaktformular.</div>
 
     <div class="selected-summary" id="selectedSummary"></div>
 
     <div class="email-preview" id="emailPreview">
       <div class="email-header-bar">
-        <div class="email-field">
-          <span class="email-field-label">An:</span>
-          <span class="email-field-val" id="emailTo"></span>
-        </div>
         <div class="email-field">
           <span class="email-field-label">Betreff:</span>
           <span class="email-field-val" id="emailSubject"></span>
@@ -597,16 +597,14 @@ footer {
       <div class="email-body-area" id="emailBody"></div>
     </div>
 
-    <a class="mailto-btn" id="mailtoBtn" href="#" target="_blank">
-      📨 E-Mail jetzt öffnen
-    </a>
+    <div class="maps-buttons-wrap" id="mapsButtonsContainer"></div>
+
     <button class="copy-btn" id="copyBtn" onclick="copyEmailText()">
-      📋 E-Mail-Text kopieren (für Gmail / Webmail)
+      📋 Anfrage-Text kopieren
     </button>
 
     <div style="font-size:12px;color:var(--text-light);text-align:center;margin-top:12px;line-height:1.7;">
-      Der Button öffnet Ihr Standard-Mailprogramm (Outlook, Apple Mail, Thunderbird usw.).<br>
-      Für Gmail oder andere Webmail-Dienste nutzen Sie bitte „Text kopieren".
+      Kopieren Sie den Text und senden Sie ihn über das Kontaktformular der jeweiligen Firma.
     </div>
   </div>
 
@@ -669,16 +667,19 @@ function setStep6BtnEnabled(enabled) {
   btn.style.cursor  = enabled ? 'pointer' : 'not-allowed';
 }
 
-// ============================================================
-// KONFIGURATION – OpenRouter API-Key hier eintragen
-// Kostenlos unter: https://openrouter.ai (keine Kreditkarte nötig)
-// ============================================================
 const OPENROUTER_API_KEY = '__OPENROUTER_API_KEY__';
 const AI_MODEL   = 'google/gemma-3-27b-it:free';
 const AI_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const GOOGLE_PLACES_API_KEY = '__GOOGLE_PLACES_API_KEY__';
 
-async function callAI(prompt, maxTokens = 1500, _attempt = 1) {
+async function callAI(prompt, maxTokens = 1500, _attempt = 1, jsonMode = false) {
+  const body = {
+    model: AI_MODEL,
+    max_tokens: maxTokens,
+    messages: [{ role: 'user', content: prompt }]
+  };
+  if (jsonMode) body.response_format = { type: 'json_object' };
+
   const res = await fetch(AI_API_URL, {
     method: 'POST',
     headers: {
@@ -687,17 +688,13 @@ async function callAI(prompt, maxTokens = 1500, _attempt = 1) {
       'HTTP-Referer': 'https://zukunft-mit-ki.com',
       'X-Title': 'Angebots-Demo Handwerk'
     },
-    body: JSON.stringify({
-      model: AI_MODEL,
-      max_tokens: maxTokens,
-      messages: [{ role: 'user', content: prompt }]
-    })
+    body: JSON.stringify(body)
   });
 
   if (res.status === 429 && _attempt <= 3) {
     const wait = Math.max(parseInt(res.headers.get('Retry-After') || '20', 10), 20) * 1000;
     await new Promise(r => setTimeout(r, wait));
-    return callAI(prompt, maxTokens, _attempt + 1);
+    return callAI(prompt, maxTokens, _attempt + 1, jsonMode);
   }
 
   if (!res.ok) throw new Error(`OpenRouter ${res.status}: ${res.statusText}`);
@@ -707,6 +704,14 @@ async function callAI(prompt, maxTokens = 1500, _attempt = 1) {
 
 function stripAI(raw) {
   return raw.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/```json|```/g, '').trim();
+}
+
+function healJSON(raw) {
+  let s = raw.replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/```json|```/g, '').trim();
+  const m = s.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
+  if (m) s = m[0];
+  s = s.replace(/,(\s*[}\]])/g, '$1');
+  return s;
 }
 
 const stepTitles =['Ihre Daten','Ihr Projekt','Fotos','Rückfragen','Preisspanne & Betriebe','Ihre Anfrage'];
@@ -819,8 +824,8 @@ Mindestens 4 davon sollen vom Typ "choice" sein.
 Kein Text vor oder nach dem JSON.`;
 
   try {
-    const raw = await callAI(prompt, 1500);
-    const questions = JSON.parse(stripAI(raw));
+    const raw = await callAI(prompt, 1500, 1, true);
+    const questions = JSON.parse(healJSON(raw));
     if (!Array.isArray(questions) || questions.length === 0) throw new Error('Ungültiges Format');
     renderQuestions(questions);
     aiQuestionsLoaded = true;
@@ -920,8 +925,8 @@ Antworte NUR mit einem JSON-Objekt – kein Text davor oder danach:
 }`;
 
   try {
-    const raw = await callAI(prompt, 500);
-    generatedPriceData = JSON.parse(stripAI(raw));
+    const raw = await callAI(prompt, 500, 1, true);
+    generatedPriceData = JSON.parse(healJSON(raw));
   } catch(e) {
     console.error('[KI] generatePriceRange fehlgeschlagen:', e.message);
     generatedPriceData = { preisVon:2000, preisBis:6000, einheit:'EUR inkl. MwSt.', hinweis:'Hängt von Materialwahl und Aufwand ab.', faktoren:['Materialqualität','Zugänglichkeit','Umfang der Arbeiten'] };
@@ -1128,14 +1133,19 @@ async function buildEmailPreview() {
   const answers = aiAnswers.filter(v => v !== undefined).join(', ');
   const preis = generatedPriceData ? `${generatedPriceData.preisVon.toLocaleString('de-DE')} – ${generatedPriceData.preisBis.toLocaleString('de-DE')} EUR` : '';
 
-  const empfaengerMitMail = selectedCompanies.filter(c=>c.email);
-  const empfaengerOhneMail = selectedCompanies.filter(c=>!c.email);
+  // Summary — built via DOM methods to avoid injecting external data as HTML
+  const summaryEl = document.getElementById('selectedSummary');
+  summaryEl.replaceChildren();
+  const summaryHeader = document.createElement('strong');
+  summaryHeader.textContent = 'Ausgewählte Betriebe (' + selectedCompanies.length + ')';
+  summaryEl.appendChild(summaryHeader);
+  selectedCompanies.forEach(function(c) {
+    summaryEl.appendChild(document.createElement('br'));
+    summaryEl.appendChild(document.createTextNode(c.name + ' – ' + c.gewerk));
+  });
 
-  // Summary — escHtml guards against XSS from API-provided company names
-  document.getElementById('selectedSummary').innerHTML = `<strong>Ausgewählte Betriebe (${selectedCompanies.length})</strong><br>${selectedCompanies.map(c=>`${escHtml(c.name)} – ${escHtml(c.gewerk)}${c.email ? '' : ' ⚠ keine E-Mail'}`).join('<br>')}`;
-
-  // Generate personalized email body
-  const prompt = `Schreibe eine höfliche, professionelle Anfrage-E-Mail auf Deutsch für folgenden Kunden:
+  // Generate personalized request text
+  const prompt = `Schreibe eine höfliche, professionelle Anfrage auf Deutsch für folgenden Kunden:
 
 Kunde: ${vorname} ${nachname}, aus ${ort}
 Telefon: ${telefon}
@@ -1144,66 +1154,51 @@ Projektbeschreibung: ${freitext}
 Weitere Details: ${answers}
 Geschätzte Preisspanne (zur Info): ${preis}
 
-Die E-Mail soll:
+Der Text soll:
 - Kurz und präzise sein (max. 12 Zeilen Haupttext)
 - Um einen kostenlosen Vor-Ort-Termin zur Angebotserstellung bitten
 - Die wichtigsten Projektdetails zusammenfassen
 - Kontaktdaten des Kunden enthalten
 - Freundlich und professionell klingen
-- KEIN "Sehr geehrte Damen und Herren" verwenden, da mehrere Firmen gleichzeitig angeschrieben werden
+- KEIN "Sehr geehrte Damen und Herren" verwenden, da mehrere Firmen gleichzeitig kontaktiert werden
 
-Antworte NUR mit dem E-Mail-Text (ohne Betreff), beginnend mit der Anrede.`;
+Antworte NUR mit dem Text (ohne Betreff), beginnend mit der Anrede.`;
 
   try {
     generatedEmailBody = await callAI(prompt, 600);
   } catch(e) {
     console.error('[KI] buildEmailPreview fehlgeschlagen:', e.message);
-    generatedEmailBody = `Guten Tag,\n\nmein Name ist ${vorname} ${nachname} und ich bin auf der Suche nach einem qualifizierten Fachbetrieb für folgendes Projekt:\n\nGewerk: ${selectedProjekt}\nBeschreibung: ${freitext}\n\nIch würde mich über einen kostenlosen Vor-Ort-Termin zur Angebotserstellung freuen.\n\nSie erreichen mich unter:\nTelefon: ${telefon}\nE-Mail: ${emailAbs}\n\nMit freundlichen Grüßen\n${vorname} ${nachname}`;
+    generatedEmailBody = 'Guten Tag,\n\nmein Name ist ' + vorname + ' ' + nachname + ' und ich bin auf der Suche nach einem qualifizierten Fachbetrieb für folgendes Projekt:\n\nGewerk: ' + selectedProjekt + '\nBeschreibung: ' + freitext + '\n\nIch würde mich über einen kostenlosen Vor-Ort-Termin zur Angebotserstellung freuen.\n\nSie erreichen mich unter:\nTelefon: ' + telefon + '\nE-Mail: ' + emailAbs + '\n\nMit freundlichen Grüßen\n' + vorname + ' ' + nachname;
   }
 
-  generatedEmailSubject = `Angebotsanfrage: ${selectedProjekt} – ${vorname} ${nachname}`;
-  const toAddresses = empfaengerMitMail.map(c=>c.email).join(',');
-
-  // Show preview
-  document.getElementById('emailTo').textContent = empfaengerMitMail.length > 0
-    ? empfaengerMitMail.map(c=>`${c.name} <${c.email}>`).join(', ')
-    : 'Keine E-Mail-Adressen verfügbar – bitte Google Maps nutzen';
+  generatedEmailSubject = 'Angebotsanfrage: ' + selectedProjekt + ' – ' + vorname + ' ' + nachname;
   document.getElementById('emailSubject').textContent = generatedEmailSubject;
   document.getElementById('emailBody').textContent = generatedEmailBody;
 
-  // Build mailto link
-  if (toAddresses) {
-    const mailtoHref = `mailto:${toAddresses}?subject=${encodeURIComponent(generatedEmailSubject)}&body=${encodeURIComponent(generatedEmailBody)}`;
-    document.getElementById('mailtoBtn').href = mailtoHref;
-    document.getElementById('mailtoBtn').style.display = 'flex';
-  } else {
-    document.getElementById('mailtoBtn').style.display = 'none';
-  }
+  // Build per-company Maps buttons
+  const mapsContainer = document.getElementById('mapsButtonsContainer');
+  mapsContainer.replaceChildren();
+  selectedCompanies.forEach(function(c) {
+    const btn = document.createElement('button');
+    btn.className = 'maps-firm-btn';
+    btn.appendChild(document.createTextNode('📍 ' + c.name + ' auf Google Maps öffnen'));
+    const arrow = document.createElement('span');
+    arrow.textContent = '→';
+    btn.appendChild(arrow);
+    btn.onclick = function() { window.open(c.maps, '_blank'); };
+    mapsContainer.appendChild(btn);
+  });
 
   emailBuilt = true;
-
-  // Show warning for companies without email (stable ID for safe re-render)
-  document.getElementById('emailNoMailWarn')?.remove();
-
-  if (empfaengerOhneMail.length > 0) {
-    const warn = document.createElement('div');
-    warn.id = 'emailNoMailWarn';
-    warn.className = 'warn-no-email';
-    const names = empfaengerOhneMail.map(c => c.name).join(', ');
-    const haben = empfaengerOhneMail.length === 1 ? 'hat' : 'haben';
-    const betrieb = empfaengerOhneMail.length === 1 ? 'diesen Betrieb' : 'diese Betriebe';
-    warn.textContent = `⚠ ${names} ${haben} keine öffentlich verfügbare E-Mail-Adresse. Bitte kontaktieren Sie ${betrieb} direkt über Google Maps oder Telefon.`;
-    document.getElementById('emailPreview').after(warn);
-  }
 }
 
 function copyEmailText() {
-  const full = `Betreff: ${generatedEmailSubject}\n\n${generatedEmailBody}`;
+  const full = 'Betreff: ' + generatedEmailSubject + '\n\n' + generatedEmailBody;
   navigator.clipboard.writeText(full).then(() => {
     const btn = document.getElementById('copyBtn');
     btn.classList.add('copied');
     btn.textContent = '✓ Kopiert!';
-    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '📋 E-Mail-Text kopieren (für Gmail / Webmail)'; }, 2500);
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '📋 Anfrage-Text kopieren'; }, 2500);
   });
 }
 </script>
