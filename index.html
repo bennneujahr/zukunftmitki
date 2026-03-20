@@ -130,14 +130,6 @@
     }
     .reveal.visible .section-title { opacity: 1; transform: translateY(0); }
 
-    /* Service cards: fan-in with slight rotation */
-    .cards-grid .card.reveal {
-      transform: translateY(24px) rotate(-1.5deg);
-      opacity: 0;
-      transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1),
-                  transform 0.6s cubic-bezier(0.22,1,0.36,1);
-    }
-    .cards-grid .card.reveal.visible { opacity: 1; transform: translateY(0) rotate(0deg); }
 
     /* ─── Buttons ────────────────────────────────────── */
     .btn {
@@ -424,68 +416,97 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ─── Leistungen ─────────────────────────────────── */
+    /* ─── Leistungen: Process Timeline ──────────────── */
     #leistungen { background: var(--dark); }
-    .leistungen-header { margin-bottom: 56px; }
-    .cards-grid {
+    .leistungen-header { margin-bottom: 64px; }
+
+    .process-timeline {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .process-step {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-    }
-    .card {
-      background: var(--surface);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: var(--radius);
-      padding: 36px 32px;
-      transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+      grid-template-columns: 56px 1fr;
+      gap: 0 32px;
       position: relative;
-      overflow: hidden;
-      will-change: transform;
     }
-    .card.tilt-active {
-      transition: border-color var(--transition),
-                  transform 0.12s ease-out,
-                  box-shadow var(--transition);
+    .step-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
     }
-    .card.tilt-reset {
-      transition: border-color var(--transition),
-                  transform 0.45s cubic-bezier(0.22,1,0.36,1),
-                  box-shadow var(--transition);
-    }
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--gold), var(--gold-light));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform var(--transition);
-    }
-    .card:hover {
-      border-color: var(--border);
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
-    }
-    .card:hover::before { transform: scaleX(1); }
-    .card-icon {
-      width: 54px;
-      height: 54px;
+    .step-number {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
       background: var(--gold-dim);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      border: 2px solid var(--gold);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 24px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--gold);
+      flex-shrink: 0;
+      transition: background var(--transition), border-color var(--transition);
+      z-index: 1;
     }
-    .card-icon svg { width: 26px; height: 26px; color: var(--gold); }
-    .card h3 {
-      font-size: 1.2rem;
+    .process-step:hover .step-number {
+      background: var(--gold);
+      color: #0f1422;
+    }
+    .step-line {
+      flex: 1;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(201,168,76,0.4), rgba(201,168,76,0.08));
+      margin: 4px 0;
+      min-height: 32px;
+    }
+    .process-step:last-child .step-line { display: none; }
+    .step-body {
+      padding-bottom: 48px;
+      padding-top: 10px;
+    }
+    .process-step:last-child .step-body { padding-bottom: 0; }
+    .step-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .step-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-icon svg { width: 18px; height: 18px; color: var(--gold); }
+    .step-body h3 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.1rem;
       font-weight: 700;
-      margin-bottom: 12px;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.3;
     }
-    .card p { color: var(--text-muted); font-size: 0.95rem; }
+    .step-body p {
+      font-size: 0.93rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      max-width: 640px;
+    }
+
+    @media (max-width: 480px) {
+      .process-step { grid-template-columns: 44px 1fr; gap: 0 20px; }
+      .step-number { width: 40px; height: 40px; font-size: 0.85rem; }
+    }
 
     /* ─── Zertifikate ────────────────────────────────── */
     #zertifikate { background: var(--dark-2); }
@@ -915,7 +936,7 @@
       .reveal, .reveal .section-label, .reveal .section-title {
         opacity: 1; transform: none; transition: none;
       }
-      .cards-grid .card.reveal { transform: none; opacity: 1; transition: none; }
+
       .zert-lightbox, .zert-lightbox-inner { transition: none; }
       .zert-lightbox.lb-open .zert-lightbox-inner { transform: scale(1); opacity: 1; }
       #mobile-menu { transition: none; }
@@ -1061,50 +1082,150 @@
   <section id="leistungen" class="section" aria-label="Leistungen">
     <div class="container">
       <div class="leistungen-header reveal">
-        <p class="section-label">Was ich biete</p>
-        <h2 class="section-title">Leistungen &amp; Angebote</h2>
-        <p class="section-sub">Von der ersten Orientierung bis zur vollständigen Implementierung — ich begleite Sie auf jedem Schritt Ihrer KI-Reise.</p>
+        <p class="section-label">Mein Ansatz</p>
+        <h2 class="section-title">So begleite ich Sie</h2>
+        <p class="section-sub">KI-Transformation ist kein einmaliges Projekt — es ist ein strukturierter Prozess. Mein Beratungsansatz folgt acht aufeinander aufbauenden Schritten, die Ihr Unternehmen Schritt für Schritt von der Standortbestimmung bis zum langfristigen KI-Erfolg führen.</p>
       </div>
 
-      <div class="cards-grid">
-        <!-- Card 1 -->
-        <div class="card reveal reveal-delay-1">
-          <div class="card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
+      <div class="process-timeline">
+
+        <!-- Schritt 1 -->
+        <div class="process-step reveal">
+          <div class="step-node" aria-hidden="true">
+            <div class="step-number">01</div>
+            <div class="step-line"></div>
           </div>
-          <h3>Kostenloses Erstgespräch</h3>
-          <p>In einem unverbindlichen 30-minütigen Gespräch analysieren wir gemeinsam Ihr Potenzial für KI-gestützte Prozesse — ohne Vorkenntnisse erforderlich.</p>
+          <div class="step-body">
+            <div class="step-meta">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </div>
+              <h3>Audit &amp; Analyse</h3>
+            </div>
+            <p>Jede erfolgreiche KI-Transformation beginnt mit Klarheit. In einem strukturierten Audit analysieren wir gemeinsam Ihren aktuellen Wissensstand über KI, Ihre Geschäftsprozesse und die Bereiche, in denen KI den größten Mehrwert schaffen kann. Das Ergebnis: eine fundierte Entscheidungsgrundlage statt Vermutungen.</p>
+          </div>
         </div>
 
-        <!-- Card 2 -->
-        <div class="card reveal reveal-delay-2">
-          <div class="card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-              <line x1="8" y1="21" x2="16" y2="21"></line>
-              <line x1="12" y1="17" x2="12" y2="21"></line>
-            </svg>
+        <!-- Schritt 2 -->
+        <div class="process-step reveal">
+          <div class="step-node" aria-hidden="true">
+            <div class="step-number">02</div>
+            <div class="step-line"></div>
           </div>
-          <h3>KI-Systeme entwickeln &amp; begleiten</h3>
-          <p>Von der Konzeption bis zum Livebetrieb: Ich entwickle maßgeschneiderte KI-Lösungen, die in Ihre bestehenden Prozesse integriert werden und echten Mehrwert liefern.</p>
+          <div class="step-body">
+            <div class="step-meta">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              </div>
+              <h3>Umgang mit Unternehmensdaten</h3>
+            </div>
+            <p>KI ist nur so gut wie die Daten, auf denen sie basiert. Ich begleite Sie dabei, Ihre Unternehmensdaten zu strukturieren, Qualitätsstandards zu etablieren und klar zu definieren, welche Daten in KI-Systeme einfließen dürfen — immer mit konsequentem Blick auf DSGVO-Konformität und Datensicherheit.</p>
+          </div>
         </div>
 
-        <!-- Card 3 -->
-        <div class="card reveal reveal-delay-3">
-          <div class="card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
+        <!-- Schritt 3 -->
+        <div class="process-step reveal">
+          <div class="step-node" aria-hidden="true">
+            <div class="step-number">03</div>
+            <div class="step-line"></div>
           </div>
-          <h3>Workshops &amp; Schulungen</h3>
-          <p>Praxisnahe Workshops für Teams und Führungskräfte: Ich vermittle KI-Grundlagen, Prompt Engineering und konkrete Anwendungsfälle für Ihren Berufsalltag.</p>
+          <div class="step-body">
+            <div class="step-meta">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+              </div>
+              <h3>Technologische Infrastruktur</h3>
+            </div>
+            <p>Selbst die beste KI-Lösung scheitert an ungeeigneter Infrastruktur. Wir prüfen gemeinsam, ob Ihre technischen Systeme — von Hardware über Cloud-Dienste bis zur IT-Architektur — die Grundlage für leistungsfähige KI-Anwendungen bilden, und schließen gezielt Lücken.</p>
+          </div>
         </div>
-      </div>
+
+        <!-- Schritt 4 -->
+        <div class="process-step reveal">
+          <div class="step-node" aria-hidden="true">
+            <div class="step-number">04</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <div class="step-meta">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <h3>Mitarbeiterschulungen &amp; Workshops</h3>
+            </div>
+            <p>Technologie allein verändert nichts — Menschen schon. Ich vermittle Ihrem Team KI-Grundlagen, Prompt Engineering und praxisnahe Anwendungsfälle für den Arbeitsalltag. Da KI sich rasant weiterentwickelt, sind regelmäßige Schulungen kein einmaliges Ereignis, sondern ein fortlaufender Prozess.</p>
+          </div>
+        </div>
+
+        <!-- Schritt 5 -->
+        <div class="process-step reveal">
+          <div class="step-node" aria-hidden="true">
+            <div class="step-number">05</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <div class="step-meta">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg>
+              </div>
+              <h3>Pilotprojekte &amp; MVPs</h3>
+            </div>
+            <p>Bevor Sie groß investieren, testen wir klein und lernen schnell. In gezielten Pilotprojekten entwickeln wir erste KI-Lösungen in überschaubarem Rahmen — um Potenziale zu validieren, Risiken zu minimieren und wertvolle Erkenntnisse für die spätere Skalierung zu gewinnen.</p>
+          </div>
+        </div>
+
+        <!-- Schritt 6 -->
+        <div class="process-step reveal">
+          <div class="step-node" aria-hidden="true">
+            <div class="step-number">06</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <div class="step-meta">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              </div>
+              <h3>Skalierung</h3>
+            </div>
+            <p>Was im Piloten funktioniert, wird zur tragenden Säule. Ich begleite Sie dabei, bewährte KI-Lösungen vollständig in Ihre Geschäftsprozesse zu integrieren — von der technischen Umsetzung bis zur organisatorischen Verankerung, damit KI echten und messbaren Mehrwert schafft.</p>
+          </div>
+        </div>
+
+        <!-- Schritt 7 -->
+        <div class="process-step reveal">
+          <div class="step-node" aria-hidden="true">
+            <div class="step-number">07</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <div class="step-meta">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h3>Ethik &amp; Governance</h3>
+            </div>
+            <p>Mit wachsendem KI-Einsatz wachsen auch die Verantwortlichkeiten. Gemeinsam entwickeln wir klare Richtlinien und Kontrollmechanismen — für den verantwortungsvollen Umgang mit KI, den Schutz vor Bias und Datenschutzverletzungen und die Einhaltung ethischer Standards in Ihrem Unternehmen.</p>
+          </div>
+        </div>
+
+        <!-- Schritt 8 -->
+        <div class="process-step reveal">
+          <div class="step-node" aria-hidden="true">
+            <div class="step-number">08</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <div class="step-meta">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <h3>Monitoring &amp; kontinuierliche Anpassung</h3>
+            </div>
+            <p>KI-Strategie ist kein Projekt mit Abschlussdatum, sondern ein fortlaufender Prozess. Ich helfe Ihnen, Ihre KI-Systeme kontinuierlich zu überwachen, auf technologische Veränderungen zu reagieren und Ihre Strategie flexibel anzupassen — für nachhaltigen Erfolg in einer sich schnell wandelnden Welt.</p>
+          </div>
+        </div>
+
+      </div><!-- /process-timeline -->
     </div>
   </section>
 
@@ -1510,29 +1631,6 @@
       card.style.setProperty('--i', i);
     });
 
-    // ── Card 3D hover tilt ────────────────────────────
-    const rmq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    document.querySelectorAll('.card').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        if (rmq.matches) return;
-        const r = card.getBoundingClientRect();
-        const cx = ((e.clientX - r.left) / r.width  - 0.5) * 2;
-        const cy = ((e.clientY - r.top)  / r.height - 0.5) * 2;
-        card.classList.add('tilt-active');
-        card.classList.remove('tilt-reset');
-        card.style.transform =
-          `translateY(-4px) perspective(800px) rotateX(${(-cy * 5).toFixed(2)}deg) rotateY(${(cx * 5).toFixed(2)}deg)`;
-      });
-      card.addEventListener('mouseleave', () => {
-        card.classList.remove('tilt-active');
-        card.classList.add('tilt-reset');
-        card.style.transform = '';
-        card.addEventListener('transitionend', function h() {
-          card.classList.remove('tilt-reset');
-          card.removeEventListener('transitionend', h);
-        });
-      });
-    });
 
     // ── Contact form ──────────────────────────────────
     const form = document.getElementById('contact-form');
