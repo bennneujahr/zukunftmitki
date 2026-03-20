@@ -668,7 +668,7 @@ function setStep6BtnEnabled(enabled) {
 }
 
 const OPENROUTER_API_KEY = '__OPENROUTER_API_KEY__';
-const AI_MODEL   = 'google/gemma-3-27b-it:free';
+const AI_MODEL   = 'google/gemma-3-12b-it:free';
 const AI_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const GOOGLE_PLACES_API_KEY = '__GOOGLE_PLACES_API_KEY__';
 
@@ -701,7 +701,12 @@ async function callAI(prompt, maxTokens = 1500, _attempt = 1, jsonMode = false) 
 
   if (!res.ok) {
     let detail = '';
-    try { const errData = await res.json(); detail = errData?.error?.message || errData?.message || ''; } catch(_) {}
+    try {
+      const rawBody = await res.text();
+      console.error('[OpenRouter raw error]', res.status, rawBody);
+      const errData = JSON.parse(rawBody);
+      detail = errData?.error?.message || errData?.message || '';
+    } catch(_) {}
     throw new Error(`OpenRouter ${res.status}: ${detail || res.statusText}`);
   }
   const data = await res.json();
