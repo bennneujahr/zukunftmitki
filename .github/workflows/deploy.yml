@@ -22,18 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Inject API key
-        env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: |
-          sed -i "s|__OPENROUTER_API_KEY__|${OPENROUTER_API_KEY}|g" Angebots_Tool.html
-
-      - name: Inject Google Places API key
-        env:
-          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
-        run: |
-          sed -i "s|__GOOGLE_PLACES_API_KEY__|${GOOGLE_PLACES_API_KEY}|g" Angebots_Tool.html
-
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
