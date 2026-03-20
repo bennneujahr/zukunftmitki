@@ -419,34 +419,6 @@
       flex-wrap: wrap;
       animation: fade-up 0.7s cubic-bezier(0.22,1,0.36,1) 0.65s both;
     }
-    .hero-scroll {
-      position: absolute;
-      bottom: 36px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      color: var(--text-muted);
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      animation: fade-up 0.7s cubic-bezier(0.22,1,0.36,1) 0.85s both;
-    }
-    .scroll-line {
-      width: 1px;
-      height: 40px;
-      background: linear-gradient(to bottom, var(--gold), transparent);
-      animation: scroll-line 2s ease infinite;
-    }
-    @keyframes scroll-line {
-      0%   { transform: scaleY(0); transform-origin: top; }
-      50%  { transform: scaleY(1); transform-origin: top; }
-      51%  { transform: scaleY(1); transform-origin: bottom; }
-      100% { transform: scaleY(0); transform-origin: bottom; }
-    }
     @keyframes fade-up {
       from { opacity: 0; transform: translateY(30px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -936,10 +908,10 @@
 
     /* ─── Reduced Motion ─────────────────────────────── */
     @media (prefers-reduced-motion: reduce) {
-      .hero-badge, .hero-title, .hero-sub, .hero-actions, .hero-scroll {
+      .hero-badge, .hero-title, .hero-sub, .hero-actions {
         animation: none; opacity: 1; transform: none;
       }
-      .hero-dot, .hero-badge-dot, .scroll-line { animation: none; }
+      .hero-dot, .hero-badge-dot { animation: none; }
       .reveal, .reveal .section-label, .reveal .section-title {
         opacity: 1; transform: none; transition: none;
       }
@@ -1083,10 +1055,6 @@
       </div>
     </div>
 
-    <div class="hero-scroll" aria-hidden="true">
-      <div class="scroll-line"></div>
-      <span>Mehr erfahren</span>
-    </div>
   </section>
 
   <!-- ─── Leistungen ────────────────────────────────── -->
