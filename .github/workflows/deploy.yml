@@ -22,11 +22,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Inject API key
+      - name: Inject Anthropic API key
         env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          sed -i "s|__OPENROUTER_API_KEY__|${OPENROUTER_API_KEY}|g" Angebots_Tool.html
+          sed -i "s|__ANTHROPIC_API_KEY__|${ANTHROPIC_API_KEY}|g" Angebots_Tool.html
 
       - name: Inject Google Places API key
         env:

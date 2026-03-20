@@ -667,28 +667,24 @@ function setStep6BtnEnabled(enabled) {
   btn.style.cursor  = enabled ? 'pointer' : 'not-allowed';
 }
 
-const OPENROUTER_API_KEY = '__OPENROUTER_API_KEY__';
-const AI_MODEL   = 'google/gemma-3-12b-it:free';
-const AI_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const ANTHROPIC_API_KEY = '__ANTHROPIC_API_KEY__';
+const AI_MODEL   = 'claude-haiku-4-5-20251001';
+const AI_API_URL = 'https://api.anthropic.com/v1/messages';
 const GOOGLE_PLACES_API_KEY = '__GOOGLE_PLACES_API_KEY__';
 
-async function callAI(prompt, maxTokens = 1500, _attempt = 1, jsonMode = false) {
+async function callAI(prompt, maxTokens = 1500, _attempt = 1) {
   const body = {
     model: AI_MODEL,
     max_tokens: maxTokens,
     messages: [{ role: 'user', content: prompt }]
   };
-  // response_format wird bewusst NICHT gesetzt — viele Free-Modelle (inkl. Gemma)
-  // unterstützen diesen Parameter nicht und antworten mit 400.
-  // healJSON() extrahiert JSON zuverlässig aus der Rohausgabe.
 
   const res = await fetch(AI_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-      'HTTP-Referer': 'https://zukunft-mit-ki.com',
-      'X-Title': 'Angebots-Demo Handwerk'
+      'x-api-key': ANTHROPIC_API_KEY,
+      'anthropic-version': '2023-06-01'
     },
     body: JSON.stringify(body)
   });
@@ -696,21 +692,21 @@ async function callAI(prompt, maxTokens = 1500, _attempt = 1, jsonMode = false) 
   if (res.status === 429 && _attempt <= 3) {
     const wait = Math.max(parseInt(res.headers.get('Retry-After') || '20', 10), 20) * 1000;
     await new Promise(r => setTimeout(r, wait));
-    return callAI(prompt, maxTokens, _attempt + 1, jsonMode);
+    return callAI(prompt, maxTokens, _attempt + 1);
   }
 
   if (!res.ok) {
     let detail = '';
     try {
       const rawBody = await res.text();
-      console.error('[OpenRouter raw error]', res.status, rawBody);
+      console.error('[Anthropic raw error]', res.status, rawBody);
       const errData = JSON.parse(rawBody);
       detail = errData?.error?.message || errData?.message || '';
     } catch(_) {}
-    throw new Error(`OpenRouter ${res.status}: ${detail || res.statusText}`);
+    throw new Error(`Anthropic ${res.status}: ${detail || res.statusText}`);
   }
   const data = await res.json();
-  return data.choices?.[0]?.message?.content || '';
+  return data.content?.[0]?.text || '';
 }
 
 function stripAI(raw) {
@@ -835,7 +831,7 @@ Mindestens 4 davon sollen vom Typ "choice" sein.
 Kein Text vor oder nach dem JSON.`;
 
   try {
-    const raw = await callAI(prompt, 1500, 1, true);
+    const raw = await callAI(prompt, 1500);
     const questions = JSON.parse(healJSON(raw));
     if (!Array.isArray(questions) || questions.length === 0) throw new Error('Ungültiges Format');
     renderQuestions(questions);
@@ -936,7 +932,7 @@ Antworte NUR mit einem JSON-Objekt – kein Text davor oder danach:
 }`;
 
   try {
-    const raw = await callAI(prompt, 500, 1, true);
+    const raw = await callAI(prompt, 500);
     generatedPriceData = JSON.parse(healJSON(raw));
   } catch(e) {
     console.error('[KI] generatePriceRange fehlgeschlagen:', e.message);
