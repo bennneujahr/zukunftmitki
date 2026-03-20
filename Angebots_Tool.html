@@ -678,7 +678,9 @@ async function callAI(prompt, maxTokens = 1500, _attempt = 1, jsonMode = false) 
     max_tokens: maxTokens,
     messages: [{ role: 'user', content: prompt }]
   };
-  if (jsonMode) body.response_format = { type: 'json_object' };
+  // response_format wird bewusst NICHT gesetzt — viele Free-Modelle (inkl. Gemma)
+  // unterstützen diesen Parameter nicht und antworten mit 400.
+  // healJSON() extrahiert JSON zuverlässig aus der Rohausgabe.
 
   const res = await fetch(AI_API_URL, {
     method: 'POST',
@@ -697,7 +699,11 @@ async function callAI(prompt, maxTokens = 1500, _attempt = 1, jsonMode = false) 
     return callAI(prompt, maxTokens, _attempt + 1, jsonMode);
   }
 
-  if (!res.ok) throw new Error(`OpenRouter ${res.status}: ${res.statusText}`);
+  if (!res.ok) {
+    let detail = '';
+    try { const errData = await res.json(); detail = errData?.error?.message || errData?.message || ''; } catch(_) {}
+    throw new Error(`OpenRouter ${res.status}: ${detail || res.statusText}`);
+  }
   const data = await res.json();
   return data.choices?.[0]?.message?.content || '';
 }
