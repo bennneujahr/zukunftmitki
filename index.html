@@ -689,7 +689,7 @@
     .zert-lightbox-close:hover { color: var(--gold); }
 
     /* ─── Über mich ──────────────────────────────────── */
-    #ueber-mich { background: var(--dark); }
+    #ueber-mich { background: var(--dark); overflow: hidden; }
     .about-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -697,7 +697,7 @@
       align-items: center;
     }
     /* Text side */
-    .about-content { position: relative; }
+    .about-content { position: relative; max-width: 100%; min-width: 0; overflow: hidden; }
     .about-accent-line {
       position: absolute;
       left: -24px;
@@ -770,6 +770,8 @@
     .zert-toggle-icon svg { width: 18px; height: 18px; color: var(--gold); }
     .zert-toggle-label {
       flex: 1;
+      min-width: 0;
+      overflow: hidden;
     }
     .zert-toggle-label strong {
       display: block;
@@ -783,6 +785,9 @@
       color: var(--text-muted);
       margin-top: 2px;
       display: block;
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
     .zert-toggle-chevron {
       flex-shrink: 0;
@@ -971,6 +976,15 @@
       .kontakt-inner { grid-template-columns: 1fr; gap: 40px; }
       .about-accent-line { display: none; }
     }
+    /* ─── Tablet (769px – 1024px) ──────────────────── */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .container { padding: 0 32px; }
+      .zert-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      #ueber-mich .container { max-width: 100%; }
+      .process-timeline { max-width: 680px; }
+      .kontakt-inner { gap: 40px; }
+      .hero-offer { margin: 18px auto 0; }
+    }
     @media (max-width: 768px) {
       .section { padding: 72px 0; }
       .nav-links, .nav-cta { display: none; }
@@ -990,13 +1004,11 @@
       }
     }
     @media (max-width: 500px) {
-      .zert-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-      }
-      .zert-card img {
-        max-height: 120px;
-      }
+      .zert-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .zert-card { padding: 20px 12px; }
+      .zert-card img { max-height: 110px; }
+      .zert-name { font-size: 0.78rem; }
+      .zert-skills li { font-size: 0.7rem; }
     }
     @media (max-width: 480px) {
       .hero-title { font-size: 2rem; }
@@ -1035,6 +1047,9 @@
     }
     @media (max-width: 360px) {
       .section { padding: 56px 12px; }
+      .zert-grid { grid-template-columns: 1fr; gap: 10px; }
+      .zert-card { padding: 16px 12px; }
+      .container { padding: 0 16px; }
     }
     .mobile-nav-cta { display: none; }
 
