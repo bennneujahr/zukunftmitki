@@ -1352,7 +1352,7 @@
           </div>
 
           <!-- Zertifikate Toggle -->
-          <div class="zert-toggle-wrap">
+          <div class="zert-toggle-wrap" id="zertifikate">
             <button
               class="zert-toggle"
               id="zertToggle"
@@ -1367,7 +1367,7 @@
               </div>
               <div class="zert-toggle-label">
                 <strong>Zertifikate &amp; Ausbildungen</strong>
-                <span>11 Zertifikate ansehen — Anthropic, Google Cloud, DIZ Schwerin</span>
+                <span>12 Zertifikate ansehen — Anthropic, Google Cloud, DIZ Schwerin</span>
               </div>
               <svg class="zert-toggle-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="6 9 12 15 18 9"/>
@@ -1376,7 +1376,7 @@
 
             <div class="zert-collapse" id="zertCollapse" role="region" aria-labelledby="zertToggle">
               <div class="zert-collapse-inner">
-                <div class="zert-grid" id="zertifikate">
+                <div class="zert-grid">
                   <!-- Zertifikat 1 -->
                   <div class="zert-card reveal" role="button" tabindex="0"
                        data-img="PNG/Anthropic_Claude 101.png" data-title="Claude 101 – Anthropic">
@@ -1517,6 +1517,22 @@
                       <li>KI in bestehende Betriebsabläufe integrieren</li>
                       <li>Mittelstandsperspektive einbringen</li>
                       <li>Praxisnahe Umsetzung ohne IT-Abteilung</li>
+                    </ul>
+                  </div>
+
+                  <!-- Zertifikat 12 -->
+                  <div class="zert-card reveal" role="button" tabindex="0"
+                       data-img="PNG/Anthropic_Introduction MCP.png"
+                       data-title="Introduction to Model Context Protocol – Anthropic">
+                    <img src="PNG/Anthropic_Introduction MCP.png"
+                         alt="Zertifikat: Introduction to Model Context Protocol – Anthropic"
+                         class="zert-img" />
+                    <p class="zert-name">Introduction to Model Context Protocol</p>
+                    <p class="zert-org">Anthropic · März 2026</p>
+                    <ul class="zert-skills">
+                      <li>MCP-Architektur und Protokollstandards verstehen</li>
+                      <li>KI-Systeme mit externen Tools und Datenquellen verbinden</li>
+                      <li>Claude-Fähigkeiten durch strukturierte Integrationen erweitern</li>
                     </ul>
                   </div>
                 </div>
@@ -1742,6 +1758,19 @@
         }
       });
     }
+
+    // ── Zertifikate: Auto-öffnen bei Anker-Navigation ────
+    function openZertIfAnchored() {
+      if (window.location.hash === '#zertifikate') {
+        if (zertToggle && zertCollapse && !zertCollapse.classList.contains('open')) {
+          zertCollapse.classList.add('open');
+          zertToggle.classList.add('open');
+          zertToggle.setAttribute('aria-expanded', 'true');
+        }
+      }
+    }
+    openZertIfAnchored();
+    window.addEventListener('hashchange', openZertIfAnchored);
 
     // ── Contact form ──────────────────────────────────
     const form = document.getElementById('contact-form');
