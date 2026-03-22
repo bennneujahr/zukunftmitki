@@ -509,8 +509,6 @@
     }
 
     /* ─── Zertifikate ────────────────────────────────── */
-    #zertifikate { background: var(--dark-2); }
-    .zert-header { margin-bottom: 56px; }
     .zert-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -697,6 +695,87 @@
       font-weight: 500;
       padding: 5px 14px;
       border-radius: 100px;
+    }
+
+    /* ─── Zertifikate-Toggle (innerhalb Über mich) ────── */
+    .zert-toggle-wrap {
+      margin-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 32px;
+    }
+    .zert-toggle {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+      text-align: left;
+    }
+    .zert-toggle:hover {
+      border-color: var(--border);
+      background: var(--surface-2);
+    }
+    .zert-toggle:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+    .zert-toggle-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--gold-dim);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .zert-toggle-icon svg { width: 18px; height: 18px; color: var(--gold); }
+    .zert-toggle-label {
+      flex: 1;
+    }
+    .zert-toggle-label strong {
+      display: block;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .zert-toggle-label span {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: block;
+    }
+    .zert-toggle-chevron {
+      flex-shrink: 0;
+      color: var(--text-muted);
+      transition: transform var(--transition), color var(--transition);
+    }
+    .zert-toggle.open .zert-toggle-chevron {
+      transform: rotate(180deg);
+      color: var(--gold);
+    }
+    .zert-collapse {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .zert-collapse.open {
+      max-height: 3200px;
+    }
+    .zert-collapse-inner {
+      padding-top: 28px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .zert-collapse { transition: none; }
+      .zert-toggle-chevron { transition: none; }
     }
 
     /* ─── Kontakt ────────────────────────────────────── */
@@ -1229,162 +1308,6 @@
     </div>
   </section>
 
-  <!-- ─── Zertifikate ───────────────────────────────── -->
-  <section id="zertifikate" class="section" aria-label="Zertifikate">
-    <div class="container">
-      <div class="zert-header reveal">
-        <p class="section-label">Qualifikationen</p>
-        <h2 class="section-title">Zertifikate &amp; Ausbildungen</h2>
-        <p class="section-sub">Fundiertes Wissen, das durch anerkannte Zertifizierungen bestätigt wird.</p>
-      </div>
-
-      <div class="zert-grid">
-        <!-- Zertifikat 1 -->
-        <div class="zert-card reveal" role="button" tabindex="0"
-             data-img="PNG/Anthropic_Claude 101.png" data-title="Claude 101 – Anthropic">
-          <img src="PNG/Anthropic_Claude 101.png" alt="Zertifikat: Claude 101 – Anthropic" class="zert-img" />
-          <p class="zert-name">Claude 101</p>
-          <p class="zert-org">Anthropic</p>
-          <ul class="zert-skills">
-            <li>Grundlagen moderner KI-Modelle</li>
-            <li>Prompts gezielt formulieren</li>
-            <li>KI-Grenzen realistisch einschätzen</li>
-          </ul>
-        </div>
-
-        <!-- Zertifikat 2 -->
-        <div class="zert-card reveal" role="button" tabindex="0"
-             data-img="PNG/Anthropic_AI Fluency.png" data-title="AI Fluency: Framework &amp; Foundations – Anthropic">
-          <img src="PNG/Anthropic_AI Fluency.png" alt="Zertifikat: AI Fluency – Anthropic" class="zert-img" />
-          <p class="zert-name">AI Fluency: Framework &amp; Foundations</p>
-          <p class="zert-org">Anthropic</p>
-          <ul class="zert-skills">
-            <li>KI-Konzepte verständlich erklären</li>
-            <li>Einsatzpotenziale im Unternehmen erkennen</li>
-            <li>Entscheidungsrahmen für KI-Einführung entwickeln</li>
-          </ul>
-        </div>
-
-        <!-- Zertifikat 3 -->
-        <div class="zert-card reveal" role="button" tabindex="0"
-             data-img="PNG/Anthropic_AI Fluency for educators.png" data-title="AI Fluency for Educators – Anthropic">
-          <img src="PNG/Anthropic_AI Fluency for educators.png" alt="Zertifikat: AI Fluency for Educators – Anthropic" class="zert-img" />
-          <p class="zert-name">AI Fluency for Educators</p>
-          <p class="zert-org">Anthropic</p>
-          <ul class="zert-skills">
-            <li>KI-Wissen strukturiert vermitteln</li>
-            <li>Workshop-Inhalte zielgruppengerecht aufbereiten</li>
-            <li>Mitarbeiter praxisnah schulen</li>
-          </ul>
-        </div>
-
-        <!-- Zertifikat 4 -->
-        <div class="zert-card reveal" role="button" tabindex="0"
-             data-img="PNG/Anthropic_Teaching AI Fluency.png" data-title="Teaching the AI Fluency Framework – Anthropic">
-          <img src="PNG/Anthropic_Teaching AI Fluency.png" alt="Zertifikat: Teaching AI Fluency – Anthropic" class="zert-img" />
-          <p class="zert-name">Teaching the AI Fluency Framework</p>
-          <p class="zert-org">Anthropic</p>
-          <ul class="zert-skills">
-            <li>KI-Schulungen eigenständig leiten</li>
-            <li>Wissenstransfer nachhaltig gestalten</li>
-            <li>Teams zur KI-Nutzung befähigen</li>
-          </ul>
-        </div>
-
-        <!-- Zertifikat 5 -->
-        <div class="zert-card reveal" role="button" tabindex="0"
-             data-img="PNG/Anthropic_Claude Code in Action.png" data-title="Claude Code in Action – Anthropic">
-          <img src="PNG/Anthropic_Claude Code in Action.png" alt="Zertifikat: Claude Code in Action – Anthropic" class="zert-img" />
-          <p class="zert-name">Claude Code in Action</p>
-          <p class="zert-org">Anthropic · März 2026</p>
-          <ul class="zert-skills">
-            <li>KI-gestütztes Coding in Workflows einsetzen</li>
-            <li>Entwicklungsprozesse beschleunigen</li>
-            <li>Prototypen und Automatisierungen bauen</li>
-          </ul>
-        </div>
-
-        <!-- Zertifikat 6 -->
-        <div class="zert-card reveal" role="button" tabindex="0"
-             data-img="PNG/Anthropic_Building with the Claude API.png" data-title="Building with the Claude API – Anthropic">
-          <img src="PNG/Anthropic_Building with the Claude API.png" alt="Zertifikat: Building with the Claude API – Anthropic" class="zert-img" />
-          <p class="zert-name">Building with the Claude API</p>
-          <p class="zert-org">Anthropic · März 2026</p>
-          <ul class="zert-skills">
-            <li>Eigene KI-Anwendungen entwickeln</li>
-            <li>API-Integrationen umsetzen</li>
-            <li>Maßgeschneiderte Lösungen für Ihr Unternehmen bauen</li>
-          </ul>
-        </div>
-
-        <!-- Zertifikat 7 -->
-        <div class="zert-card reveal" role="button" tabindex="0"
-             data-img="PNG/Google_generative badge.png" data-title="Introduction to Generative AI – Google Cloud">
-          <img src="PNG/Google_generative badge.png" alt="Zertifikat: Introduction to Generative AI – Google Cloud" class="zert-img" />
-          <p class="zert-name">Introduction to Generative AI</p>
-          <p class="zert-org">Google Cloud</p>
-          <ul class="zert-skills">
-            <li>Generative KI fundiert erklären und einordnen</li>
-            <li>Anwendungsfelder realistisch bewerten</li>
-            <li>Technologie von Hype trennen</li>
-          </ul>
-        </div>
-
-        <!-- Zertifikat 8 -->
-        <div class="zert-card reveal" role="button" tabindex="0"
-             data-img="PNG/Google_llm badge.png" data-title="Introduction to Large Language Models – Google Cloud">
-          <img src="PNG/Google_llm badge.png" alt="Zertifikat: Introduction to Large Language Models – Google Cloud" class="zert-img" />
-          <p class="zert-name">Introduction to Large Language Models</p>
-          <p class="zert-org">Google Cloud</p>
-          <ul class="zert-skills">
-            <li>LLM-Funktionsweise verstehen und erklären</li>
-            <li>Modellauswahl fachkundig beraten</li>
-            <li>Technische Grenzen klar kommunizieren</li>
-          </ul>
-        </div>
-
-        <!-- Zertifikat 9 -->
-        <div class="zert-card reveal" role="button" tabindex="0"
-             data-img="PNG/Google_responsible ai badge.png" data-title="Introduction to Responsible AI – Google Cloud">
-          <img src="PNG/Google_responsible ai badge.png" alt="Zertifikat: Introduction to Responsible AI – Google Cloud" class="zert-img" />
-          <p class="zert-name">Introduction to Responsible AI</p>
-          <p class="zert-org">Google Cloud</p>
-          <ul class="zert-skills">
-            <li>KI-Risiken erkennen und bewerten</li>
-            <li>Ethische Leitlinien in der Praxis anwenden</li>
-            <li>Vertrauenswürdige KI-Nutzung sicherstellen</li>
-          </ul>
-        </div>
-
-        <!-- Zertifikat 10 -->
-        <div class="zert-card reveal" role="button" tabindex="0"
-             data-img="PNG/Google_application developer.png" data-title="Gemini for Application Developers – Google Cloud">
-          <img src="PNG/Google_application developer.png" alt="Zertifikat: Gemini for Application Developers – Google Cloud" class="zert-img" />
-          <p class="zert-name">Gemini for Application Developers</p>
-          <p class="zert-org">Google Cloud</p>
-          <ul class="zert-skills">
-            <li>Google KI-Ökosystem gezielt einsetzen</li>
-            <li>Herstellerunabhängige Strategien entwickeln</li>
-            <li>Multi-Modell-Ansätze umsetzen</li>
-          </ul>
-        </div>
-
-        <!-- Zertifikat 11 -->
-        <div class="zert-card reveal" role="button" tabindex="0"
-             data-img="PNG/Digitales Innovationszentrum_Zertifikat_KI VO.png" data-title="KI-Kompetenz für den Arbeitsalltag – DIZ Schwerin">
-          <img src="PNG/Digitales Innovationszentrum_Zertifikat_KI VO.png" alt="Zertifikat: KI-Kompetenz für den Arbeitsalltag – DIZ Schwerin" class="zert-img" />
-          <p class="zert-name">KI-Kompetenz für den Arbeitsalltag</p>
-          <p class="zert-org">Digitales Innovationszentrum Schwerin · Feb. 2026</p>
-          <ul class="zert-skills">
-            <li>KI in bestehende Betriebsabläufe integrieren</li>
-            <li>Mittelstandsperspektive einbringen</li>
-            <li>Praxisnahe Umsetzung ohne IT-Abteilung</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ─── Über mich ─────────────────────────────────── -->
   <section id="ueber-mich" class="section" aria-label="Über mich">
     <div class="container">
@@ -1426,6 +1349,179 @@
             <span class="about-skill">Automatisierung</span>
             <span class="about-skill">Machine Learning</span>
             <span class="about-skill">Workshops</span>
+          </div>
+
+          <!-- Zertifikate Toggle -->
+          <div class="zert-toggle-wrap">
+            <button
+              class="zert-toggle"
+              id="zertToggle"
+              aria-expanded="false"
+              aria-controls="zertCollapse"
+            >
+              <div class="zert-toggle-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="7" height="7" rx="1"/><rect x="15" y="3" width="7" height="7" rx="1"/>
+                  <rect x="2" y="14" width="7" height="7" rx="1"/><rect x="15" y="14" width="7" height="7" rx="1"/>
+                </svg>
+              </div>
+              <div class="zert-toggle-label">
+                <strong>Zertifikate &amp; Ausbildungen</strong>
+                <span>11 Zertifikate ansehen — Anthropic, Google Cloud, DIZ Schwerin</span>
+              </div>
+              <svg class="zert-toggle-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+
+            <div class="zert-collapse" id="zertCollapse" role="region" aria-labelledby="zertToggle">
+              <div class="zert-collapse-inner">
+                <div class="zert-grid" id="zertifikate">
+                  <!-- Zertifikat 1 -->
+                  <div class="zert-card reveal" role="button" tabindex="0"
+                       data-img="PNG/Anthropic_Claude 101.png" data-title="Claude 101 – Anthropic">
+                    <img src="PNG/Anthropic_Claude 101.png" alt="Zertifikat: Claude 101 – Anthropic" class="zert-img" />
+                    <p class="zert-name">Claude 101</p>
+                    <p class="zert-org">Anthropic</p>
+                    <ul class="zert-skills">
+                      <li>Grundlagen moderner KI-Modelle</li>
+                      <li>Prompts gezielt formulieren</li>
+                      <li>KI-Grenzen realistisch einschätzen</li>
+                    </ul>
+                  </div>
+
+                  <!-- Zertifikat 2 -->
+                  <div class="zert-card reveal" role="button" tabindex="0"
+                       data-img="PNG/Anthropic_AI Fluency.png" data-title="AI Fluency: Framework &amp; Foundations – Anthropic">
+                    <img src="PNG/Anthropic_AI Fluency.png" alt="Zertifikat: AI Fluency – Anthropic" class="zert-img" />
+                    <p class="zert-name">AI Fluency: Framework &amp; Foundations</p>
+                    <p class="zert-org">Anthropic</p>
+                    <ul class="zert-skills">
+                      <li>KI-Konzepte verständlich erklären</li>
+                      <li>Einsatzpotenziale im Unternehmen erkennen</li>
+                      <li>Entscheidungsrahmen für KI-Einführung entwickeln</li>
+                    </ul>
+                  </div>
+
+                  <!-- Zertifikat 3 -->
+                  <div class="zert-card reveal" role="button" tabindex="0"
+                       data-img="PNG/Anthropic_AI Fluency for educators.png" data-title="AI Fluency for Educators – Anthropic">
+                    <img src="PNG/Anthropic_AI Fluency for educators.png" alt="Zertifikat: AI Fluency for Educators – Anthropic" class="zert-img" />
+                    <p class="zert-name">AI Fluency for Educators</p>
+                    <p class="zert-org">Anthropic</p>
+                    <ul class="zert-skills">
+                      <li>KI-Wissen strukturiert vermitteln</li>
+                      <li>Workshop-Inhalte zielgruppengerecht aufbereiten</li>
+                      <li>Mitarbeiter praxisnah schulen</li>
+                    </ul>
+                  </div>
+
+                  <!-- Zertifikat 4 -->
+                  <div class="zert-card reveal" role="button" tabindex="0"
+                       data-img="PNG/Anthropic_Teaching AI Fluency.png" data-title="Teaching the AI Fluency Framework – Anthropic">
+                    <img src="PNG/Anthropic_Teaching AI Fluency.png" alt="Zertifikat: Teaching AI Fluency – Anthropic" class="zert-img" />
+                    <p class="zert-name">Teaching the AI Fluency Framework</p>
+                    <p class="zert-org">Anthropic</p>
+                    <ul class="zert-skills">
+                      <li>KI-Schulungen eigenständig leiten</li>
+                      <li>Wissenstransfer nachhaltig gestalten</li>
+                      <li>Teams zur KI-Nutzung befähigen</li>
+                    </ul>
+                  </div>
+
+                  <!-- Zertifikat 5 -->
+                  <div class="zert-card reveal" role="button" tabindex="0"
+                       data-img="PNG/Anthropic_Claude Code in Action.png" data-title="Claude Code in Action – Anthropic">
+                    <img src="PNG/Anthropic_Claude Code in Action.png" alt="Zertifikat: Claude Code in Action – Anthropic" class="zert-img" />
+                    <p class="zert-name">Claude Code in Action</p>
+                    <p class="zert-org">Anthropic · März 2026</p>
+                    <ul class="zert-skills">
+                      <li>KI-gestütztes Coding in Workflows einsetzen</li>
+                      <li>Entwicklungsprozesse beschleunigen</li>
+                      <li>Prototypen und Automatisierungen bauen</li>
+                    </ul>
+                  </div>
+
+                  <!-- Zertifikat 6 -->
+                  <div class="zert-card reveal" role="button" tabindex="0"
+                       data-img="PNG/Anthropic_Building with the Claude API.png" data-title="Building with the Claude API – Anthropic">
+                    <img src="PNG/Anthropic_Building with the Claude API.png" alt="Zertifikat: Building with the Claude API – Anthropic" class="zert-img" />
+                    <p class="zert-name">Building with the Claude API</p>
+                    <p class="zert-org">Anthropic · März 2026</p>
+                    <ul class="zert-skills">
+                      <li>Eigene KI-Anwendungen entwickeln</li>
+                      <li>API-Integrationen umsetzen</li>
+                      <li>Maßgeschneiderte Lösungen für Ihr Unternehmen bauen</li>
+                    </ul>
+                  </div>
+
+                  <!-- Zertifikat 7 -->
+                  <div class="zert-card reveal" role="button" tabindex="0"
+                       data-img="PNG/Google_generative badge.png" data-title="Introduction to Generative AI – Google Cloud">
+                    <img src="PNG/Google_generative badge.png" alt="Zertifikat: Introduction to Generative AI – Google Cloud" class="zert-img" />
+                    <p class="zert-name">Introduction to Generative AI</p>
+                    <p class="zert-org">Google Cloud</p>
+                    <ul class="zert-skills">
+                      <li>Generative KI fundiert erklären und einordnen</li>
+                      <li>Anwendungsfelder realistisch bewerten</li>
+                      <li>Technologie von Hype trennen</li>
+                    </ul>
+                  </div>
+
+                  <!-- Zertifikat 8 -->
+                  <div class="zert-card reveal" role="button" tabindex="0"
+                       data-img="PNG/Google_llm badge.png" data-title="Introduction to Large Language Models – Google Cloud">
+                    <img src="PNG/Google_llm badge.png" alt="Zertifikat: Introduction to Large Language Models – Google Cloud" class="zert-img" />
+                    <p class="zert-name">Introduction to Large Language Models</p>
+                    <p class="zert-org">Google Cloud</p>
+                    <ul class="zert-skills">
+                      <li>LLM-Funktionsweise verstehen und erklären</li>
+                      <li>Modellauswahl fachkundig beraten</li>
+                      <li>Technische Grenzen klar kommunizieren</li>
+                    </ul>
+                  </div>
+
+                  <!-- Zertifikat 9 -->
+                  <div class="zert-card reveal" role="button" tabindex="0"
+                       data-img="PNG/Google_responsible ai badge.png" data-title="Introduction to Responsible AI – Google Cloud">
+                    <img src="PNG/Google_responsible ai badge.png" alt="Zertifikat: Introduction to Responsible AI – Google Cloud" class="zert-img" />
+                    <p class="zert-name">Introduction to Responsible AI</p>
+                    <p class="zert-org">Google Cloud</p>
+                    <ul class="zert-skills">
+                      <li>KI-Risiken erkennen und bewerten</li>
+                      <li>Ethische Leitlinien in der Praxis anwenden</li>
+                      <li>Vertrauenswürdige KI-Nutzung sicherstellen</li>
+                    </ul>
+                  </div>
+
+                  <!-- Zertifikat 10 -->
+                  <div class="zert-card reveal" role="button" tabindex="0"
+                       data-img="PNG/Google_application developer.png" data-title="Gemini for Application Developers – Google Cloud">
+                    <img src="PNG/Google_application developer.png" alt="Zertifikat: Gemini for Application Developers – Google Cloud" class="zert-img" />
+                    <p class="zert-name">Gemini for Application Developers</p>
+                    <p class="zert-org">Google Cloud</p>
+                    <ul class="zert-skills">
+                      <li>Google KI-Ökosystem gezielt einsetzen</li>
+                      <li>Herstellerunabhängige Strategien entwickeln</li>
+                      <li>Multi-Modell-Ansätze umsetzen</li>
+                    </ul>
+                  </div>
+
+                  <!-- Zertifikat 11 -->
+                  <div class="zert-card reveal" role="button" tabindex="0"
+                       data-img="PNG/Digitales Innovationszentrum_Zertifikat_KI VO.png" data-title="KI-Kompetenz für den Arbeitsalltag – DIZ Schwerin">
+                    <img src="PNG/Digitales Innovationszentrum_Zertifikat_KI VO.png" alt="Zertifikat: KI-Kompetenz für den Arbeitsalltag – DIZ Schwerin" class="zert-img" />
+                    <p class="zert-name">KI-Kompetenz für den Arbeitsalltag</p>
+                    <p class="zert-org">Digitales Innovationszentrum Schwerin · Feb. 2026</p>
+                    <ul class="zert-skills">
+                      <li>KI in bestehende Betriebsabläufe integrieren</li>
+                      <li>Mittelstandsperspektive einbringen</li>
+                      <li>Praxisnahe Umsetzung ohne IT-Abteilung</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1631,6 +1727,21 @@
       card.style.setProperty('--i', i);
     });
 
+    // ── Zertifikate Toggle ───────────────────────────────
+    const zertToggle = document.getElementById('zertToggle');
+    const zertCollapse = document.getElementById('zertCollapse');
+    if (zertToggle && zertCollapse) {
+      zertToggle.addEventListener('click', () => {
+        const isOpen = zertCollapse.classList.toggle('open');
+        zertToggle.classList.toggle('open', isOpen);
+        zertToggle.setAttribute('aria-expanded', String(isOpen));
+        if (isOpen) {
+          setTimeout(() => {
+            zertToggle.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 100);
+        }
+      });
+    }
 
     // ── Contact form ──────────────────────────────────
     const form = document.getElementById('contact-form');
