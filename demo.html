@@ -455,6 +455,42 @@
       text-align: center;
     }
 
+    /* ─── ElevenLabs Widget Theming ─────────────── */
+    elevenlabs-convai {
+      --el-primary: #C9A84C;
+      --el-primary-hover: #E8C870;
+      --el-primary-active: #b8962e;
+      --el-base: #222b45;
+      --el-base-hover: #293252;
+      --el-text: #e8eaf0;
+      color-scheme: dark;
+    }
+
+    /* ─── Start-Call Button ──────────────────────── */
+    .start-call-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 16px 32px;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      transition: all var(--transition);
+    }
+    .start-call-btn.active {
+      background: transparent;
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      cursor: default;
+    }
+    .start-call-btn.active .start-btn-text::before {
+      content: "● ";
+      color: #4ade80;
+      font-size: 0.75rem;
+      margin-right: 4px;
+    }
+
     /* ─── Footer ─────────────────────────────────── */
     footer {
       background: var(--dark-2);
@@ -711,7 +747,23 @@
               Der Browser fragt nach Ihrem Mikrofon — bitte erlauben Sie den Zugriff
               um das Gespräch zu starten.
             </p>
-            <elevenlabs-convai agent-id="agent_6201kme38nwqe48v55hbttwnytve"></elevenlabs-convai>
+            <button class="btn btn-gold start-call-btn" aria-label="Gespräch starten">
+              <svg style="width:18px;height:18px;margin-right:8px;flex-shrink:0"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+              <span class="start-btn-text">Gespräch starten</span>
+            </button>
+            <elevenlabs-convai
+              agent-id="agent_6201kme38nwqe48v55hbttwnytve"
+              action-text="KI-Sprachassistent"
+              start-call-text="Gespräch starten"
+              end-call-text="Gespräch beenden">
+            </elevenlabs-convai>
             <p class="demo-disclaimer">
               Dies ist eine Demo-Version mit vordefinierten Szenarien.
               Für Ihr Unternehmen entwickeln wir individuelle Lösungen.
@@ -762,7 +814,23 @@
               Der Browser fragt nach Ihrem Mikrofon — bitte erlauben Sie den Zugriff
               um das Gespräch zu starten.
             </p>
-            <elevenlabs-convai agent-id="agent_6101kmg09gc4fjerv6zvwxk3gspx"></elevenlabs-convai>
+            <button class="btn btn-gold start-call-btn" aria-label="Gespräch starten">
+              <svg style="width:18px;height:18px;margin-right:8px;flex-shrink:0"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+              <span class="start-btn-text">Gespräch starten</span>
+            </button>
+            <elevenlabs-convai
+              agent-id="agent_6101kmg09gc4fjerv6zvwxk3gspx"
+              action-text="KI-Sprachassistent"
+              start-call-text="Gespräch starten"
+              end-call-text="Gespräch beenden">
+            </elevenlabs-convai>
             <p class="demo-disclaimer">
               Dies ist eine Demo-Version mit vordefinierten Szenarien.
               Für Ihr Unternehmen entwickeln wir individuelle Lösungen.
@@ -817,7 +885,23 @@
               Der Browser fragt nach Ihrem Mikrofon — bitte erlauben Sie den Zugriff
               um das Gespräch zu starten.
             </p>
-            <elevenlabs-convai agent-id="agent_1001kmg0z03wep6t1yvr1gdp5efq"></elevenlabs-convai>
+            <button class="btn btn-gold start-call-btn" aria-label="Gespräch starten">
+              <svg style="width:18px;height:18px;margin-right:8px;flex-shrink:0"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+              <span class="start-btn-text">Gespräch starten</span>
+            </button>
+            <elevenlabs-convai
+              agent-id="agent_1001kmg0z03wep6t1yvr1gdp5efq"
+              action-text="KI-Sprachassistent"
+              start-call-text="Gespräch starten"
+              end-call-text="Gespräch beenden">
+            </elevenlabs-convai>
             <p class="demo-disclaimer">
               Dies ist eine Demo-Version mit vordefinierten Szenarien.
               Für Ihr Unternehmen entwickeln wir individuelle Lösungen.
@@ -932,6 +1016,11 @@
         panels[i].style.transition = 'opacity 0.3s ease';
         panels[i].style.opacity = '1';
       });
+      // Reset all start-call buttons when switching tabs
+      document.querySelectorAll('.start-call-btn').forEach(function(b) {
+        b.classList.remove('active');
+        b.querySelector('.start-btn-text').textContent = 'Gespräch starten';
+      });
     });
   });
 
@@ -951,6 +1040,30 @@
   }, { threshold: 0.12 });
 
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ── Custom Start-Call Buttons ────────────────────────
+  document.querySelectorAll('.start-call-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (btn.classList.contains('active')) return;
+      var card = btn.closest('.demo-agent-card');
+      if (!card) return;
+      var widget = card.querySelector('elevenlabs-convai');
+      if (!widget) return;
+      try {
+        var shadowRoot = widget.shadowRoot;
+        if (shadowRoot) {
+          var internalBtn = shadowRoot.querySelector('button');
+          if (internalBtn) {
+            internalBtn.click();
+            btn.classList.add('active');
+            btn.querySelector('.start-btn-text').textContent = 'Verbunden – sprechen Sie jetzt';
+          }
+        }
+      } catch(e) {
+        console.log('Custom button fallback – use widget button');
+      }
+    });
+  });
 </script>
 </body>
 </html>
