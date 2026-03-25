@@ -1015,6 +1015,81 @@
       }
     }
 
+    /* ─── FAQ ──────────────────────────────────────────── */
+    #faq { background: var(--dark-2); }
+
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-item:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 4px;
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: color var(--transition);
+    }
+    .faq-question:hover { color: var(--gold); }
+    .faq-question[aria-expanded="true"] { color: var(--gold); }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all var(--transition);
+    }
+    .faq-question[aria-expanded="true"] .faq-icon {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--gold-dim);
+      transform: rotate(45deg);
+    }
+    .faq-icon svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .faq-answer {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .faq-answer-inner {
+      padding: 0 4px 22px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 0.97rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .faq-answer { transition: none; }
+      .faq-icon   { transition: none; }
+    }
+
     /* ─── Kontakt ────────────────────────────────────── */
     #kontakt { background: var(--dark-2); }
     .kontakt-inner {
@@ -1337,6 +1412,7 @@
         <li><a href="#ueber-mich">Über mich</a></li>
         <li><a href="#anwendungen">Anwendungen</a></li>
         <li><a href="demo.html" class="nav-demo-link">KI-Demo</a></li>
+        <li><a href="#faq">FAQ</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
       </ul>
 
@@ -1355,6 +1431,7 @@
     <a href="#ueber-mich">Über mich</a>
     <a href="#anwendungen">Anwendungen</a>
     <a href="demo.html" style="color: var(--gold); font-weight: 600">KI-Demo</a>
+    <a href="#faq">FAQ</a>
     <a href="#kontakt">Kontakt</a>
     <a href="#kontakt" class="btn btn-gold mobile-nav-cta">Erstgespräch buchen</a>
   </div>
@@ -2013,6 +2090,315 @@
     </div>
   </section>
 
+  <!-- ─── FAQ ──────────────────────────────────────── -->
+  <section id="faq" class="section" aria-label="Häufige Fragen">
+    <div class="container">
+
+      <div class="reveal" style="text-align:center; margin-bottom:56px">
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title">Häufig gestellte Fragen</h2>
+        <p class="section-sub" style="margin: 0 auto">
+          Alles was Sie vor dem ersten Gespräch wissen möchten.
+        </p>
+      </div>
+
+      <div class="faq-list reveal">
+
+        <!-- 1 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Ist KI auch für kleine Unternehmen sinnvoll?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Ja — und oft sogar besonders. Gerade in kleinen Betrieben kostet
+              Bürokratie, E-Mail-Bearbeitung und Papierkram unverhältnismäßig
+              viel Zeit. KI übernimmt genau diese Aufgaben, sodass Sie sich auf
+              das konzentrieren können was Ihr Unternehmen wirklich voranbringt.
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Brauche ich technische Vorkenntnisse?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Nein. Meine Aufgabe ist es, die Technik zu verstehen und in
+              verständliche Lösungen für Sie zu übersetzen. Sie müssen kein
+              IT-Experte sein — Sie müssen nur wissen wo Sie Zeit verlieren
+              oder was Sie sich gerne abnehmen lassen würden.
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Wir funktionieren bisher gut ohne KI — warum sollte sich das ändern?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Das ist eine berechtigte Frage. KI ist kein Selbstzweck — wenn
+              alles reibungslos läuft, brauchen Sie sie vielleicht noch nicht.
+              In den meisten Betrieben gibt es aber mindestens zwei bis drei
+              Bereiche die deutlich effizienter werden könnten. Das finden wir
+              gemeinsam im Erstgespräch heraus — ohne Verpflichtung.
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Wie läuft eine Zusammenarbeit konkret ab?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Wir starten mit einem Erstgespräch (60–90 Minuten) in dem ich
+              Ihren Betrieb und Ihre Herausforderungen verstehe. Daraus
+              entwickle ich konkrete Empfehlungen — was sinnvoll ist, was nicht,
+              und in welcher Reihenfolge. Dann entscheiden Sie wie wir
+              weitermachen: Beratung, Umsetzung oder beides.
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Was muss ich vorbereiten bevor ich mich melde?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Nichts. Je offener Sie ins Gespräch gehen, desto besser. Es hilft
+              wenn Sie grob wissen wo Sie aktuell die meiste Zeit verlieren —
+              aber auch das können wir gemeinsam herausfinden.
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Begleiten Sie auch die Umsetzung oder nur die Beratung?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Beides. Ich berate nicht nur und verschwinde dann. Ich kann die
+              empfohlenen Lösungen selbst aufsetzen, einrichten und Ihr Team
+              einweisen — oder Sie an spezialisierte Partner weitervermitteln
+              wenn das sinnvoller ist.
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Was kostet KI-Beratung und wann rechnet sie sich?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Das Erstgespräch kostet 149&nbsp;€ (bis 30. April 2026 kostenlos).
+              Für konkrete Projekte erstelle ich danach ein individuelles
+              Angebot. Eine Automatisierung die 3 Stunden pro Woche einspart
+              entspricht über ein Jahr mehr als 150 Arbeitsstunden — das rechnet
+              sich schnell.
+            </div>
+          </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Gibt es Fördermöglichkeiten für KI-Projekte?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Ja. Das Bundesförderprogramm „go-digital" unterstützt KMU mit bis
+              zu 50&nbsp;% der Kosten für Digitalisierungs- und KI-Beratung.
+              Zusätzlich gibt es Förderprogramme auf Landesebene — in
+              Mecklenburg-Vorpommern zum Beispiel über die
+              Mittelstandsförderung. Im Erstgespräch schauen wir gemeinsam was
+              für Sie in Frage kommt.
+            </div>
+          </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Welche laufenden Kosten entstehen nach dem Projekt?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Das hängt von der Lösung ab. Viele KI-Tools kosten zwischen 20
+              und 100&nbsp;€ im Monat. Ich stelle sicher dass Sie die
+              Kostenstruktur vollständig kennen bevor wir starten — keine
+              versteckten Kosten, keine Überraschungen.
+            </div>
+          </div>
+        </div>
+
+        <!-- 10 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Sind meine Unternehmensdaten sicher?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Das ist eine der wichtigsten Fragen überhaupt. Ich arbeite
+              ausschließlich mit Anbietern die DSGVO-konform sind und
+              europäische Datenschutzstandards erfüllen. Welche Daten wohin
+              fließen — das klären wir transparent bevor eine Lösung
+              eingerichtet wird.
+            </div>
+          </div>
+        </div>
+
+        <!-- 11 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Ist KI DSGVO-konform?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              KI ist ein Werkzeug — entscheidend ist wie man es einsetzt. Ich
+              wähle ausschließlich Lösungen die DSGVO-konform betrieben werden
+              können und zeige Ihnen wie Sie das in Ihrem Betrieb sicher
+              umsetzen.
+            </div>
+          </div>
+        </div>
+
+        <!-- 12 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Wie schnell sehe ich erste Ergebnisse?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Erste Ergebnisse sind oft innerhalb von 2–4 Wochen spürbar.
+              Einfache Automatisierungen lassen sich schnell einrichten — ich
+              priorisiere immer die Maßnahmen mit dem schnellsten sichtbaren
+              Nutzen für Sie.
+            </div>
+          </div>
+        </div>
+
+        <!-- 13 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Was passiert wenn eine Lösung nicht funktioniert wie erwartet?
+            <span class="faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round">
+                <line x1="6" y1="1" x2="6" y2="11"/>
+                <line x1="1" y1="6" x2="11" y2="6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Ich stehe auch nach der Umsetzung zur Verfügung. Wenn etwas nicht
+              wie gewünscht läuft, passen wir es an. Mein Ziel ist keine
+              einmalige Lieferung — sondern eine Lösung die wirklich in Ihrem
+              Betrieb funktioniert.
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /faq-list -->
+    </div>
+  </section>
+
   <!-- ─── Kontakt ───────────────────────────────────── -->
   <section id="kontakt" class="section" aria-label="Kontakt">
     <div class="container">
@@ -2111,6 +2497,7 @@
         <li><a href="impressum.html">Impressum</a></li>
         <li><a href="datenschutz.html">Datenschutz</a></li>
         <li><a href="demo.html">KI-Demo</a></li>
+        <li><a href="#faq">FAQ</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
       </ul>
 
@@ -2281,6 +2668,31 @@
     }
     openZertIfAnchored();
     window.addEventListener('hashchange', openZertIfAnchored);
+
+    // ── FAQ Accordion ─────────────────────────────────
+    document.querySelectorAll('.faq-question').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        var answer   = btn.nextElementSibling;
+
+        // Alle anderen schließen
+        document.querySelectorAll('.faq-question').forEach(function(other) {
+          if (other !== btn) {
+            other.setAttribute('aria-expanded', 'false');
+            other.nextElementSibling.style.maxHeight = null;
+          }
+        });
+
+        // Dieses Item toggeln
+        if (expanded) {
+          btn.setAttribute('aria-expanded', 'false');
+          answer.style.maxHeight = null;
+        } else {
+          btn.setAttribute('aria-expanded', 'true');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+        }
+      });
+    });
 
     // ── Contact form ──────────────────────────────────
     const form = document.getElementById('contact-form');
