@@ -1409,7 +1409,7 @@
               <circle cx="12" cy="12" r="10"/>
               <polyline points="12 6 12 12 16 14"/>
             </svg>
-            Sonderaktion: Kostenloses Erstgespräch&nbsp;·&nbsp;bis 30. April 2026
+            Jetzt kostenlos&nbsp;·&nbsp;regulär 149&nbsp;€
             <span class="offer-countdown" id="offerCountdown"></span>
           </div>
       </div>
@@ -2154,12 +2154,35 @@
       const offerEl     = document.getElementById('heroOffer');
       const countdownEl = document.getElementById('offerCountdown');
       if (!offerEl || !countdownEl) return;
+
       const deadline = new Date('2026-04-30T23:59:59');
-      const now = new Date();
+      const now      = new Date();
+
       if (now > deadline) {
-        offerEl.style.display = 'none';
+        // Aktion abgelaufen: Badge bleibt sichtbar, zeigt regulären Preis
+        // Uhr-Icon durch Euro-Icon ersetzen (sichere DOM-Methoden)
+        var iconEl = offerEl.querySelector('svg');
+        if (iconEl) {
+          var ns = 'http://www.w3.org/2000/svg';
+          while (iconEl.firstChild) iconEl.removeChild(iconEl.firstChild);
+          var c = document.createElementNS(ns, 'circle');
+          c.setAttribute('cx', '12'); c.setAttribute('cy', '12'); c.setAttribute('r', '10');
+          iconEl.appendChild(c);
+          var p = document.createElementNS(ns, 'path');
+          p.setAttribute('d', 'M8 12h8M8 9c1-2 6-2 7 0M8 15c1 2 6 2 7 0');
+          iconEl.appendChild(p);
+        }
+        // Textknoten leeren, neuen Text + Preis setzen
+        offerEl.childNodes.forEach(function(node) {
+          if (node.nodeType === 3) node.textContent = '';
+        });
+        var textNode = document.createTextNode('Erstgespräch\u00a0·\u00a0');
+        offerEl.insertBefore(textNode, countdownEl);
+        countdownEl.textContent = '149\u00a0€';
         return;
       }
+
+      // Aktion läuft noch: Countdown anzeigen
       const diffMs = deadline - now;
       const days   = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
       countdownEl.textContent = 'Noch ' + days + ' Tag' + (days === 1 ? '' : 'e');
