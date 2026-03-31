@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Impressum – Zukunft mit KI</title>
-  <meta name="description" content="Impressum von Zukunft mit KI – Angaben gemäß § 5 TMG für Benn Neujahr, KI-Berater in Schwerin." />
+  <title>Auf dem Weg zur Singularität – Zukunft mit KI</title>
+  <meta name="description" content="Tägliche Perspektiven auf KI, Technologie und die Beschleunigung der Welt. Ein Blog von Benn Neujahr – Zukunft mit KI." />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Benn Neujahr" />
 
   <!-- Open Graph -->
   <meta property="og:type"        content="website" />
-  <meta property="og:url"         content="https://www.zukunft-mit-ki.com/impressum.html" />
-  <meta property="og:title"       content="Impressum – Zukunft mit KI" />
-  <meta property="og:description" content="Impressum von Zukunft mit KI – Benn Neujahr, KI-Berater in Schwerin." />
+  <meta property="og:url"         content="https://www.zukunft-mit-ki.com/blog.html" />
+  <meta property="og:title"       content="Auf dem Weg zur Singularität – Zukunft mit KI" />
+  <meta property="og:description" content="Tägliche Perspektiven auf KI, Technologie und die Beschleunigung der Welt. Ein Blog von Benn Neujahr." />
   <meta property="og:locale"      content="de_DE" />
   <meta property="og:site_name"   content="Zukunft mit KI" />
 
   <!-- Canonical -->
-  <link rel="canonical" href="https://www.zukunft-mit-ki.com/impressum.html" />
+  <link rel="canonical" href="https://www.zukunft-mit-ki.com/blog.html" />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -61,6 +61,17 @@
       outline: 2px solid var(--gold);
       outline-offset: 3px;
       border-radius: 3px;
+    }
+
+    /* ─── Scroll Reveal ──────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* ─── Navigation ─────────────────────────────── */
@@ -210,118 +221,116 @@
     #mobile-menu a:last-child { border-bottom: none; }
     #mobile-menu .btn { justify-content: center; margin-top: 8px; }
 
-    /* ─── Page Layout ────────────────────────────── */
-    main {
-      flex: 1;
-      padding-top: 72px; /* navbar height */
+    /* ─── Nav special links ──────────────────────── */
+    .nav-demo-link { color: var(--gold) !important; font-weight: 600; }
+    .nav-demo-link:hover { opacity: 0.8; }
+    .nav-blog-link { color: var(--gold-light) !important; font-weight: 600; }
+    .nav-blog-link:hover { color: var(--gold) !important; }
+
+    /* ─── Hero / Blog-Header ─────────────────────── */
+    .blog-hero {
+      background: var(--dark-2);
+      padding-top: 140px;
+      padding-bottom: 80px;
+      text-align: center;
+    }
+    .blog-hero-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .section-label {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .section-sub {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      max-width: 600px;
+      display: block;
     }
 
-    .page-header {
-      background: var(--dark-2);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      padding: 56px 24px 40px;
+    /* ─── Blog List ──────────────────────────────── */
+    .blog-list-section {
+      background: var(--dark);
+      padding: 64px 0 96px;
+      flex: 1;
     }
-    .page-header-inner {
-      max-width: 760px;
+    .blog-list-inner {
+      max-width: 800px;
       margin: 0 auto;
+      padding: 0 24px;
     }
-    .back-link {
+
+    /* ─── Blog Card ──────────────────────────────── */
+    .blog-card {
+      display: block;
+      border-bottom: 1px solid var(--border);
+      padding: 36px 0;
+      text-decoration: none;
+      color: inherit;
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+    .blog-card:first-child { border-top: 1px solid var(--border); }
+    .blog-card:hover .blog-card-title { color: var(--gold); }
+
+    .blog-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .blog-card-date {
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .blog-card-readtime {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .blog-card-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.3;
+      transition: color var(--transition);
+    }
+    .blog-card-excerpt {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .blog-card-link {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gold);
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-      transition: color var(--transition), gap var(--transition);
-    }
-    .back-link:hover { color: var(--gold); gap: 10px; }
-    .back-link svg { flex-shrink: 0; }
-
-    h1 {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: clamp(1.8rem, 4vw, 2.4rem);
-      font-weight: 800;
-      line-height: 1.2;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    .page-subtitle {
-      font-size: 1rem;
-      color: var(--text-muted);
-    }
-
-    .content-area {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
-    }
-
-    /* ─── Content Sections ───────────────────────── */
-    .section-block {
-      background: var(--surface);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: var(--radius);
-      padding: 32px 36px;
-      margin-bottom: 24px;
-    }
-    h2 {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    h2 .h2-accent {
-      display: inline-block;
-      width: 3px;
-      height: 18px;
-      background: var(--gold);
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
-    .dl-grid {
-      display: grid;
-      grid-template-columns: max-content 1fr;
-      gap: 10px 24px;
-    }
-    .dl-label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-weight: 500;
-      padding-top: 1px;
-    }
-    .dl-value {
-      font-size: 0.95rem;
-      color: var(--text);
-    }
-    .dl-value a { color: var(--gold); }
-    .dl-value a:hover { color: var(--gold-light); }
-
-    p.prose {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      line-height: 1.75;
-    }
-    p.prose:last-child { margin-bottom: 0; }
-    p.prose a { color: var(--gold); }
-    p.prose a:hover { color: var(--gold-light); }
-
-    /* Placeholder highlight */
-    .placeholder {
-      display: inline-block;
-      background: rgba(201,168,76,0.12);
-      border: 1px dashed rgba(201,168,76,0.5);
-      color: var(--gold-light);
-      font-weight: 600;
-      padding: 1px 8px;
-      border-radius: 4px;
-      font-size: 0.88em;
     }
 
     /* ─── Footer ─────────────────────────────────── */
@@ -378,32 +387,18 @@
     .footer-social svg { width: 16px; height: 16px; color: var(--text-muted); transition: color var(--transition); }
     .footer-social:hover svg { color: var(--gold); }
 
-    .nav-demo-link { color: var(--gold) !important; font-weight: 600; }
-    .nav-demo-link:hover { opacity: 0.8; }
-    .nav-blog-link { color: var(--gold-light) !important; font-weight: 600; }
-    .nav-blog-link:hover { color: var(--gold) !important; }
-
     /* ─── Responsive ─────────────────────────────── */
     @media (max-width: 768px) {
       .nav-links, .nav-cta { display: none; }
       .nav-hamburger { display: flex; }
-
-      .section-block { padding: 24px 20px; }
-
-      .dl-grid {
-        grid-template-columns: 1fr;
-        gap: 6px;
-      }
-      .dl-label { font-size: 0.78rem; margin-bottom: 0; }
-      .dl-value { margin-bottom: 10px; }
-      .dl-value:last-child { margin-bottom: 0; }
-
       .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
       .footer-links { flex-wrap: wrap; gap: 16px; }
+      .blog-card-title { font-size: 1.1rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition: none !important; animation: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
     }
   </style>
 </head>
@@ -425,7 +420,7 @@
       <li><a href="index.html#anwendungen">Anwendungen</a></li>
       <li><a href="demo.html" class="nav-demo-link">KI-Demo</a></li>
       <li><a href="index.html#faq">FAQ</a></li>
-      <li><a href="blog.html" class="nav-blog-link">Singularität</a></li>
+      <li><a href="blog.html" class="nav-blog-link active">Singularität</a></li>
       <li><a href="index.html#kontakt">Kontakt</a></li>
     </ul>
 
@@ -450,120 +445,58 @@
   <a href="index.html#kontakt" class="btn btn-gold mobile-nav-cta">Erstgespräch buchen</a>
 </div>
 
-<!-- ─── Main Content ──────────────────────────── -->
+<!-- ─── Blog Hero ───────────────────────────────── -->
 <main>
-  <div class="page-header">
-    <div class="page-header-inner">
-      <a href="index.html" class="back-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        Zurück zur Startseite
-      </a>
-      <h1>Impressum</h1>
-      <p class="page-subtitle">Angaben gemäß § 5 Telemediengesetz (TMG)</p>
+  <div class="blog-hero">
+    <div class="blog-hero-inner reveal">
+      <p class="section-label">Blog</p>
+      <h1 class="section-title" style="font-size: clamp(2rem,4vw,3.2rem)">
+        Auf dem Weg zur Singularität
+      </h1>
+      <p class="section-sub" style="margin: 0 auto">
+        Tägliche Perspektiven auf KI, Technologie und die Beschleunigung
+        der Welt — von Benn Neujahr.
+      </p>
     </div>
   </div>
 
-  <div class="content-area">
+  <!-- ─── Artikel-Liste ─────────────────────────── -->
+  <section class="blog-list-section">
+    <div class="blog-list-inner">
 
-    <!-- Angaben § 5 TMG -->
-    <div class="section-block">
-      <h2><span class="h2-accent" aria-hidden="true"></span>Angaben gemäß § 5 TMG</h2>
-      <div class="dl-grid">
-        <span class="dl-label">Name</span>
-        <span class="dl-value">Benn Neujahr</span>
+      <a href="blog/die-singularitaet-optimiert-die-optimierer.html" class="blog-card reveal">
+        <div class="blog-card-meta">
+          <span class="blog-card-date">31. März 2026</span>
+          <span class="blog-card-readtime">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            4 Min. Lesezeit
+          </span>
+        </div>
+        <h2 class="blog-card-title">
+          Die Singularität optimiert die Optimierer
+        </h2>
+        <p class="blog-card-excerpt">
+          Meta-Forscher haben AIRA2 vorgestellt – ein System, das gleich drei
+          zentrale Engpässe bei KI-Forschungsagenten knackt: von der starren
+          synchronen Single-GPU-Ausführung bis hin zur Generalisierungslücke,
+          die die Leistung bei langen Suchhorizonten einbrechen lässt. Die
+          Lösung ist rekursiv und clever.
+        </p>
+        <span class="blog-card-link">
+          Weiterlesen
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </a>
 
-        <span class="dl-label">Anschrift</span>
-        <span class="dl-value">Wallstraße 27<br>19053 Schwerin</span>
-
-        <span class="dl-label">Telefon</span>
-        <span class="dl-value">+49 172 5354796</span>
-
-        <span class="dl-label">E-Mail</span>
-        <span class="dl-value"><a href="mailto:info@zukunft-mit-ki.com">info@zukunft-mit-ki.com</a></span>
-
-        <span class="dl-label">Website</span>
-        <span class="dl-value"><a href="https://www.zukunft-mit-ki.com" target="_blank" rel="noopener">www.zukunft-mit-ki.com</a></span>
-      </div>
     </div>
-
-    <!-- Berufsbezeichnung -->
-    <div class="section-block">
-      <h2><span class="h2-accent" aria-hidden="true"></span>Berufsbezeichnung</h2>
-      <div class="dl-grid">
-        <span class="dl-label">Berufsbezeichnung</span>
-        <span class="dl-value">KI-Berater / Unternehmensberater</span>
-
-        <span class="dl-label">Tätigkeitsbereich</span>
-        <span class="dl-value">Beratung, Konzeption und Entwicklung von KI-gestützten Lösungen für Unternehmen</span>
-
-        <span class="dl-label">Geschäftsform</span>
-        <span class="dl-value">Einzelunternehmen</span>
-      </div>
-    </div>
-
-    <!-- Steuerliche Angaben -->
-    <div class="section-block">
-      <h2><span class="h2-accent" aria-hidden="true"></span>Steuerliche Angaben</h2>
-      <p class="prose">
-        Das Unternehmen befindet sich derzeit in Gründung. Eine Steuernummer wurde noch nicht zugeteilt.
-        Die steuerlichen Angaben werden nach Abschluss der Gewerbeanmeldung und Zuteilung der
-        Steuernummer durch das <strong>Finanzamt Schwerin</strong> unverzüglich ergänzt.
-      </p>
-      <p class="prose">
-        Eine Umsatzsteuer-Identifikationsnummer (USt-ID) liegt derzeit nicht vor.
-      </p>
-    </div>
-
-    <!-- Verantwortlicher für Inhalt -->
-    <div class="section-block">
-      <h2><span class="h2-accent" aria-hidden="true"></span>Verantwortlicher für den Inhalt</h2>
-      <p class="prose">Verantwortlich für den Inhalt nach § 18 Abs. 2 Medienstaatsvertrag (MStV):</p>
-      <div class="dl-grid">
-        <span class="dl-label">Name</span>
-        <span class="dl-value">Benn Neujahr</span>
-
-        <span class="dl-label">Anschrift</span>
-        <span class="dl-value">Wallstraße 27<br>19053 Schwerin</span>
-      </div>
-    </div>
-
-    <!-- Streitschlichtung -->
-    <div class="section-block">
-      <h2><span class="h2-accent" aria-hidden="true"></span>Streitschlichtung</h2>
-      <p class="prose">
-        Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:
-        <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr/</a>
-      </p>
-      <p class="prose">
-        Benn Neujahr ist nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer
-        Verbraucherschlichtungsstelle teilzunehmen.
-      </p>
-    </div>
-
-    <!-- Haftungsausschluss -->
-    <div class="section-block">
-      <h2><span class="h2-accent" aria-hidden="true"></span>Haftungsausschluss</h2>
-      <p class="prose">
-        <strong>Haftung für Inhalte:</strong> Die Inhalte dieser Website wurden mit größter Sorgfalt erstellt.
-        Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden.
-        Als Diensteanbieter bin ich gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den
-        allgemeinen Gesetzen verantwortlich.
-      </p>
-      <p class="prose">
-        <strong>Haftung für Links:</strong> Diese Website enthält Links zu externen Websites Dritter,
-        auf deren Inhalte ich keinen Einfluss habe. Für die Inhalte der verlinkten Seiten ist stets
-        der jeweilige Anbieter oder Betreiber verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt
-        der Verlinkung auf mögliche Rechtsverstöße überprüft, ohne dass rechtswidrige Inhalte erkennbar waren.
-      </p>
-      <p class="prose">
-        <strong>Urheberrecht:</strong> Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten
-        unterliegen dem deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet.
-        Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen
-        des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
-      </p>
-    </div>
-
-  </div><!-- /content-area -->
+  </section>
 </main>
 
 <!-- ─── Footer ────────────────────────────────── -->
@@ -575,11 +508,11 @@
     </div>
 
     <ul class="footer-links" role="list">
-      <li><a href="impressum.html" class="active">Impressum</a></li>
+      <li><a href="impressum.html">Impressum</a></li>
       <li><a href="datenschutz.html">Datenschutz</a></li>
       <li><a href="demo.html">KI-Demo</a></li>
       <li><a href="index.html#faq">FAQ</a></li>
-      <li><a href="blog.html">Singularität</a></li>
+      <li><a href="blog.html" class="active">Singularität</a></li>
       <li><a href="index.html#kontakt">Kontakt</a></li>
     </ul>
 
@@ -606,11 +539,11 @@
   document.getElementById('year').textContent = new Date().getFullYear();
 
   // ── Navbar scroll behaviour ──────────────────────
-  const navbar = document.getElementById('navbar');
-  let ticking = false;
-  window.addEventListener('scroll', () => {
+  var navbar = document.getElementById('navbar');
+  var ticking = false;
+  window.addEventListener('scroll', function() {
     if (!ticking) {
-      requestAnimationFrame(() => {
+      requestAnimationFrame(function() {
         navbar.classList.toggle('scrolled', window.scrollY > 40);
         ticking = false;
       });
@@ -619,12 +552,12 @@
   }, { passive: true });
 
   // ── Mobile hamburger ─────────────────────────────
-  const hamburger = document.querySelector('.nav-hamburger');
-  const mobileMenu = document.getElementById('mobile-menu');
+  var hamburger = document.querySelector('.nav-hamburger');
+  var mobileMenu = document.getElementById('mobile-menu');
 
   function openMenu() {
     mobileMenu.classList.add('menu-visible');
-    requestAnimationFrame(() => mobileMenu.classList.add('menu-open'));
+    requestAnimationFrame(function() { mobileMenu.classList.add('menu-open'); });
     hamburger.classList.add('open');
     hamburger.setAttribute('aria-expanded', 'true');
     hamburger.setAttribute('aria-label', 'Menü schließen');
@@ -641,13 +574,26 @@
     });
   }
 
-  hamburger.addEventListener('click', () => {
+  hamburger.addEventListener('click', function() {
     mobileMenu.classList.contains('menu-open') ? closeMenu() : openMenu();
   });
 
-  // Close menu when a link is clicked
-  mobileMenu.querySelectorAll('a').forEach(link => {
+  mobileMenu.querySelectorAll('a').forEach(function(link) {
     link.addEventListener('click', closeMenu);
+  });
+
+  // ── Scroll Reveal ────────────────────────────────
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(function(el) {
+    revealObserver.observe(el);
   });
 </script>
 </body>

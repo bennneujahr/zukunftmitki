@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Die Singularität optimiert die Optimierer – Zukunft mit KI</title>
+  <meta name="description" content="Meta-Forscher haben AIRA2 vorgestellt – ein System, das gleich drei zentrale Engpässe bei KI-Forschungsagenten knackt. Ein Artikel von Benn Neujahr." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Benn Neujahr" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="article" />
+  <meta property="og:url"         content="https://www.zukunft-mit-ki.com/blog/die-singularitaet-optimiert-die-optimierer.html" />
+  <meta property="og:title"       content="Die Singularität optimiert die Optimierer – Zukunft mit KI" />
+  <meta property="og:description" content="Meta-Forscher haben AIRA2 vorgestellt – ein System, das gleich drei zentrale Engpässe bei KI-Forschungsagenten knackt." />
+  <meta property="og:locale"      content="de_DE" />
+  <meta property="og:site_name"   content="Zukunft mit KI" />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://www.zukunft-mit-ki.com/blog/die-singularitaet-optimiert-die-optimierer.html" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Design Tokens ──────────────────────────── */
+    :root {
+      --dark:       #1a2035;
+      --dark-2:     #151c2e;
+      --gold:       #C9A84C;
+      --gold-light: #E8C870;
+      --gold-dim:   rgba(201,168,76,0.15);
+      --surface:    #222b45;
+      --surface-2:  #293252;
+      --text:       #e8eaf0;
+      --text-muted: #8d9ab5;
+      --border:     rgba(201,168,76,0.2);
+      --radius:     14px;
+      --radius-sm:  8px;
+      --shadow:     0 8px 40px rgba(0,0,0,0.35);
+      --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ─── Reset & Base ───────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: var(--gold); text-decoration: none; transition: color var(--transition); }
+    a:hover { color: var(--gold-light); }
+    a:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+
+    /* ─── Navigation ─────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 24px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      transition: background var(--transition), backdrop-filter var(--transition), box-shadow var(--transition);
+    }
+    #navbar.scrolled {
+      background: rgba(26,32,53,0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(201,168,76,0.15), 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .nav-inner {
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+    }
+    .nav-logo-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .nav-logo-icon img { width: 44px; height: 44px; object-fit: contain; border-radius: 10px; }
+    .nav-logo span { color: var(--gold); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color var(--transition);
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform var(--transition);
+      transform-origin: left;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      border: none;
+      text-decoration: none;
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: #0f1422;
+    }
+    .btn-gold:hover {
+      background: var(--gold-light);
+      color: #0f1422;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(201,168,76,0.35);
+    }
+    .nav-cta { margin-left: 12px; }
+
+    /* Mobile hamburger */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      padding: 4px;
+      border: none;
+      cursor: pointer;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    #mobile-menu {
+      display: none;
+      position: fixed;
+      top: 72px; left: 0; right: 0;
+      background: var(--dark-2);
+      border-bottom: 1px solid var(--border);
+      padding: 24px;
+      z-index: 99;
+      flex-direction: column;
+      gap: 20px;
+      opacity: 0;
+      transform: translateY(-12px);
+      transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    #mobile-menu.menu-visible { display: flex; }
+    #mobile-menu.menu-open    { opacity: 1; transform: translateY(0); }
+    #mobile-menu a {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    #mobile-menu a:last-child { border-bottom: none; }
+    #mobile-menu .btn { justify-content: center; margin-top: 8px; }
+
+    /* ─── Nav special links ──────────────────────── */
+    .nav-demo-link { color: var(--gold) !important; font-weight: 600; }
+    .nav-demo-link:hover { opacity: 0.8; }
+    .nav-blog-link { color: var(--gold-light) !important; font-weight: 600; }
+    .nav-blog-link:hover { color: var(--gold) !important; }
+
+    /* ─── Artikel Header ─────────────────────────── */
+    .article-header {
+      background: var(--dark-2);
+      padding-top: 140px;
+      padding-bottom: 64px;
+    }
+    .article-header-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      transition: color var(--transition), gap var(--transition);
+    }
+    .back-link:hover { color: var(--gold); gap: 10px; }
+
+    /* ─── Artikel Content ────────────────────────── */
+    .article-content {
+      background: var(--dark);
+      padding: 64px 0 96px;
+      flex: 1;
+    }
+    .article-content-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .article-body {
+      color: var(--text);
+      line-height: 1.85;
+      font-size: 1.05rem;
+    }
+    .article-body p {
+      margin-bottom: 1.4em;
+    }
+    .article-body h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      margin: 2.5em 0 0.8em;
+      padding-left: 14px;
+      border-left: 3px solid var(--gold);
+      line-height: 1.4;
+    }
+
+    /* ─── Artikel Navigation ─────────────────────── */
+    .article-nav {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 24px 0;
+      border-top: 1px solid var(--border);
+    }
+    .article-nav-link {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: color var(--transition);
+    }
+    .article-nav-link:hover { color: var(--gold); }
+
+    /* ─── Footer ─────────────────────────────────── */
+    footer {
+      background: var(--dark-2);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 40px 24px;
+    }
+    .footer-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-logo {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+    .footer-logo span { color: var(--gold); }
+    .footer-copy { font-size: 0.82rem; color: var(--text-muted); }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      transition: color var(--transition);
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-links a.active { color: var(--gold); }
+    .footer-socials { display: flex; gap: 12px; }
+    .footer-social {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color var(--transition), background var(--transition);
+      cursor: pointer;
+    }
+    .footer-social:hover {
+      border-color: var(--border);
+      background: var(--gold-dim);
+    }
+    .footer-social svg { width: 16px; height: 16px; color: var(--text-muted); transition: color var(--transition); }
+    .footer-social:hover svg { color: var(--gold); }
+
+    /* ─── Responsive ─────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .footer-links { flex-wrap: wrap; gap: 16px; }
+      .article-body { font-size: 1rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Navigation ─────────────────────────────── -->
+<nav id="navbar" role="navigation" aria-label="Hauptnavigation">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo" aria-label="Zukunft mit KI – Startseite">
+      <div class="nav-logo-icon" aria-hidden="true">
+        <img src="../Logo_neu.png" alt="Zukunft mit KI Logo" />
+      </div>
+    </a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="../index.html#leistungen">Leistungen</a></li>
+      <li><a href="../index.html#zertifikate">Zertifikate</a></li>
+      <li><a href="../index.html#ueber-mich">Über mich</a></li>
+      <li><a href="../index.html#anwendungen">Anwendungen</a></li>
+      <li><a href="../demo.html" class="nav-demo-link">KI-Demo</a></li>
+      <li><a href="../index.html#faq">FAQ</a></li>
+      <li><a href="../blog.html" class="nav-blog-link">Singularität</a></li>
+      <li><a href="../index.html#kontakt">Kontakt</a></li>
+    </ul>
+
+    <a href="../index.html#kontakt" class="btn btn-gold nav-cta">Erstgespräch buchen</a>
+
+    <button class="nav-hamburger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu" role="dialog" aria-label="Mobilmenü">
+  <a href="../index.html#leistungen">Leistungen</a>
+  <a href="../index.html#zertifikate">Zertifikate</a>
+  <a href="../index.html#ueber-mich">Über mich</a>
+  <a href="../index.html#anwendungen">Anwendungen</a>
+  <a href="../demo.html" style="color: var(--gold); font-weight: 600">KI-Demo</a>
+  <a href="../index.html#faq">FAQ</a>
+  <a href="../blog.html" class="nav-blog-link" style="color: var(--gold-light); font-weight: 600">Singularität</a>
+  <a href="../index.html#kontakt">Kontakt</a>
+  <a href="../index.html#kontakt" class="btn btn-gold mobile-nav-cta">Erstgespräch buchen</a>
+</div>
+
+<!-- ─── Artikel Header ──────────────────────────── -->
+<main>
+  <div class="article-header">
+    <div class="article-header-inner">
+      <a href="../blog.html" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Zurück zum Blog
+      </a>
+      <div style="display:flex;align-items:center;gap:16px;font-size:0.8rem;color:var(--text-muted);margin-bottom:20px">
+        <span style="color:var(--gold);font-weight:600">31. März 2026</span>
+        <span>4 Min. Lesezeit</span>
+      </div>
+      <h1 style="font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;line-height:1.2;margin-bottom:24px;font-family:'Plus Jakarta Sans',sans-serif">
+        Die Singularität optimiert die Optimierer
+      </h1>
+      <div style="height:3px;width:60px;background:var(--gold);border-radius:2px"></div>
+    </div>
+  </div>
+
+  <!-- ─── Artikel Content ──────────────────────── -->
+  <div class="article-content">
+    <div class="article-content-inner">
+      <div class="article-body">
+
+        <p>Meta-Forscher haben AIRA2 vorgestellt – ein System, das gleich drei
+        zentrale Engpässe bei KI-Forschungsagenten knackt: von der starren
+        synchronen Single-GPU-Ausführung bis hin zur Generalisierungslücke,
+        die die Leistung bei langen Suchhorizonten einbrechen lässt. Die Lösung
+        ist rekursiv und clever: Bilevel Autoresearch packt eine innere
+        Forschungsschleife in eine äußere, die zur Laufzeit komplett neue
+        Suchstrategien als Python-Code generiert. Beide Schleifen laufen mit
+        demselben LLM – kein stärkeres Modell nötig.</p>
+
+        <p>Parallel dazu machen Natural-Language Agent Harnesses die Steuerlogik
+        von Agenten zu portablen, editierbaren Natursprach-Artefakten. Die
+        Infrastruktur- und Kontrollschicht selbst wird dadurch zu einem
+        erstklassigen, programmierbaren Objekt.</p>
+
+        <p>Um zu messen, was diese Agenten wirklich simulieren können, gibt es
+        jetzt die neue WR-Arena-Benchmark. Sie prüft Weltmodelle auf
+        Aktionsgenauigkeit, Langzeit-Vorhersage und simulative Denk- und
+        Planungsfähigkeit.</p>
+
+        <p>Ein kontrolliertes Experiment zeigt den echten Mehrwert: Wenn ein
+        Autoresearch-Agent während der Hyperparameter-Suche Zugriff auf aktuelle
+        CS-Papers hatte, verbesserten sich die Ergebnisse um 3,2&nbsp;%. Die
+        Agenten werden immer hungriger nach Input. Alibaba hat mit Qwen3.5-Omni
+        ein Modell vorgestellt, das Text, über 10 Stunden Audio, Bilder und Video
+        verarbeitet – allerdings nur über eine proprietäre API. Ein leises, aber
+        deutliches Signal: China zieht sich aus dem Open-Source-Bereich etwas
+        zurück.</p>
+
+        <h2>Superintelligenz sickert jetzt in die Materie ein.</h2>
+
+        <p>Eli Lilly hat einen Deal über 2,75 Milliarden Dollar mit Insilico
+        Medicine geschlossen, um KI-entwickelte Medikamente weltweit auf den
+        Markt zu bringen. In der Hardware-Welt hat die University of Michigan
+        einen neuen Memristor aus Bismut-Selenid präsentiert, der langfristige
+        Datenspeicherung mit analoger Feinabstimmung kombiniert und so die
+        Energieeffizienz von KI massiv steigert.</p>
+
+        <p>Und dann haben Wissenschaftler einen mikroskopisch kleinen QR-Code
+        geschaffen – kleiner als die meisten Bakterien und nur unter dem
+        Elektronenmikroskop sichtbar. Offizieller Weltrekord. Auf Nanometer-Skala
+        wird Informationsdichte langsam ununterscheidbar von Zauberei.</p>
+
+        <h2>Der Infrastruktur-Ausbau beschleunigt sich auf allen Achsen.</h2>
+
+        <p>Mistral hat 830 Millionen Dollar an Fremdkapital eingesammelt, um
+        Nvidia-betriebene Rechenzentren in Europa hochzuziehen. Die französische
+        Armee soll zudem einen Dreijahresvertrag mit Mistral abgeschlossen haben,
+        um Modelle auf Verteidigungsdaten zu fine-tunen.</p>
+
+        <p>Die Rechenpower verlässt sogar den Erdboden: Starcloud hat
+        170&nbsp;Millionen Dollar bei einer Bewertung von 1,1&nbsp;Milliarden
+        Dollar eingesammelt, um Rechenzentren im All zu bauen – eines der
+        schnellsten Unicorns nach Y Combinator.</p>
+
+        <p>Und zurück auf Meereshöhe hat China in Shanghai die weltweit erste
+        ultra-große schwimmende Forschungsinsel im Tiefseebereich gestartet.
+        Die Grenzen werden in jede Richtung verschoben.</p>
+
+        <h2>Roboter werden zum Betriebssystem der physischen Welt.</h2>
+
+        <p>Skild AI hat gezeigt, wie sein „robotic brain" mit hoher Präzision
+        GPU-Racks zusammenbaut – ein Vorgeschmack auf robotisch montierte
+        Rechenzentren. Figure 03 kann jetzt autonom verformbare Pakete mit dem
+        Label nach unten für den Scanner sortieren. Im großen Maßstab hat ein
+        Maximo-Roboter 100&nbsp;MW Solaranlage beim AES Bellefield-Komplex
+        installiert.</p>
+
+        <p>Roboter-Sicherheitshunde patrouillieren inzwischen in den Straßen von
+        Atlanta – die Bürger nehmen die Kriminalitätsbekämpfung selbst in die
+        Hand (bzw. in die Pfote).</p>
+
+        <p>Mark Cuban meint, dass humanoide Roboter in zehn Jahren gar nicht mehr
+        nötig sein werden: Die Roboter werden einfach mit ihrer Umgebung
+        verschmelzen.</p>
+
+        <p>Die Gewinner sind schon da: 93-Jährige gewinnen durch Tesla FSD und
+        Grok-Navigation neue Freiheit – sie fahren ohne die Angst und die
+        Erschöpfung, die mit dem Alter sonst einhergehen.</p>
+
+        <h2>Die vibe-codierte Flut ist da.</h2>
+
+        <p>Seit agentisches Coding mainstream geworden ist, sind die
+        iOS-App-Releases in den USA im Januar um 54,8&nbsp;% gegenüber dem
+        Vorjahr gestiegen – der höchste Zuwachs seit vier Jahren.</p>
+
+        <p>Die Tools nisten sich ineinander ein: OpenAI hat ein Codex-Plugin für
+        Claude Code vorgestellt, mit dem Nutzer Codex aufrufen können, um Code
+        zu reviewen oder Aufgaben zu delegieren.</p>
+
+        <p>Auch die Wearables-Schiene wächst mit: Whoop hat 575&nbsp;Millionen
+        Dollar bei einer Bewertung von 10,1&nbsp;Milliarden Dollar eingesammelt –
+        nach über einer Milliarde Dollar ARR. Gleichzeitig haben Gerichte in
+        Philadelphia sämtliche smarten und KI-integrierten Brillen verboten,
+        um Zeugen und Geschworene vor Einschüchterung zu schützen.</p>
+
+        <h2>Die Wirtschaft merkt langsam, dass viele ihrer Institutionen nur
+        Workarounds für zu wenig Intelligenz waren.</h2>
+
+        <p>Ein pro-KI-Political-Action-Committee namens Innovation Council Action
+        steigt mit über 100&nbsp;Millionen Dollar in die Midterms ein, um
+        KI-Deregulierung voranzutreiben – mit Segen des Weißen Hauses.</p>
+
+        <p>Rivian hat einen jahrelangen Kampf gegen die Autohändler in Washington
+        State gewonnen und darf EVs jetzt direkt an Kunden verkaufen. Amazon baut
+        jedes Jahr 40 bis 50 neue Liefer-Hubs und ist auf Kurs, innerhalb von
+        vier Jahren jeden US-Postleitzahlbereich beliefern zu können.</p>
+
+        <p>Bildgenerierung wird zur Commodity-Funktion: Der monatliche Traffic
+        von Midjourney ist seit dem Peak 2023 um 60&nbsp;% eingebrochen, weil
+        die Fähigkeit in die Foundation-Modelle sickert.</p>
+
+        <p>Dana White, auf die Nutzung generativer KI bei der UFC angesprochen,
+        sagte einem Reporter sinngemäß: „Halt die Klappe und schau dir einfach
+        die Kämpfe an."</p>
+
+        <h2>Und über allem macht der Himmel eine Show.</h2>
+
+        <p>NASA startet am Mittwoch Artemis II – die erste bemannte Mission zum
+        Mond seit 50 Jahren.</p>
+
+        <p>Die American Meteor Society meldet eine beispiellose Häufung großer
+        Feuerbälle im ersten Quartal 2026. Als ob das Universum das Feuerwerk
+        schon mal vorab zündet.</p>
+
+        <p>Selbst die Meteore beschleunigen jetzt.</p>
+
+      </div>
+    </div>
+
+    <!-- ─── Artikel Navigation ─────────────────── -->
+    <div class="article-nav">
+      <a href="../blog.html" class="article-nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Zurück zum Blog
+      </a>
+    </div>
+  </div>
+</main>
+
+<!-- ─── Footer ────────────────────────────────── -->
+<footer role="contentinfo">
+  <div class="footer-inner">
+    <div>
+      <p class="footer-logo">Zukunft mit <span>KI</span></p>
+      <p class="footer-copy">&copy; <span id="year"></span> Zukunft mit KI. Alle Rechte vorbehalten.</p>
+    </div>
+
+    <ul class="footer-links" role="list">
+      <li><a href="../impressum.html">Impressum</a></li>
+      <li><a href="../datenschutz.html">Datenschutz</a></li>
+      <li><a href="../demo.html">KI-Demo</a></li>
+      <li><a href="../index.html#faq">FAQ</a></li>
+      <li><a href="../blog.html">Singularität</a></li>
+      <li><a href="../index.html#kontakt">Kontakt</a></li>
+    </ul>
+
+    <div class="footer-socials" aria-label="Social Media">
+      <a href="https://www.linkedin.com/in/benn-neujahr-2162033b3" target="_blank" rel="noopener noreferrer" class="footer-social" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+          <rect x="2" y="9" width="4" height="12"></rect>
+          <circle cx="4" cy="4" r="2"></circle>
+        </svg>
+      </a>
+      <a href="#" class="footer-social" aria-label="Xing">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 2l-5 9 3 5h-4l-3-5 5-9h4z"/>
+          <path d="M6 6h-2l3 5-5 8h2l5-8-3-5z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Auto year ────────────────────────────────────
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ── Navbar scroll behaviour ──────────────────────
+  var navbar = document.getElementById('navbar');
+  var ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(function() {
+        navbar.classList.toggle('scrolled', window.scrollY > 40);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // ── Mobile hamburger ─────────────────────────────
+  var hamburger = document.querySelector('.nav-hamburger');
+  var mobileMenu = document.getElementById('mobile-menu');
+
+  function openMenu() {
+    mobileMenu.classList.add('menu-visible');
+    requestAnimationFrame(function() { mobileMenu.classList.add('menu-open'); });
+    hamburger.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    hamburger.setAttribute('aria-label', 'Menü schließen');
+  }
+
+  function closeMenu() {
+    mobileMenu.classList.remove('menu-open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    hamburger.setAttribute('aria-label', 'Menü öffnen');
+    mobileMenu.addEventListener('transitionend', function h() {
+      mobileMenu.classList.remove('menu-visible');
+      mobileMenu.removeEventListener('transitionend', h);
+    });
+  }
+
+  hamburger.addEventListener('click', function() {
+    mobileMenu.classList.contains('menu-open') ? closeMenu() : openMenu();
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', closeMenu);
+  });
+</script>
+</body>
+</html>
